@@ -1,0 +1,62 @@
+﻿using Microsoft.OpenApi.Models;
+using System;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace VFM.Services
+{
+    public class HashPassword
+    {
+        public static string Hash(string password)
+        {
+            string Salt = generateSalt();
+            password += Salt;
+
+            password = generateHash(password);
+
+            password += Salt;
+
+            return password;
+        }
+
+        public static bool ComparePasswords(string HashPassword, string Password)
+        {
+            string Salt = getSalt(HashPassword);
+
+            Password += Salt;
+            Password = generateHash(Password);
+            Password += Salt;
+
+            return HashPassword == Password;
+        }
+
+        private static string generateHash(string input)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(input);
+            SHA256 sha256 = SHA256.Create();
+            byte[] hash = sha256.ComputeHash(bytes);
+            string hashString = BitConverter.ToString(hash).Replace("-", "");
+            return hashString;
+        }
+
+        private static string generateSalt()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            Random random = new Random();
+            int length = 57;
+
+            string Salt = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+            Salt = generateHash(Salt);
+            return Salt;
+        }
+        private static string getSalt(string hash)
+        {
+            int first = hash.Length - 58;
+
+            string Salt = hash.Substring(first);
+
+            return Salt;
+        }
+    }
+}
