@@ -5,8 +5,8 @@ using VFM.Models.View;
 using VFM.Services;
 using System;
 using VFM.Models;
-using SharpCompress.Archives;
-using SharpCompress.Archives.SevenZip;
+/*using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;*/
 
 
 namespace VFM.Controllers
@@ -103,43 +103,31 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFiles([FromForm] FilesUploadModel files, string path)
+        public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
         {
+            List<OSModel> osModels = new List<OSModel>();
             try
             {
                 if (string.IsNullOrWhiteSpace(path)) throw new Exception("Путь не может быть пустым");
                 if (System.IO.File.Exists(path)) throw new Exception("Должен быть указан путь до папки");
                 if (!Directory.Exists(path)) throw new Exception("Директории с таким путем не существует");
 
-                foreach (var file in files.Files)
+                foreach (var file in files)
                 {
                     string filePath = Path.Combine(path, file.FileName);
 
-                    if (file.ContentType.ToLower().StartsWith("application/"))
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
+                    OSModel? osModel = await sFileManager.CreateAsync(filePath, file);
 
-                        // Обработка архива
-                        string extractPath = Path.Combine(path, $"{Path.GetFileNameWithoutExtension(file.FileName)}_extracted");
-
-                        using (var archive = ArchiveFactory.Open(filePath))
-                        {
-                            foreach (var entry in archive.Entries)
-                            {
-                                if (!entry.IsDirectory)
-                                {
-                                    string destinationFilePath = Path.Combine(extractPath, entry.Key);
-                                    entry.WriteTo(destinationFilePath);
-                                }
-                            }
-                        }
-                    }
+                    if (osModel != null) osModels.Add(osModel);
                 }
 
-                return Ok("Files uploaded successfully");
+                if (osModels.Count() == files.Count())
+                    return Ok(osModels);
+                else if (osModels.Count() < files.Count() && osModels.Count() != 0)
+                    return StatusCode(206, osModels);
+                else
+                    throw new Exception("Не удалось загрузить файлы");
+
             }
             catch (Exception ex)
             {
@@ -148,9 +136,21 @@ namespace VFM.Controllers
         }
 
         [HttpPost("download")]
-        public IActionResult Download()
+        public IActionResult Download(string path)
         {
-            return Ok();
+            try
+            {
+                if (System.IO.File.Exists(path))
+                    return sFileManager.downloadFile(path);
+                else if (Directory.Exists(path))
+                    return sFileManager.downloadDirectory(path);
+
+                throw new Exception("Файла или папки с таким путем не существует");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // Не используемые методы

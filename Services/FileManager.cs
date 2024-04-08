@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices;
 using VFM.Models;
@@ -31,25 +33,75 @@ namespace VFM.Services
             return files;
         }
 
-        public OSModel Create(string Path, bool isFile)
+        public OSModel Create(string path, bool isFile)
         {
             if (isFile)
-               return CreateFile(Path);
+               return CreateFile(path);
             else
-                return CreateDirectory(Path);
+                return CreateDirectory(path);
         }
 
-        public void Delete(string Path, bool isFile)
+        public async Task<OSModel>? CreateAsync (string path, IFormFile file)
+        {
+            if (File.Exists(path)) throw new Exception("Такой файл уже существует");
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            if(File.Exists(path))
+            {
+                return new OSModel
+                {
+                    icon = iconPathDocument,
+                    fileName = Path.GetFileName(path),
+                    fullPath = path,
+                    dateCreate = File.GetCreationTime(path).ToString(),
+                    dateChange = File.GetLastWriteTime(path).ToString(),
+                    size = file.Length
+                };
+            }
+
+            return null;
+        }
+
+        public FileContentResult downloadFile(string path)
+        {
+            byte[] fileBytes = File.ReadAllBytes(path);
+
+            string contentType = "application/" + Path.GetExtension(path);
+
+            FileContentResult fileContentResult = new FileContentResult(fileBytes, contentType);
+            fileContentResult.FileDownloadName = Path.GetFileName(path);
+
+            return fileContentResult;
+        }
+
+        public FileContentResult downloadDirectory(string path)
+        {
+            string pathToZip = $"{Directory.GetParent(path).FullName}/{Path.GetFileNameWithoutExtension(path)}.zip";
+
+            ZipFile.CreateFromDirectory(path, pathToZip);
+
+            FileContentResult fileContentResult = downloadFile(pathToZip);
+
+            File.Delete(pathToZip);
+
+            return fileContentResult;
+        }
+
+        public void Delete(string path, bool isFile)
         {
             try
             {
                 if(isFile)
                 {
-                    File.Delete(Path);
+                    File.Delete(path);
                 }
                 else
                 {
-                    Directory.Delete(Path, true);
+                    Directory.Delete(path, true);
                 }
             }
             catch
@@ -100,19 +152,19 @@ namespace VFM.Services
             throw new Exception("Не верный путь");
         }
 
-        private OSModel CreateFile(string Path)
+        private OSModel CreateFile(string path)
         {
             try
             {
-                FileStream file = File.Create(Path);
+                FileStream file = File.Create(path);
 
                 var fileModel = new OSModel
                 {
                     icon = iconPathDocument,
-                    fileName = System.IO.Path.GetFileName(Path),
-                    fullPath = Path,
-                    dateCreate = File.GetCreationTime(Path).ToString(),
-                    dateChange = File.GetLastWriteTime(Path).ToString(),
+                    fileName = System.IO.Path.GetFileName(path),
+                    fullPath = path,
+                    dateCreate = File.GetCreationTime(path).ToString(),
+                    dateChange = File.GetLastWriteTime(path).ToString(),
                     size = file.Length
                 };
 
@@ -126,19 +178,19 @@ namespace VFM.Services
             }
         }
 
-        private OSModel CreateDirectory(string Path)
+        private OSModel CreateDirectory(string path)
         {
             try
             {
-                DirectoryInfo file = Directory.CreateDirectory(Path);
+                DirectoryInfo file = Directory.CreateDirectory(path);
                 return new OSModel
                 {
                     icon = iconPathDocument,
-                    fileName = System.IO.Path.GetDirectoryName(Path),
-                    fullPath = Path,
-                    dateCreate = Directory.GetCreationTime(Path).ToString(),
-                    dateChange = Directory.GetLastWriteTime(Path).ToString(),
-                    size = GetFolderSize(Path),
+                    fileName = System.IO.Path.GetDirectoryName(path),
+                    fullPath = path,
+                    dateCreate = Directory.GetCreationTime(path).ToString(),
+                    dateChange = Directory.GetLastWriteTime(path).ToString(),
+                    size = GetFolderSize(path),
                     isEmpty = true
                 };
             }
