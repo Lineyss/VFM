@@ -4,6 +4,10 @@ using VFM.Controllers.Base;
 using VFM.Models.View;
 using VFM.Services;
 using System;
+using VFM.Models;
+using SharpCompress.Archives;
+using SharpCompress.Archives.SevenZip;
+
 
 namespace VFM.Controllers
 {
@@ -99,9 +103,48 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-        public IActionResult Upload()
+        public async Task<IActionResult> UploadFiles([FromForm] FilesUploadModel files, string path)
         {
-            return Ok();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(path)) throw new Exception("Путь не может быть пустым");
+                if (System.IO.File.Exists(path)) throw new Exception("Должен быть указан путь до папки");
+                if (!Directory.Exists(path)) throw new Exception("Директории с таким путем не существует");
+
+                foreach (var file in files.Files)
+                {
+                    string filePath = Path.Combine(path, file.FileName);
+
+                    if (file.ContentType.ToLower().StartsWith("application/"))
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        // Обработка архива
+                        string extractPath = Path.Combine(path, $"{Path.GetFileNameWithoutExtension(file.FileName)}_extracted");
+
+                        using (var archive = ArchiveFactory.Open(filePath))
+                        {
+                            foreach (var entry in archive.Entries)
+                            {
+                                if (!entry.IsDirectory)
+                                {
+                                    string destinationFilePath = Path.Combine(extractPath, entry.Key);
+                                    entry.WriteTo(destinationFilePath);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return Ok("Files uploaded successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("download")]
