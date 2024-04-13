@@ -5,8 +5,6 @@ using System;
 using VFM.Models;
 using Microsoft.AspNetCore.Authorization;
 using VFM.Controllers.API.Base;
-/*using SharpCompress.Archives;
-using SharpCompress.Archives.SevenZip;*/
 
 
 namespace VFM.Controllers

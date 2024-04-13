@@ -1,0 +1,32 @@
+.content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.userBlock
+{
+    margin-top: 20px;
+    width: 90%;
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    align-items: center;
+    border: 1px solid black;
+}
+
+.userBlock > div, p
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.userBlock > input
+{
+    padding: 5px 0px;
+    padding-left: 5px;
+    margin: 0px 5px;
+}

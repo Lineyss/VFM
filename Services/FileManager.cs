@@ -215,7 +215,7 @@ namespace VFM.Services
 
         private void GetFilesAndDirectoriesLinux(string? path)
         {
-            if (string.IsNullOrWhiteSpace(path)) path = @"\";
+            if (string.IsNullOrWhiteSpace(path)) path = @"/";
 
             GetFiles(path);
             GetDirectories(path);

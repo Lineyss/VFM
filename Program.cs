@@ -91,6 +91,8 @@ namespace VFM
                     };
                 });
 
+            builder.Services.AddRazorPages();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -114,6 +116,8 @@ namespace VFM
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.UseEndpoints(endpoints =>
             {

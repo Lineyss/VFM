@@ -89,3 +89,5 @@ D:\Рабочий стол\Курсач\Программа\obj\Debug\net6.0\scop
 D:\Рабочий стол\Курсач\Программа\obj\Debug\net6.0\VFM.csproj.CopyComplete
 D:\Рабочий стол\Курсач\Программа\obj\Debug\net6.0\VFM.genruntimeconfig.cache
 D:\Рабочий стол\Курсач\Программа\obj\Debug\net6.0\ref\VFM.dll
+D:\Рабочий стол\Курсач\Проект\VFM\obj\Debug\net6.0\VFM.RazorAssemblyInfo.cache
+D:\Рабочий стол\Курсач\Проект\VFM\obj\Debug\net6.0\VFM.RazorAssemblyInfo.cs

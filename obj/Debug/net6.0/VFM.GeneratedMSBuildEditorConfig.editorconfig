@@ -15,3 +15,15 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = D:\Рабочий стол\Курсач\Проект\VFM
 build_property._RazorSourceGeneratorDebug = 
+
+[D:/Рабочий стол/Курсач/Проект/VFM/Views/Main/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxBZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Рабочий стол/Курсач/Проект/VFM/Views/Main/Auth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxBdXRoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Рабочий стол/Курсач/Проект/VFM/Views/Main/Exit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxFeGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 

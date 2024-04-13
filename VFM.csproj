@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\js\" />
+    <None Include="wwwroot\css\auth.css" />
+    <None Include="wwwroot\css\main.css" />
+    <None Include="wwwroot\js\checkAuthorizationUsers.js" />
   </ItemGroup>
 
   <ItemGroup>

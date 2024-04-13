@@ -1,0 +1,42 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+body, html
+{
+    width: 100%;
+    height: 100%;
+}
+
+body
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button
+{
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.header
+{
+    width: 99%;
+    height: 10%;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: start  ;
+}
+
+.content
+{
+    width: 99%;
+    height: 90%;
+    border: 1px solid black;
+}
