@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Extensions;
-using VFM.Controllers.Base;
 using VFM.Services;
 using System;
 using VFM.Models;
 using Microsoft.AspNetCore.Authorization;
+using VFM.Controllers.API.Base;
 /*using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;*/
 
@@ -66,7 +66,8 @@ namespace VFM.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(path)) new Exception("Путь не может быть пустым");
+                if (string.IsNullOrWhiteSpace(path)) 
+                    throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 string _url = $"{url + HttpContext.Request.Path}?Path={path}";
                 return Created(path, sFileManager.Create(path, isFile));
@@ -84,8 +85,8 @@ namespace VFM.Controllers
             try
             {
                 Console.WriteLine(path);
-                if (string.IsNullOrWhiteSpace(path)) new Exception("Путь не может быть пустым");
-                if (string.IsNullOrWhiteSpace(fileName)) new Exception("Название не может быть пустым");
+                if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(fileName)) 
+                    throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 return Ok(sFileManager.ChangeFileName(fileName, path));
             }
@@ -101,7 +102,9 @@ namespace VFM.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(path)) new Exception("Путь не может быть пустым");
+                if (string.IsNullOrWhiteSpace(path)) 
+                    throw new Exception(ErrorModel.AllFieldsMostBeFields);
+
                 sFileManager.Delete(path, isFile);
                 return Ok();
             }
@@ -113,18 +116,18 @@ namespace VFM.Controllers
 
         [HttpPost("upload")]
 /*        [Authorize(Policy = "upload")]*/
-        public async Task<IActionResult> UploadFiles(IFormFile files, [FromHeader] string path)
+        public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
         {
             List<OSModel> osModels = new List<OSModel>();
             try
             {
-                if (string.IsNullOrWhiteSpace(path)) throw new Exception("Путь не может быть пустым");
-                if (System.IO.File.Exists(path)) throw new Exception("Должен быть указан путь до папки");
-                if (!Directory.Exists(path)) throw new Exception("Директории с таким путем не существует");
+                if (string.IsNullOrWhiteSpace(path) || System.IO.File.Exists(path))
+                    throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
+                if (!Directory.Exists(path)) 
+                    throw new Exception(ErrorModel.FileIsExist);
 
-                return Ok();
-/*                foreach (var file in files)
+                foreach (var file in files)
                 {
                     string filePath = Path.Combine(path, file.FileName);
 
@@ -133,13 +136,9 @@ namespace VFM.Controllers
                     if (osModel != null) osModels.Add(osModel);
                 }
 
-                if (osModels.Count == files.Count)
-                    return Ok(osModels);
-                else if (osModels.Count < files.Count && osModels.Count != 0)
-                    return StatusCode(206, osModels);
-                else
-                    throw new Exception("Не удалось загрузить файлы");*/
-                
+                if (osModels.Count == files.Count) return Ok(osModels);
+                else if (osModels.Count < files.Count && osModels.Count != 0) return StatusCode(206, osModels);
+                else throw new Exception(ErrorModel.CanNotUploadFiles);
             }
             catch (Exception ex)
             {
@@ -158,7 +157,7 @@ namespace VFM.Controllers
                 else if (Directory.Exists(path))
                     return sFileManager.downloadDirectory(path);
 
-                throw new Exception("Файла или папки с таким путем не существует");
+                throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }
             catch (Exception e)
             {

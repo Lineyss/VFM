@@ -11,7 +11,7 @@ using System.Security.Claims;
 using VFM.Models;
 using VFM.Services;
 
-namespace VFM.Controllers
+namespace VFM.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,13 +29,13 @@ namespace VFM.Controllers
         {
             try
             {
-                if (model == null) throw new Exception("Все поля должны быть заполненны");
+                if (model == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 var user = db.GetCollection<UserModel>("user").Find(element => element.login == model.login).FirstOrDefault();
-                
-                if (user == null) throw new Exception("Не верный логин или пароль");
 
-                if(!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception("Не верный логин или пароль");
+                if (user == null) throw new Exception(ErrorModel.WrongLoginAndPassword);
+
+                if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginAndPassword);
 
                 var claims = new List<Claim>
                 {

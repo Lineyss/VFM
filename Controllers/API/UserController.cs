@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using VFM.Controllers.Base;
+using VFM.Controllers.API.Base;
 using VFM.Models;
 
-namespace VFM.Controllers
+namespace VFM.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -33,7 +33,7 @@ namespace VFM.Controllers
             catch
             {
                 return BadRequest();
-            } 
+            }
         }
 
         [HttpGet("{ID}")]
@@ -59,7 +59,7 @@ namespace VFM.Controllers
                 var users = db.GetCollection<UserModel>("user");
                 UserModel? user = users.Find(element => element.login == model.login).FirstOrDefault();
 
-                if (user != null) throw new Exception("Аккаунт с таким логином уже существует");
+                if (user != null) throw new Exception(ErrorModel.LoginIsExist);
 
                 user = new UserModel(model, customPar);
 
@@ -84,10 +84,10 @@ namespace VFM.Controllers
             try
             {
                 var users = db.GetCollection<UserModel>("user");
-                UserModel user = users.Find(element => element.ID == ID).FirstOrDefault() 
-                    ?? throw new Exception("Такого аккаунта не существует");
+                UserModel user = users.Find(element => element.ID == ID).FirstOrDefault()
+                    ?? throw new Exception(ErrorModel.AccountIsNotExist);
 
-                user.UpdateModel(model, customPar);                
+                user.UpdateModel(model, customPar);
 
                 user.UpdateModel(user, customPar);
                 users.Update(user);
@@ -105,11 +105,11 @@ namespace VFM.Controllers
         {
             try
             {
-                bool isDelete = db.GetCollection<UserModel>("user").Delete(ID) == false ? 
-                    throw new Exception("Пользователя с таким ID не существует") : true;
+                bool isDelete = db.GetCollection<UserModel>("user").Delete(ID) == false ?
+                    throw new Exception(ErrorModel.AccountWithThisIDIsNotExist) : true;
                 return Ok(ID);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

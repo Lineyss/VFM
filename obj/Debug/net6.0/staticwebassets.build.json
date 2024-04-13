@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2ZP8RDYNO6sU/I8J4b2Tduukysc4gfnnaie/je5PtPg=",
+  "Hash": "M1B5NmucEa+pI5aOT8c759Jzcw/EHuKLMSOc+mRD0rI=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "VFM\\wwwroot",
       "Source": "VFM",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\document.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\document.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/document.svg",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot\\image\\document.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\drive.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\drive.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/drive.svg",
       "AssetKind": "All",
@@ -51,10 +51,10 @@
       "OriginalItemSpec": "wwwroot\\image\\drive.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\folder.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\folder.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/folder.svg",
       "AssetKind": "All",

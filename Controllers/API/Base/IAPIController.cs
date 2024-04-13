@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace VFM.Controllers.Base
+namespace VFM.Controllers.API.Base
 {
-    public interface IAPIController<Model,CModel>
+    public interface IAPIController<Model, CModel>
     {
         public IActionResult Get();
         public IActionResult Post(CModel model);
