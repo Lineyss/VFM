@@ -1,6 +1,8 @@
 using LiteDB;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Diagnostics;
@@ -16,21 +18,69 @@ namespace VFM
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string ip = IPManager.getAddress();
-
             builder.WebHost
                 .UseKestrel()
-                .UseUrls($"http://{ip}:5000");
+                .UseUrls(IPManager.getAddress());
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSingleton(new LiteDatabase("LiteDb.db"));
+            builder.Services.AddSingleton(new LiteDbContext("LiteDb.db"));
 
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("admin", policy =>
+                {
+                    policy.RequireClaim("isAdmin", "True");
+                });
+                options.AddPolicy("create", policy =>
+                {
+                    policy.RequireClaim("createF", "True");
+                });
+                options.AddPolicy("delete", policy =>
+                {
+                    policy.RequireClaim("deleteF", "True");
+                });
+                options.AddPolicy("updateName", policy =>
+                {
+                    policy.RequireClaim("updateNameF", "True");
+                });
+                options.AddPolicy("download", policy =>
+                {
+                    policy.RequireClaim("downloadF", "True");
+                });
+                options.AddPolicy("upload", policy =>
+                {
+                    policy.RequireClaim("uploadF", "True");
+                });
+            });
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // указывает, будет ли валидироваться издатель при валидации токена
+                        ValidateIssuer = true,
+                        // строка, представляющая издателя
+                        ValidIssuer = Jwt.ValidIssuer,
+                        // будет ли валидироваться потребитель токена
+                        ValidateAudience = true,
+                        // установка потребителя токена
+                        ValidAudience = Jwt.ValidAudience,
+                        // будет ли валидироваться время существования
+                        ValidateLifetime = true,
+                        // установка ключа безопасности
+                        IssuerSigningKey = Jwt.GetSymmetricSecurityKey(),
+                        // валидация ключа безопасности
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
 
             var app = builder.Build();
 
@@ -47,15 +97,16 @@ namespace VFM
                 app.UseSwaggerUI();
             }
 
+            app.UseStaticFiles();
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            /*            app.UseHttpsRedirection();*/
-            app.UseStaticFiles();
-
-            app.MapControllers();
-
-            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }

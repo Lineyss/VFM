@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Extensions;
 using VFM.Controllers.Base;
-using VFM.Models.View;
 using VFM.Services;
 using System;
 using VFM.Models;
+using Microsoft.AspNetCore.Authorization;
 /*using SharpCompress.Archives;
 using SharpCompress.Archives.SevenZip;*/
 
@@ -25,9 +25,10 @@ namespace VFM.Controllers
             url = $"{request.Scheme}://{request.Host.Value}";
             sFileManager = new FileManager(url);
         }
-
+        
         [HttpGet]
-        public IActionResult Get([FromHeader] string? path = null, [FromHeader] int pageNumber = 1, [FromHeader] bool isFile = false)
+        [Authorize]
+        public IActionResult Get(string? path = null, [FromHeader] int pageNumber = 1, [FromHeader] bool isFile = false)
         {
             try
             {
@@ -36,16 +37,21 @@ namespace VFM.Controllers
                     return Ok();
                 }
 
-                var files = sFileManager.GetFilesAndDirectories(path);
+                var files = sFileManager.GetDriversFilesAndDirectories(path);
+                int totalNumberPage = files.GetNumberPages(maxNumberItems);
+                 
+                files = files.Slice(maxNumberItems, pageNumber).ToList();
+                if (path != null) files = sFileManager.GetOSModelsSize(files).ToList();
+
                 var fileManagerModel = new VFileManagerModel
-                {
+                {   
                     currentPage = pageNumber,
                     totalNumberItems = files.Count,
-                    totalNumberPages = files.GetNumberPages(maxNumberItems),
-                    currentItems = files.Slice(maxNumberItems, pageNumber).ToList(),
+                    totalNumberPages = totalNumberPage,
+                    currentItems = files,
                 };
-
-                return Ok(fileManagerModel);
+                
+                return totalNumberPage < pageNumber ? NotFound(fileManagerModel):Ok(fileManagerModel);
 
             }
             catch (Exception e) 
@@ -55,6 +61,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "create")]
         public IActionResult Post([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -71,6 +78,7 @@ namespace VFM.Controllers
         }
 
         [HttpPut("{fileName}")]
+        [Authorize(Policy = "updateName")]
         public IActionResult Put(string fileName, [FromHeader] string path)
         {
             try
@@ -88,6 +96,7 @@ namespace VFM.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Policy = "delete")]
         public IActionResult Delete([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -103,7 +112,8 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
+/*        [Authorize(Policy = "upload")]*/
+        public async Task<IActionResult> UploadFiles(IFormFile files, [FromHeader] string path)
         {
             List<OSModel> osModels = new List<OSModel>();
             try
@@ -112,7 +122,9 @@ namespace VFM.Controllers
                 if (System.IO.File.Exists(path)) throw new Exception("Должен быть указан путь до папки");
                 if (!Directory.Exists(path)) throw new Exception("Директории с таким путем не существует");
 
-                foreach (var file in files)
+
+                return Ok();
+/*                foreach (var file in files)
                 {
                     string filePath = Path.Combine(path, file.FileName);
 
@@ -121,13 +133,13 @@ namespace VFM.Controllers
                     if (osModel != null) osModels.Add(osModel);
                 }
 
-                if (osModels.Count() == files.Count())
+                if (osModels.Count == files.Count)
                     return Ok(osModels);
-                else if (osModels.Count() < files.Count() && osModels.Count() != 0)
+                else if (osModels.Count < files.Count && osModels.Count != 0)
                     return StatusCode(206, osModels);
                 else
-                    throw new Exception("Не удалось загрузить файлы");
-
+                    throw new Exception("Не удалось загрузить файлы");*/
+                
             }
             catch (Exception ex)
             {
@@ -136,6 +148,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("download")]
+        [Authorize(Policy = "download")]
         public IActionResult Download(string path)
         {
             try

@@ -1,20 +1,20 @@
 ﻿using LiteDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using VFM.Controllers.Base;
 using VFM.Models;
-using VFM.Models.Create;
-using VFM.Models.View;
 
 namespace VFM.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase, IAPIController<UserModel, CUserModel>
+    [Route("api/[controller]")]
+    [Authorize(Policy = "admin")]
+    public class UserController : ControllerBase, IAPIController<UserModel, SupportUserModel>
     {
-        private readonly LiteDatabase db;
-        public UserController(LiteDatabase db)
+        private readonly LiteDbContext db;
+        public UserController(LiteDbContext db)
         {
             this.db = db;
         }
@@ -24,13 +24,11 @@ namespace VFM.Controllers
         {
             try
             {
-                var users = VUserModel.ConvertToViewModel(
+                var users = SupportUserModel.ConvertToViewModel(
                         db.GetCollection<UserModel>("user")
-                        .FindAll()
-                        .ToList()
-                    );
+                        .FindAll());
 
-                return users.Count == 0 ? NoContent() : Ok(users);
+                return users.Count() == 0 ? NoContent() : Ok(users);
             }
             catch
             {
@@ -54,7 +52,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromForm] CUserModel model, bool customPar = false)
+        public IActionResult Post([FromForm] SupportUserModel model, bool customPar = false)
         {
             try
             {
@@ -81,7 +79,7 @@ namespace VFM.Controllers
         }
 
         [HttpPut("{ID}")]
-        public IActionResult Put([FromForm] CUserModel model, int ID, bool customPar = false)
+        public IActionResult Put([FromForm] SupportUserModel model, int ID, bool customPar = false)
         {
             try
             {
@@ -120,7 +118,7 @@ namespace VFM.Controllers
         // Не реалезованные методы
 
         [NonAction]
-        public IActionResult Post([FromForm] CUserModel model)
+        public IActionResult Post([FromForm] SupportUserModel model)
         {
             throw new NotImplementedException();
         }

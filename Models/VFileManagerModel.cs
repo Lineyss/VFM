@@ -1,4 +1,4 @@
-﻿namespace VFM.Models.View
+﻿namespace VFM.Models
 {
     public class VFileManagerModel
     {

@@ -27,7 +27,8 @@ namespace VFM.Services
             Password = generateHash(Password);
             Password += Salt;
 
-            return HashPassword == Password;
+            bool a = HashPassword == Password;
+            return a;
         }
 
         private static string generateHash(string input)
@@ -48,11 +49,11 @@ namespace VFM.Services
 
             string Salt = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
             Salt = generateHash(Salt);
-            return Salt;
+            return Salt.Substring(0,20);
         }
         private static string getSalt(string hash)
         {
-            int first = hash.Length - 58;
+            int first = hash.Length - 20;
 
             string Salt = hash.Substring(first);
 

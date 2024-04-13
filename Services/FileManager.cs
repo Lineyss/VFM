@@ -25,9 +25,9 @@ namespace VFM.Services
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) os = "Windows";
             else os = "Unix";
         }
-        public List<OSModel> GetFilesAndDirectories(string? path)
+        public List<OSModel> GetDriversFilesAndDirectories(string? path)
         {
-            if (os == "Windows") GetFilesAndDirectoriesWindows(path);
+            if (os == "Windows") GetDriversFilesAndDirectoriesWindows(path);
             else GetFilesAndDirectoriesLinux(path);
 
             return files;
@@ -96,13 +96,9 @@ namespace VFM.Services
             try
             {
                 if(isFile)
-                {
                     File.Delete(path);
-                }
                 else
-                {
                     Directory.Delete(path, true);
-                }
             }
             catch
             {
@@ -152,6 +148,23 @@ namespace VFM.Services
             throw new Exception("Не верный путь");
         }
 
+        public IEnumerable<OSModel> GetOSModelsSize(IEnumerable<OSModel> osModels)
+        {
+            foreach (var element in osModels)
+            {
+                try
+                {
+                    if (element.icon == iconPathDocument)
+                        element.size = new FileInfo(element.fullPath).Length;
+                    else
+                        element.size = GetFolderSize(element.fullPath);
+                }
+                catch { }
+            }
+
+            return osModels;
+        }
+
         private OSModel CreateFile(string path)
         {
             try
@@ -186,7 +199,7 @@ namespace VFM.Services
                 return new OSModel
                 {
                     icon = iconPathDocument,
-                    fileName = System.IO.Path.GetDirectoryName(path),
+                    fileName = Path.GetDirectoryName(path),
                     fullPath = path,
                     dateCreate = Directory.GetCreationTime(path).ToString(),
                     dateChange = Directory.GetLastWriteTime(path).ToString(),
@@ -208,7 +221,7 @@ namespace VFM.Services
             GetDirectories(path);
         }
 
-        private void GetFilesAndDirectoriesWindows(string? path)
+        private void GetDriversFilesAndDirectoriesWindows(string? path)
         {
             if (string.IsNullOrWhiteSpace(path)) GetDrivers();
             else
@@ -231,7 +244,6 @@ namespace VFM.Services
                     fullPath = fullPath,
                     dateCreate = File.GetCreationTime(fullPath).ToString(),
                     dateChange = File.GetLastWriteTime(fullPath).ToString(),
-                    size = new FileInfo(fullPath).Length
                 });
             }
 
@@ -251,7 +263,6 @@ namespace VFM.Services
                     fullPath = fullPath,
                     dateCreate = Directory.GetCreationTime(fullPath).ToString(),
                     dateChange = Directory.GetLastWriteTime(fullPath).ToString(),
-                    size = GetFolderSize(fullPath),
                 });
             }
 
@@ -275,17 +286,25 @@ namespace VFM.Services
             }
         }
 
-        private long GetFolderSize(string path)
+        private long GetFolderSize(string path, long size = 0)
         {
-            long size = 0;
             try
             {
-                foreach(var element in Directory.GetFiles(path))
+                List<string> filesAndFolder = Directory.GetFiles(path).ToList();
+                filesAndFolder = filesAndFolder.Concat(Directory.GetDirectories(path)).ToList();
+
+                foreach(var element in filesAndFolder)
                 {
-                    size += new FileInfo(element).Length;
+                    if(Directory.Exists(element)) 
+                        size += GetFolderSize(element, size);
+                    else
+                        size += new FileInfo(element).Length;
                 }
             }
-            catch { }
+            catch (Exception e) 
+            {
+                Console.WriteLine(e.Message);
+            }
 
             return size;
         }
