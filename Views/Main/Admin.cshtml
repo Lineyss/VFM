@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="~/js/checkAuthorizationUsers.js.js"></script>
+    <script src="~/js/checkAuthorizationUsers.js"></script>
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/admin.css">
     <title>Document</title>
@@ -16,22 +16,37 @@
     <div class="header">
         <h1>
             <a href="#">
-                Виртуальный файловый менеджер
+                VFM
             </a>
         </h1>
 
         <div class="d1">
             <form>
-                <input type="text" placeholder="Искать здесь..." maxlength="260">
+                <input id="myInput" type="text" placeholder="Искать здесь..." maxlength="266">
+                <snap id="charCount">0/266</snap>
                 <button type="submit">Поиск</button>
             </form>
+        </div>
+
+        <div class="ButtonBlock">
+            <button>
+                <a>
+                    Выйти
+                </a>
+            </button>
+
+            <button>
+                <a>
+                    Создать пользователя
+                </a>
+            </button>
         </div>
     </div>
     <div class="content">
         <form class="userBlock">
             <p>ID</p>
-            <input placeholder="Login" text="Lineyss" required />
-            <input placeholder="Password" text="password" required />
+            <input placeholder="Login" text="Lineyss" maxlength="20" required />
+            <input placeholder="Password" text="password" maxlength="25" required />
             <div>
                 <span>isAdmin</span>
                 <select>
@@ -87,3 +102,13 @@
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>
 </html>
+
+<script>
+    const inputField = document.getElementById('myInput');
+    const charCount = document.getElementById('charCount');
+
+    inputField.addEventListener('input', function () {
+        charCount.textContent = `${inputField.value.length}/${inputField.maxLength}`;
+    });
+
+</script>

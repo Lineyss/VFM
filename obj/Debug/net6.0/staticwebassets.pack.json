@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\css\\auth.css"
     },
     {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\index.css",
+      "PackagePath": "staticwebassets\\css\\index.css"
+    },
+    {
       "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\main.css",
       "PackagePath": "staticwebassets\\css\\main.css"
     },
@@ -25,12 +29,16 @@
       "PackagePath": "staticwebassets\\image\\folder.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\CheckAuthorizationUsers.js",
-      "PackagePath": "staticwebassets\\js\\CheckAuthorizationUsers.js"
-    },
-    {
       "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\auth.js",
       "PackagePath": "staticwebassets\\js\\auth.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\checkAuthorizationUsers.js",
+      "PackagePath": "staticwebassets\\js\\checkAuthorizationUsers.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
+      "PackagePath": "staticwebassets\\js\\exit.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VFM.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="~/js/checkAuthorizationUsers.js.js"></script>
+    <script src="~/js/checkAuthorizationUsers.js"></script>
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/auth.css">
     <title>Document</title>
@@ -15,8 +15,8 @@
     <div class="Authorization">
         <h1>Авторизация</h1>
         <form method="post">
-            <input placeholder="Логин" required>
-            <input placeholder="Пароль" type="password" required>
+            <input placeholder="Логин" required maxlength="20">
+            <input placeholder="Пароль" type="password" required maxlength="25">
             <button type="submit">Войти</button>
         </form>
     </div>

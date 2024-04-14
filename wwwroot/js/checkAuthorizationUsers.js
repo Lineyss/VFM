@@ -12,6 +12,4 @@
     return null;
 }
 
-if (!jwtToken() && location.pathname != "/auth/index.html") location.href = location.origin + "/auth/index.html"
-
-console.log(location.origin);
+if (!jwtToken() && location.pathname != "/Auth/Login.html") location.href = location.origin + "/Auth/Login.html"

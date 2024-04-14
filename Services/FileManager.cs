@@ -43,7 +43,7 @@ namespace VFM.Services
 
         public async Task<OSModel>? CreateAsync (string path, IFormFile file)
         {
-            if (File.Exists(path)) throw new Exception("Такой файл уже существует");
+            if (File.Exists(path)) throw new Exception(ErrorModel.FileIsExist);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -102,7 +102,7 @@ namespace VFM.Services
             }
             catch
             {
-                throw new Exception("Не удалось удалить" + (isFile ? "файл": "папку"));
+                throw new Exception(isFile ? ErrorModel.CanNotDeleteFile : ErrorModel.CanNotDeleteDirectories);
             }
         }
 
@@ -142,10 +142,10 @@ namespace VFM.Services
             }
             catch
             {
-                throw new Exception("Не удалось изменить название файла");
+                throw new Exception(ErrorModel.CanNotChangeFileName);
             }
 
-            throw new Exception("Не верный путь");
+            throw new Exception(ErrorModel.WrongPath);
         }
 
         public IEnumerable<OSModel> GetOSModelsSize(IEnumerable<OSModel> osModels)
@@ -174,7 +174,7 @@ namespace VFM.Services
                 var fileModel = new OSModel
                 {
                     icon = iconPathDocument,
-                    fileName = System.IO.Path.GetFileName(path),
+                    fileName = Path.GetFileName(path),
                     fullPath = path,
                     dateCreate = File.GetCreationTime(path).ToString(),
                     dateChange = File.GetLastWriteTime(path).ToString(),
@@ -187,7 +187,7 @@ namespace VFM.Services
             }
             catch
             {
-                throw new Exception("Не удалось создать файл");
+                throw new Exception(ErrorModel.CanNotCreateFile);
             }
         }
 
@@ -209,7 +209,7 @@ namespace VFM.Services
             }
             catch
             {
-                throw new Exception("Не удалось создать папку");
+                throw new Exception(ErrorModel.CanNotCreateDirectory);
             }
         }
 

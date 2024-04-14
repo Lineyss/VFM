@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+Ftqoqf09N/WlOiCANZ/pRAFmik+9H4WJWDwyyPyU/4=",
+  "Hash": "IDZaOivl0V/K9jnh6ynOPiHpIC8XHiSyzl/TUP4QEgY=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
+    },
+    {
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\index.css",
+      "SourceId": "VFM",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "BasePath": "_content/VFM",
+      "RelativePath": "css/index.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\index.css"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\main.css",
@@ -136,12 +153,12 @@
       "OriginalItemSpec": "wwwroot\\js\\auth.js"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\CheckAuthorizationUsers.js",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\checkAuthorizationUsers.js",
       "SourceId": "VFM",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
-      "RelativePath": "js/CheckAuthorizationUsers.js",
+      "RelativePath": "js/checkAuthorizationUsers.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -150,7 +167,24 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\CheckAuthorizationUsers.js"
+      "OriginalItemSpec": "wwwroot\\js\\checkAuthorizationUsers.js"
+    },
+    {
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
+      "SourceId": "VFM",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "BasePath": "_content/VFM",
+      "RelativePath": "js/exit.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\exit.js"
     }
   ]
 }

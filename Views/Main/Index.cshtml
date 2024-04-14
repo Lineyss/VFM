@@ -1,0 +1,72 @@
+﻿@page
+@model VFM.Views.Main.IndexModel
+@{
+}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @* <script src="~/js/checkAuthorizationUsers.js"></script> *@
+    <link type="text/css" rel="stylesheet" href="~/css/main.css">
+    <link type="text/css" rel="stylesheet" href="~/css/index.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <a href="#">
+                VFM
+            </a>
+        </h1>
+
+        <div class="d1">
+            <form>
+                <input id="myInput" type="text" placeholder="Искать здесь..." maxlength="266">
+                <snap id="charCount">0/266</snap>
+                <button type="submit">Поиск</button>
+            </form>
+        </div>
+
+        <div class="ButtonBlock">
+
+            <button id="createFi">
+                Создать папку
+            </button>
+
+            <button id="createFo">
+                Создать файл
+            </button>
+
+            <button id="upload">
+                Загрузить
+            </button>
+
+            <button id="download">
+                Скачать
+            </button>
+
+            <button id="delete">
+                Удалить
+            </button>
+
+            <button>
+                <a>
+                    Выйти
+                </a>
+            </button>
+
+        </div>
+    </div>
+    <div class="content">
+        <table>
+            <tr>
+
+            </tr>
+        </table>
+    </div>
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+</body>
+</html>
+
+<script src="~/js/index.js"></script>
