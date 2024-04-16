@@ -1,9 +1,10 @@
 ﻿using LiteDB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using VFM.Controllers.API.Base;
+using VFM.Controllers.Base;
 using VFM.Models;
 
 namespace VFM.Controllers.API
@@ -20,6 +21,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Get()
         {
             try
@@ -27,8 +29,7 @@ namespace VFM.Controllers.API
                 var users = SupportUserModel.ConvertToViewModel(
                         db.GetCollection<UserModel>("user")
                         .FindAll());
-
-                return users.Count() == 0 ? NoContent() : Ok(users);
+                return !users.Any() ? NoContent() : Ok(users);
             }
             catch
             {
@@ -37,6 +38,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpGet("{ID}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Get(int ID)
         {
             try
@@ -52,6 +54,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Post([FromForm] SupportUserModel model, bool customPar = false)
         {
             try
@@ -79,6 +82,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPut("{ID}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Put([FromForm] SupportUserModel model, int ID, bool customPar = false)
         {
             try
@@ -101,6 +105,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpDelete("{ID}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Delete(int ID)
         {
             try

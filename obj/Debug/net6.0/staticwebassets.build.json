@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IDZaOivl0V/K9jnh6ynOPiHpIC8XHiSyzl/TUP4QEgY=",
+  "Hash": "Ls0O7akx9UiR/LgBxF722vAyZhu3NEoE1KmZHI3uRO4=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -153,12 +153,12 @@
       "OriginalItemSpec": "wwwroot\\js\\auth.js"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\checkAuthorizationUsers.js",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\clientManager.js",
       "SourceId": "VFM",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
       "BasePath": "_content/VFM",
-      "RelativePath": "js/checkAuthorizationUsers.js",
+      "RelativePath": "js/clientManager.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -167,7 +167,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\checkAuthorizationUsers.js"
+      "OriginalItemSpec": "wwwroot\\js\\clientManager.js"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
@@ -185,6 +185,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\exit.js"
+    },
+    {
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\index.js",
+      "SourceId": "VFM",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "BasePath": "_content/VFM",
+      "RelativePath": "js/index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\index.js"
+    },
+    {
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\windowsRoute.js",
+      "SourceId": "VFM",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "BasePath": "_content/VFM",
+      "RelativePath": "js/windowsRoute.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\windowsRoute.js"
     }
   ]
 }

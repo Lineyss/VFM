@@ -33,12 +33,20 @@
       "PackagePath": "staticwebassets\\js\\auth.js"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\checkAuthorizationUsers.js",
-      "PackagePath": "staticwebassets\\js\\checkAuthorizationUsers.js"
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\clientManager.js",
+      "PackagePath": "staticwebassets\\js\\clientManager.js"
     },
     {
       "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
       "PackagePath": "staticwebassets\\js\\exit.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\index.js",
+      "PackagePath": "staticwebassets\\js\\index.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\windowsRoute.js",
+      "PackagePath": "staticwebassets\\js\\windowsRoute.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VFM.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -1,12 +1,6 @@
-using LiteDB;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Diagnostics;
 using System.Net;
 using VFM.Models;
 using VFM.Services;
@@ -69,27 +63,49 @@ namespace VFM
                 });
             });
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.LoginPath = "/Auth/Login.html"; // —траница авторизации
+                options.LogoutPath = "/Auth/Exit"; // —траница выхода
+
+                options.SlidingExpiration = true; // ѕродлени€ сроков жизни cookie при каждом запросе
+
+                options.Cookie.HttpOnly = true; // ”станавливаем флажок в браузере чтобы не было доступа у js
+                 
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ƒл€ использовани€ HTTPS
+
+                options.Cookie.SameSite = SameSiteMode.None; // ƒл€ предотвращени€ csrf атак
+
+                options.Cookie.MaxAge = TimeSpan.FromDays(1); // ¬рем€ жизни cookie
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        // указывает, будет ли валидироватьс€ издатель при валидации токена
-                        ValidateIssuer = true,
-                        // строка, представл€юща€ издател€
-                        ValidIssuer = Jwt.ValidIssuer,
-                        // будет ли валидироватьс€ потребитель токена
-                        ValidateAudience = true,
-                        // установка потребител€ токена
-                        ValidAudience = Jwt.ValidAudience,
-                        // будет ли валидироватьс€ врем€ существовани€
-                        ValidateLifetime = true,
-                        // установка ключа безопасности
-                        IssuerSigningKey = Jwt.GetSymmetricSecurityKey(),
-                        // валидаци€ ключа безопасности
-                        ValidateIssuerSigningKey = true,
-                    };
-                });
+                    // указывает, будет ли валидироватьс€ издатель при валидации токена
+                    ValidateIssuer = true,
+                    // строка, представл€юща€ издател€
+                    ValidIssuer = Jwt.ValidIssuer,
+                    // будет ли валидироватьс€ потребитель токена
+                    ValidateAudience = true,
+                    // установка потребител€ токена
+                    ValidAudience = Jwt.ValidAudience,
+                    // будет ли валидироватьс€ врем€ существовани€
+                    ValidateLifetime = true,
+                    // установка ключа безопасности
+                    IssuerSigningKey = Jwt.GetSymmetricSecurityKey(),
+                    // валидаци€ ключа безопасности
+                    ValidateIssuerSigningKey = true,
+                };
+            });
 
             builder.Services.AddRazorPages();
 
@@ -125,6 +141,8 @@ namespace VFM
             });
 
             app.Run();
+
+            File.WriteAllText("ѕуть до твоего файла", "«ашифрованный текст");
         }
     }
 }

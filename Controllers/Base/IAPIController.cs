@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace VFM.Controllers.API.Base
+namespace VFM.Controllers.Base
 {
     public interface IAPIController<Model, CModel>
     {

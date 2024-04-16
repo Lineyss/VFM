@@ -4,8 +4,8 @@ using VFM.Services;
 using System;
 using VFM.Models;
 using Microsoft.AspNetCore.Authorization;
-using VFM.Controllers.API.Base;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using VFM.Controllers.Base;
 
 namespace VFM.Controllers
 {
@@ -25,7 +25,7 @@ namespace VFM.Controllers
         }
         
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Get(string? path = null, [FromHeader] int pageNumber = 1, [FromHeader] bool isFile = false)
         {
             try
@@ -59,7 +59,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "create")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "create")]
         public IActionResult Post([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -77,7 +77,7 @@ namespace VFM.Controllers
         }
 
         [HttpPut("{fileName}")]
-        [Authorize(Policy = "updateName")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "updateName")]
         public IActionResult Put(string fileName, [FromHeader] string path)
         {
             try
@@ -95,7 +95,7 @@ namespace VFM.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Policy = "delete")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "delete")]
         public IActionResult Delete([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -113,7 +113,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-/*        [Authorize(Policy = "upload")]*/
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "upload")]
         public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
         {
             List<OSModel> osModels = new List<OSModel>();
@@ -145,7 +145,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("download")]
-        [Authorize(Policy = "download")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "download")]
         public IActionResult Download(string path)
         {
             try

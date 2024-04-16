@@ -2,12 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using VFM.Models;
 using VFM.Services;
 
@@ -18,6 +13,7 @@ namespace VFM.Controllers.API
     public class AuthController : ControllerBase
     {
         private readonly LiteDbContext db;
+        private readonly AuthenticationManager authenticationManager = new AuthenticationManager();
 
         public AuthController(LiteDbContext db)
         {
@@ -37,25 +33,10 @@ namespace VFM.Controllers.API
 
                 if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginAndPassword);
 
-                var claims = new List<Claim>
+                return Ok(new
                 {
-                    new Claim(ClaimTypes.Name, user.login),
-                    new Claim("isAdmin", user.isAdmin.ToString()),
-                    new Claim("createF", user.createF.ToString()),
-                    new Claim("deleteF", user.deleteF.ToString()),
-                    new Claim("updateNameF", user.updateNameF.ToString()),
-                    new Claim("downloadF", user.downloadF.ToString()),
-                    new Claim("uploadF", user.uploadF.ToString())
-                };
-
-                var jwt = new JwtSecurityToken(
-                        issuer: Jwt.ValidIssuer,
-                        audience: Jwt.ValidAudience,
-                        claims: claims,
-                        expires: DateTime.UtcNow.Add(TimeSpan.FromHours(2)), // время действия 2 минуты
-                        signingCredentials: new SigningCredentials(Jwt.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-                return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
+                    token = authenticationManager.JwtLogIn(user)
+                });
             }
             catch (Exception e)
             {
@@ -64,12 +45,12 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost("Logout")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Logout()
         {
             try
             {
-                await HttpContext.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
+                authenticationManager.JwtLogOut(HttpContext);
                 return Ok();
             }
             catch (Exception e)
