@@ -1,12 +1,11 @@
 ﻿@page
-@model VFM.Views.Auth.IndexModel
+@using VFM.Models
 @{
 }
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="~/js/clientManager.js"></script>
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/auth.css">
     <title>Document</title>
@@ -14,13 +13,42 @@
 <body>
     <div class="Authorization">
         <h1>Авторизация</h1>
-        <form>
-            <input id="Login" name="login" placeholder="Логин" required maxlength="20">
-            <input id="Password" name="password" placeholder="Пароль" type="password" required maxlength="25">
+        <form method="post">
+            <div>
+                <input name="login" type="text" id="Login" placeholder="Логин" required maxlength="20">
+                <snap id="charCount">0/266</snap>
+            </div>
+            <div>
+                <input name="password" id="Password" placeholder="Пароль" type="password" required maxlength="25">
+                <snap id="charCount">0/266</snap>
+            </div>
             <button type="submit">Войти</button>
         </form>
     </div>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    <script>
+
+        function Counter (div) {
+            const returnedFunction = () => {
+                let inputField = div.children[0];
+                let charCount = div.children[1];
+        
+                charCount.textContent = `${inputField.value.length}/${inputField.maxLength}`;
+            };
+
+            returnedFunction();
+
+            return returnedFunction;
+        }
+
+        var divInputs = document.querySelectorAll("form > div");
+
+        for(let i = 0;i<divInputs.length;i++)
+        {
+            divInputs[i].children[0].addEventListener('input', Counter(divInputs[i]));
+        }
+
+    </script>
 </body>
 </html>
-<script type="module" src="~/js/auth.js"></script>
+<script type="module" src="~/js/Auth.js"></script>

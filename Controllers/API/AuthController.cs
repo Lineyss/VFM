@@ -45,12 +45,12 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost("Logout")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Logout()
         {
             try
             {
-                authenticationManager.JwtLogOut(HttpContext);
+                await authenticationManager.JwtLogOut(HttpContext);
                 return Ok();
             }
             catch (Exception e)

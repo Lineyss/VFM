@@ -11,7 +11,7 @@ namespace VFM.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Policy = "admin")]
+    [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
     public class UserController : ControllerBase, IAPIController<UserModel, SupportUserModel>
     {
         private readonly LiteDbContext db;
@@ -21,14 +21,11 @@ namespace VFM.Controllers.API
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Get()
         {
             try
             {
-                var users = SupportUserModel.ConvertToViewModel(
-                        db.GetCollection<UserModel>("user")
-                        .FindAll());
+                var users = db.GetCollection<UserModel>("user") .FindAll();
                 return !users.Any() ? NoContent() : Ok(users);
             }
             catch
@@ -38,7 +35,6 @@ namespace VFM.Controllers.API
         }
 
         [HttpGet("{ID}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Get(int ID)
         {
             try
@@ -54,7 +50,6 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Post([FromForm] SupportUserModel model, bool customPar = false)
         {
             try
@@ -82,7 +77,6 @@ namespace VFM.Controllers.API
         }
 
         [HttpPut("{ID}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Put([FromForm] SupportUserModel model, int ID, bool customPar = false)
         {
             try
@@ -105,7 +99,6 @@ namespace VFM.Controllers.API
         }
 
         [HttpDelete("{ID}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public IActionResult Delete(int ID)
         {
             try

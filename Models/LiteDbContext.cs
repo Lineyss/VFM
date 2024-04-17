@@ -11,7 +11,7 @@ namespace VFM.Models
             if(user.Count() == 0)
                 user.Insert(new UserModel
                 {
-                    ID = 0,
+                    ID = 1,
                     login = "admin",
                     password = HashPassword.Hash("admin"),
                     isAdmin = true,
@@ -21,6 +21,6 @@ namespace VFM.Models
                     downloadF = true,
                     uploadF = true
                 });
-        }      
+        }
     }
 }

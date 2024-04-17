@@ -1,27 +1,21 @@
-﻿import { hrefLoad } from './clientManager.js'
-
-const form = document.querySelector("form");
+﻿var form = document.querySelector("form");
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    url = location.origin + "/api/Auth/Login";
+    var _form = new FormData(form);
 
-    const _form = new FormData(form);
-
-    console.log(url);
-
-    fetch(url, {
+    fetch(location.href,{
         method: 'POST',
         body: _form
     }).then(response => {
-        console.log(response.body);
-        return response.json();
+        if (response.redirected) {
+            location.href = response.url;
+        }
+        return response.json;
     }).then(data => {
-        const jwtToken = data.token;
-        localStorage.setItem("jwtToken", jwtToken);
-        hrefLoad(location.origin + "/VirtualFileManager");
+        window.alert(data);
     }).catch(error => {
-        window.alert(error);
-    });
-});
+        window.alert("Ошибка: Не удалось отправить запрос");
+    })
+})

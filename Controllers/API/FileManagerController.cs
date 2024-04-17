@@ -25,7 +25,7 @@ namespace VFM.Controllers
         }
         
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Get(string? path = null, [FromHeader] int pageNumber = 1, [FromHeader] bool isFile = false)
         {
             try
@@ -59,7 +59,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "create")]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyValue = "createF", PropertyName ="True")]
         public IActionResult Post([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -77,7 +77,7 @@ namespace VFM.Controllers
         }
 
         [HttpPut("{fileName}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "updateName")]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyValue = "updateNmaeF", PropertyName = "True")]
         public IActionResult Put(string fileName, [FromHeader] string path)
         {
             try
@@ -95,7 +95,7 @@ namespace VFM.Controllers
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "delete")]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyValue = "deleteF", PropertyName = "True")]
         public IActionResult Delete([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -113,7 +113,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "upload")]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyValue = "uploadF", PropertyName = "True")]
         public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
         {
             List<OSModel> osModels = new List<OSModel>();
@@ -145,7 +145,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("download")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "download")]
+        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyValue = "downloadF", PropertyName = "True")]
         public IActionResult Download(string path)
         {
             try

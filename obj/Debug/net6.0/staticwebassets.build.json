@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Ls0O7akx9UiR/LgBxF722vAyZhu3NEoE1KmZHI3uRO4=",
+  "Hash": "NXd5A2X6awk4YkN1LEVcyyP69+0UPiYO2sR90vM7xzg=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "VFM\\wwwroot",
       "Source": "VFM",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\admin.css",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\css\\admin.css",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "css/admin.css",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot\\css\\admin.css"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\auth.css",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\css\\auth.css",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "css/auth.css",
       "AssetKind": "All",
@@ -51,10 +51,10 @@
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\index.css",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\css\\index.css",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "css/index.css",
       "AssetKind": "All",
@@ -68,10 +68,10 @@
       "OriginalItemSpec": "wwwroot\\css\\index.css"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\main.css",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\css\\main.css",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "css/main.css",
       "AssetKind": "All",
@@ -85,10 +85,10 @@
       "OriginalItemSpec": "wwwroot\\css\\main.css"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\document.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\document.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/document.svg",
       "AssetKind": "All",
@@ -102,10 +102,10 @@
       "OriginalItemSpec": "wwwroot\\image\\document.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\drive.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\drive.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/drive.svg",
       "AssetKind": "All",
@@ -119,10 +119,10 @@
       "OriginalItemSpec": "wwwroot\\image\\drive.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\folder.svg",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\image\\folder.svg",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
       "RelativePath": "image/folder.svg",
       "AssetKind": "All",
@@ -136,12 +136,12 @@
       "OriginalItemSpec": "wwwroot\\image\\folder.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\auth.js",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\Auth.js",
       "SourceId": "VFM",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
-      "RelativePath": "js/auth.js",
+      "RelativePath": "js/Auth.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -150,75 +150,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\auth.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\clientManager.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/clientManager.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\clientManager.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/exit.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\exit.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\index.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/index.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\index.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\windowsRoute.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/windowsRoute.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\windowsRoute.js"
+      "OriginalItemSpec": "wwwroot\\js\\Auth.js"
     }
   ]
 }

@@ -22,19 +22,19 @@ namespace VFM.Services
             return new JwtSecurityTokenHandler().WriteToken(jwt).ToString();
         }
 
-        public async void CookieLogIn(HttpContext context ,UserModel user)
+        public async Task CookieLogIn(HttpContext context ,UserModel user)
         {
             var claimsIdentity = new ClaimsIdentity(GetClaims(user), CookieAuthenticationDefaults.AuthenticationScheme);
            
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         }
 
-        public async void JwtLogOut(HttpContext context)
+        public async Task JwtLogOut(HttpContext context)
         {
             await context.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
         }
 
-        public async void CookieLogOut(HttpContext context)
+        public async Task CookieLogOut(HttpContext context)
         {
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
@@ -43,13 +43,7 @@ namespace VFM.Services
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.login),
-                new Claim("isAdmin", user.isAdmin.ToString()),
-                new Claim("createF", user.createF.ToString()),
-                new Claim("deleteF", user.deleteF.ToString()),
-                new Claim("updateNameF", user.updateNameF.ToString()),
-                new Claim("downloadF", user.downloadF.ToString()),
-                new Claim("uploadF", user.uploadF.ToString())
+                new Claim("ID", user.ID.ToString()),
             };
         }
     }

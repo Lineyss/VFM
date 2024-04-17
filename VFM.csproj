@@ -9,7 +9,6 @@
   <ItemGroup>
     <None Include="wwwroot\css\auth.css" />
     <None Include="wwwroot\css\main.css" />
-    <None Include="wwwroot\js\clientManager.js" />
   </ItemGroup>
 
   <ItemGroup>

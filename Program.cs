@@ -35,33 +35,7 @@ namespace VFM
 
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("admin", policy =>
-                {
-                    policy.RequireClaim("isAdmin", "True");
-                });
-                options.AddPolicy("create", policy =>
-                {
-                    policy.RequireClaim("createF", "True");
-                });
-                options.AddPolicy("delete", policy =>
-                {
-                    policy.RequireClaim("deleteF", "True");
-                });
-                options.AddPolicy("updateName", policy =>
-                {
-                    policy.RequireClaim("updateNameF", "True");
-                });
-                options.AddPolicy("download", policy =>
-                {
-                    policy.RequireClaim("downloadF", "True");
-                });
-                options.AddPolicy("upload", policy =>
-                {
-                    policy.RequireClaim("uploadF", "True");
-                });
-            });
+            builder.Services.AddAuthorization();
 
             builder.Services.AddAuthentication(options =>
             {
