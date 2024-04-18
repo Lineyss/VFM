@@ -115,8 +115,6 @@ namespace VFM
             });
 
             app.Run();
-
-            File.WriteAllText("Путь до твоего файла", "Зашифрованный текст");
         }
     }
 }

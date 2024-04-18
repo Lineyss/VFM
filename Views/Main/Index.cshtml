@@ -7,7 +7,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="~/js/checkAuthorizationUsers.js"></script>
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/index.css">
     <title>Document</title>
@@ -22,7 +21,7 @@
 
         <div class="d1">
             <form>
-                <input id="myInput" type="text" placeholder="Искать здесь..." maxlength="266">
+                <input id="myInput" name="path" type="text" placeholder="Искать здесь..." maxlength="266">
                 <snap id="charCount">0/266</snap>
                 <button type="submit">Поиск</button>
             </form>
@@ -30,11 +29,11 @@
 
         <div class="ButtonBlock">
 
-            <button id="createFi">
+            <button id="createFo">
                 Создать папку
             </button>
 
-            <button id="createFo">
+            <button id="createFi">
                 Создать файл
             </button>
 
@@ -51,7 +50,7 @@
             </button>
 
             <button>
-                <a>
+                <a href="/Auth/Exit">
                     Выйти
                 </a>
             </button>
@@ -60,13 +59,104 @@
     </div>
     <div class="content">
         <table>
-            <tr>
+            <thead>
+               <tr>
+                    <th>
 
-            </tr>
+                    </th>
+                    <th>
+                        Логотип
+                    </th>
+                    <th>
+                        Название файла
+                    </th>
+                    <th>
+                        Полный путь до файла
+                    </th>
+                    <th>
+                        Дата создания
+                    </th>
+                    <th>
+                        Дата изменения
+                    </th>
+                    <th>
+                        Размер
+                    </th>
+               </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <img src="~/image/document.svg" />
+                    </td>
+                    <td>
+                        Ирбис.pdf
+                    </td>
+                    <td>
+                        D://Ирбис.pdf
+                    </td>
+                    <td>
+                        21:00 02.12.2023
+                    </td>
+                    <td>
+                        21:00 02.01.2024
+                    </td>
+                    <td>
+                        200000000 байт
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
+    <div class="pagination">
+        <a class="paginationElement" href="#">
+            1
+        </a>
+        <a class="paginationElement" href="#">
+            2
+        </a>
+        <a class="paginationElement" href="#">
+            3
+        </a>
+        <a class="paginationElement None">
+            ...
+        </a>
+        <a class="paginationElement" href="#">
+            10
+        </a>
+    </div>
+
+    <div class="popupConteiner hidden">
+        <div class="load hidden">
+            <img src="~/image/loadIcon.svg" />
+        </div>
+        <div class="popupMain">
+            <div class="closePopup">
+                <span class="close"></span>
+            </div>
+            <div class="formPopup">
+                <form method="post">    
+
+                    <button type="submit">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+
+    <script>
+        let inputField = document.getElementById('myInput');
+        let charCount = document.getElementById('charCount');
+        
+        inputField.addEventListener("input", () => {
+            charCount.textContent = `${inputField.value.length}/${inputField.maxLength}`
+        })
+    </script>
 </body>
 </html>
 
-<script src="~/js/index.js"></script>
+<script src="~/js/Index.js"></script>

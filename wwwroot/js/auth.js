@@ -1,9 +1,14 @@
 ﻿var form = document.querySelector("form");
+var button = document.querySelector("form > button"); 
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    button.disabled = true;
+
     var _form = new FormData(form);
+
+    let url;
 
     fetch(location.href,{
         method: 'POST',
@@ -12,10 +17,15 @@ form.addEventListener("submit", (e) => {
         if (response.redirected) {
             location.href = response.url;
         }
-        return response.json;
+        return {
+           "text": response.statusText,
+            "status": response.status
+        }
     }).then(data => {
-        window.alert(data);
-    }).catch(error => {
-        window.alert("Ошибка: Не удалось отправить запрос");
+        if (data['status'] != 200) {
+            window.alert(data['text']);
+        }
     })
+
+    button.disabled = false;
 })

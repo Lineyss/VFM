@@ -16,6 +16,7 @@ namespace VFM.Controllers.Main
         }
 
         [HttpGet("Auth/Login.html")]
+        [NoAuthUser(RedirectPath= "/VirtualFileManager")]
         public IActionResult Auth() => View();
 
         [HttpPost("Auth/Login.html")]

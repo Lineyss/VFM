@@ -21,6 +21,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost("Login")]
+        [NoAuthUser]
         public IActionResult Login([FromForm] AuthUserModel model)
         {
             try
