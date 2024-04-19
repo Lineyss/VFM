@@ -35,7 +35,11 @@ const covertPropertyesToUrl = (propertyesDict) => {
 }
 
 const getPropertyes = () => {
-    let dictionary = {};
+    let dictionary = {
+        "pageNumber": 1,
+        "isFile": false,
+        "path": undefined
+    };
     const propertyesString = location.search.substring(1, location.search.length);
 
     const propertyesArray = propertyesString.split('&');
@@ -43,7 +47,22 @@ const getPropertyes = () => {
 
     for (let i = 0; i < propertyesArray.length; i++) {
         let subArray = propertyesArray[i].split('=');
-        dictionary[subArray[0]] = subArray[1];
+
+        switch (subArray[0]) {
+            case "pageNumber":
+                let numberPageNumber = Number(subArray[1]);
+                if (subArray[1] !== undefined && numberPageNumber !== NaN)
+                    dictionary["pageNumber"] = numberPageNumber;
+                break
+            case "isFile":
+                subArray[1] = subArray[1].toLowerCase();
+                if (subArray[1] == "true" || subArray[1] == "false")
+                    dictionary["isFile"] = subArray[1];
+                break;
+            case "path":
+                dictionary["path"] = subArray[1];
+                break;
+        }
     }
 
     return dictionary;
@@ -54,11 +73,7 @@ const createPaginations = (maxPagination) => {
     const createA = (text, href = undefined, addEventClick = true) => {
         let a = document.createElement("a");
         try {
-            if (text == getPropertyes()['pageNumber'])
-            {
-                a.classList.add('select')
-            }
-
+            if (text == getPropertyes()['pageNumber']) a.classList.add('select')
         }
         catch { }
 
@@ -69,11 +84,17 @@ const createPaginations = (maxPagination) => {
 
         if (addEventClick) {
             a.addEventListener("click", function (e) {
+
+                const getPageNumber = (url) => {
+                    const urlArr = url.split('/');
+                    return urlArr[urlArr.length - 1];
+                }
+
                 e.preventDefault();
 
                 propertyes = getPropertyes();
 
-                propertyes['pageNumber'] = this.href[this.href.length-1];
+                propertyes['pageNumber'] = getPageNumber(this.href);
 
                 location.href = covertPropertyesToUrl(propertyes);
             });
@@ -85,14 +106,13 @@ const createPaginations = (maxPagination) => {
     let maxBlocksInPage = 3;
 
     let currentPage = getPropertyes()['pageNumber'];
-    currentPage = currentPage !== undefined ? Number(currentPage) : 1;
 
     let lastIndex = currentPage + 2;
 
     lastIndex = Math.abs(maxPagination - lastIndex);
 
-    const needHelpBlock = (lastIndex > 1);
-
+    const needHelpBlock = lastIndex > 1;
+        
     const needViewMaxPage = !((currentPage + 1) <= maxPagination);
 
     if (currentPage + 2 >= maxPagination) maxBlocksInPage = 2;  
@@ -197,7 +217,7 @@ document.getElementById("upload").addEventListener("click", () => {
     viewOrHiddenPopup(false);
 });
 
-createPaginations(5);
+createPaginations(10);
 
 /*viewOrHiddenPopup(false);
 viewOrHiddenLoad(false);
