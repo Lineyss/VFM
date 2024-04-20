@@ -1,255 +1,150 @@
-﻿const viewOrHiddenPopup = (bool) => {
-    let popupConteiner = document.querySelector(".popupConteiner");
-    if (bool !== undefined)
-        return popupConteiner.classList.toggle("hidden", bool);
+﻿const popupContainer = document.querySelector(".popupConteiner");
+const popupMain = document.querySelector(".popupMain");
+const load = document.querySelector(".load");
+const paginationContainer = document.querySelector(".pagination");
+const tbody = document.querySelector("tbody");
 
-    return popupConteiner.classList.toggle("hidden");
+const viewOrHiddenPopup = (bool) => {
+    popupContainer.classList.toggle("hidden", bool);
 }
 
 const viewOrHiddenLoad = (bool) => {
-    let popupMain = document.querySelector(".popupMain");
-    let load = document.querySelector(".load");
-
-    if (bool !== undefined) {
-        popupMain.classList.toggle("hidden", !bool);
-        return load.classList.toggle("hidden", bool);
-    }
-
-    popupMain.classList.toggle("hidden");
-    return load.classList.toggle("hidden");
-}
-
-const covertPropertyesToUrl = (propertyesDict) => {
-    let arrayStringPropertyes = [];
-
-    for (key in propertyesDict) {
-        let stringProperty = key + '=' + propertyesDict[key];
-        arrayStringPropertyes.push(stringProperty);
-    }
-
-    const stringPropertyes = arrayStringPropertyes.join('&');
-
-    const url = location.origin + location.pathname + '?' + stringPropertyes;
-
-    return url;
+    popupMain.classList.toggle("hidden", !bool);
+    load.classList.toggle("hidden", bool);
 }
 
 const getPropertyes = () => {
-    let dictionary = {
-        "pageNumber": 1,
-        "isFile": false,
-        "path": undefined
-    };
-    const propertyesString = location.search.substring(1, location.search.length);
+    const searchParams = new URLSearchParams(location.search);
+    const pageNumber = searchParams.get("pageNumber") || 1;
+    const isFile = searchParams.get("isFile") === "true";
+    const path = searchParams.get("path") || '';
 
-    const propertyesArray = propertyesString.split('&');
-    console.log(propertyesArray);
-
-    for (let i = 0; i < propertyesArray.length; i++) {
-        let subArray = propertyesArray[i].split('=');
-
-        switch (subArray[0]) {
-            case "pageNumber":
-                let numberPageNumber = Number(subArray[1]);
-                if (subArray[1] !== undefined && numberPageNumber !== NaN)
-                    dictionary["pageNumber"] = numberPageNumber;
-                break
-            case "isFile":
-                subArray[1] = subArray[1].toLowerCase();
-                if (subArray[1] == "true" || subArray[1] == "false")
-                    dictionary["isFile"] = subArray[1];
-                break;
-            case "path":
-                dictionary["path"] = subArray[1];
-                break;
-        }
-    }
-
-    return dictionary;
+    return { pageNumber: +pageNumber, isFile, path };
 }
 
-const createPaginations = (maxPagination) => {
+const covertPropertyesToUrl = (propertyesDict = getPropertyes()) => {
+    const searchParams = new URLSearchParams(propertyesDict);
+    return `?${searchParams.toString()}`;
+}
 
-    const createA = (text, href = undefined, addEventClick = true) => {
-        let a = document.createElement("a");
-        try {
-            if (text == getPropertyes()['pageNumber']) a.classList.add('select')
-        }
-        catch { }
+const createPaginatorLink = (text, pageNumber) => {
+    const a = document.createElement("a");
+    a.textContent = text;
+    a.classList.add("paginationElement");
 
-        text = document.createTextNode(text);
-        a.appendChild(text);
-        if (href) a.href = href;
-        a.classList.add('paginationElement');
-
-        if (addEventClick) {
-            a.addEventListener("click", function (e) {
-
-                const getPageNumber = (url) => {
-                    const urlArr = url.split('/');
-                    return urlArr[urlArr.length - 1];
-                }
-
-                e.preventDefault();
-
-                propertyes = getPropertyes();
-
-                propertyes['pageNumber'] = getPageNumber(this.href);
-
-                location.href = covertPropertyesToUrl(propertyes);
-            });
-        }
-
-        return a;
+    if (pageNumber === getPropertyes().pageNumber) {
+        a.classList.add("select");
     }
 
-    let maxBlocksInPage = 3;
+    a.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), pageNumber })}`;
 
-    let currentPage = getPropertyes()['pageNumber'];
+    return a;
+}
 
-    let lastIndex = currentPage + 2;
+const createPagination = async (maxPagination) => {
+    const currentPage = getPropertyes().pageNumber;
+    const maxBlocksInPage = Math.min(3, maxPagination - currentPage + 1);
 
-    lastIndex = Math.abs(maxPagination - lastIndex);
-
-    const needHelpBlock = lastIndex > 1;
-        
-    const needViewMaxPage = !((currentPage + 1) <= maxPagination);
-
-    if (currentPage + 2 >= maxPagination) maxBlocksInPage = 2;  
-
-    if (currentPage + 1 >= maxPagination) maxBlocksInPage = 1;
-
-    let arrayPaginations = [];
-
-    if (!needViewMaxPage) {
-        for (let i = 0; i < maxBlocksInPage; i++) {
-            let a = createA(currentPage + i, currentPage + i);
-            arrayPaginations.push(a);
-        }
+    for (let i = currentPage; i < currentPage + maxBlocksInPage; i++) {
+        paginationContainer.appendChild(createPaginatorLink(i, i));
     }
 
-    if (needHelpBlock) {
-        let a = createA(text = '...', undefined, addEventClick = false);
-        arrayPaginations.push(a);
+    if (maxPagination - currentPage > 2) {
+        paginationContainer.appendChild(createPaginatorLink("...", maxPagination));
     }
 
-    let lastA = createA(maxPagination, maxPagination);
-    arrayPaginations.push(lastA);
-
-    if (Number(currentPage) - 1 > 0) {
-        let a = createA('←',currentPage - 1);
-        arrayPaginations.splice(0, 0, a);
+    if (currentPage > 1) {
+        paginationContainer.insertBefore(createPaginatorLink("←", currentPage - 1), paginationContainer.firstChild);
     }
 
-    if (Number(currentPage) + 1 <= maxPagination) {
-        let a = createA('→',currentPage + 1);
-        arrayPaginations.push(a);
-    }
-
-    for (let a of arrayPaginations) {
-        document.querySelector(".pagination").appendChild(a);
+    if (currentPage < maxPagination) {
+        paginationContainer.appendChild(createPaginatorLink("→", currentPage + 1));
     }
 }
 
-const createContent = (imgPath, fileName, fullPath, dateCreate, dateChange, size) => {
+const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, size) => {
+    const tr = document.createElement("tr");
 
-    const convertBytes = (bytes) => {
-        if (bytes < 1024) {
-            return bytes + ' B';
-        } else if (bytes < 1024 * 1024) {
-            return (bytes / 1024).toFixed(2) + ' KB';
-        } else if (bytes < 1024 * 1024 * 1024) {
-            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-        } else {
-            return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-        }
-    }
-
-    let tr = document.createElement("tr");
-
-    let tdChechBox = document.createElement("td");
-    let checkBox = document.createElement("input");
+    const tdCheckBox = document.createElement("td");
+    const checkBox = document.createElement("input");
     checkBox.type = "checkbox";
-    tdChechBox.appendChild(checkBox);
+    tdCheckBox.appendChild(checkBox);
 
-    let tdImage = document.createElement("td");
-    let image = document.createElement("img");
+    const tdImage = document.createElement("td");
+    const image = document.createElement("img");
     image.src = imgPath;
     tdImage.appendChild(image);
 
-    let tdFileName = document.createElement("td");
-    tdFileName.appendChild(fileName);
+    tr.append(tdCheckBox, tdImage, createSimpleTd(fileName), createSimpleTd(fullPath), createSimpleTd(dateCreate), createSimpleTd(dateChange), createSimpleTd(convertBytes(size)));
 
-    let tdFullPath = document.createElement("td");
-    tdFullPath.appendChild(fullPath);
-
-    let tdDateCreateFile = document.createElement("td");
-    tdDateCreateFile.appendChild(dateCreate);
-
-    let tdDateChangeFile = document.createElement("td");
-    tdDateChangeFile.appendChild(dateChange);
-
-    let tdSizeFile = document.createElement("td");
-    tdSizeFile.appendChild(convertBytes(size));
-
-    tr.appendChild(tdChechBox);
-    tr.appendChild(tdImage);
-    tr.appendChild(tdFileName);
-    tr.appendChild(tdFullPath);
-    tr.appendChild(tdDateCreateFile);
-    tr.appendChild(tdDateChangeFile);
-    tr.appendChild(tdSizeFile);
-
-    document.querySelector("tbody").appendChild(tr);
+    tbody.appendChild(tr);
 }
 
-document.querySelector(".close").addEventListener("click", () => {
-    viewOrHiddenPopup(true); 
-});
+const convertBytes = (bytes) => {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-document.getElementById("createFi").addEventListener("click", () => {
-    viewOrHiddenPopup(false);
-});
-document.getElementById("createFo").addEventListener("click", () => {
-    viewOrHiddenPopup(false);
-});
-document.getElementById("upload").addEventListener("click", () => {
-    viewOrHiddenPopup(false);
-});
+    let unitIndex = 0;
+    while (bytes >= 1024 && unitIndex < units.length - 1) {
+        bytes /= 1024;
+        unitIndex++;
+    }
 
-createPaginations(10);
+    return bytes.toFixed(2) + ' ' + units[unitIndex];
+};
 
-/*viewOrHiddenPopup(false);
-viewOrHiddenLoad(false);
+const createSimpleTd = (text) => {
+    const td = document.createElement("td");
+    td.textContent = text;
+    return td;
+}
 
-let url = location.origin + "/api/FileManager?path=F://"
-
-fetch(url , {
-    method: "GET",
-}).then(response => {
-    if (response.ok) {   
-        return response.json(); 
-    } else {
-        let h2 = document.createElement("h2");
-        let h2Text = document.createTextNode("Ничего не нашли по данному пути");
-
-        h2.appendChild(h2Text);
-
-        let content = document.querySelector(".content");
-
-        let tbodyElement = document.querySelector("tbody");
-        if (tbodyElement) {
-            content.removeChild(tbodyElement);
+const sendRequest = async (url) => {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(response.statusText);
         }
 
+        const data = await response.json();
+        createPagination(data.totalNumberPages);
+
+        for (const element of data.currentItems) {
+            createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size);
+        }
+    } catch (error) {
+        const h2 = document.createElement("h2");
+        h2.textContent = "Nothing found for this path";
+        const content = document.querySelector(".content");
+        content.innerHTML = '';
         content.appendChild(h2);
+    } finally {
+        viewOrHiddenPopup(true);
+        viewOrHiddenLoad(true);
     }
-}).then(data => {
-})
-.catch(error => {
-    console.log(error);
-});
+}
 
-viewOrHiddenPopup(true);
-viewOrHiddenLoad(true);*/
+const main = async () => {
+    const url = `${location.origin}/api/FileManager${covertPropertyesToUrl()}`;
+    await sendRequest(url);
 
+    document.querySelector(".close").addEventListener("click", () => {
+        viewOrHiddenPopup(true);
+    });
+
+    document.getElementById("createFi").addEventListener("click", () => {
+        viewOrHiddenPopup(false);
+    });
+
+    document.getElementById("createFo").addEventListener("click", () => {
+        viewOrHiddenPopup(false);
+    });
+
+    document.getElementById("upload").addEventListener("click", () => {
+        viewOrHiddenPopup(false);
+    });
+}
+
+viewOrHiddenPopup(false);
+viewOrHiddenLoad(false);
+
+main();
