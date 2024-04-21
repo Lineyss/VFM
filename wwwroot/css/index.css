@@ -109,6 +109,12 @@ thead
 tbody > tr
 {
     margin: 0 10px;
+    cursor:pointer;
+    background: white;
+}
+
+tbody > tr:hover{
+    background: grey;
 }
 
 .formPopup {
@@ -116,7 +122,11 @@ tbody > tr
     height: 95%;
 }
 
-.select
+.selectA
 {
     background:red !important;
+}
+
+.selectTr {
+    background: grey !important;
 }

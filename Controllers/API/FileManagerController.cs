@@ -27,7 +27,7 @@ namespace VFM.Controllers
         
         [HttpGet]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult Get(string? path = null, [FromHeader] int pageNumber = 1, [FromHeader] bool isFile = false)
+        public IActionResult Get(string? path = null, int pageNumber = 1, bool isFile = false)
         {
             try
             {
@@ -151,14 +151,16 @@ namespace VFM.Controllers
 
         [HttpPost("download")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "downloadF", PropertyName = "True")]
-        public IActionResult Download(string path)
+        public IActionResult Download(List<string> paths)
         {
             try
             {
-                if (System.IO.File.Exists(path))
-                    return sFileManager.downloadFile(path);
-                else if (Directory.Exists(path))
-                    return sFileManager.downloadDirectory(path);
+                paths = paths.Where(element => System.IO.File.Exists(element) || Directory.Exists(element)).ToList();
+                
+                if (System.IO.File.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadFile(paths[0]);
+                else if (Directory.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadDirectory(paths[0]);
+
+                sFileManager.downloadAll(paths);
 
                 throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }

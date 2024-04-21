@@ -41,11 +41,11 @@
                 Загрузить
             </button>
 
-            <button id="download">
+            <button id="download" disabled="true">
                 Скачать
             </button>
 
-            <button id="delete">
+            <button id="delete" disabled="true">
                 Удалить
             </button>
 
@@ -85,29 +85,6 @@
                 </tr>
             </thead>
             <tbody>
-@*                <tr>
-                    <td>
-                        <input type="checkbox" />
-                    </td>
-                    <td>
-                        <img src="~/image/document.svg" />
-                    </td>
-                    <td>
-                        Ирбис.pdf
-                    </td>
-                    <td>
-                        D://Ирбис.pdf
-                    </td>
-                    <td>
-                        21:00 02.12.2023
-                    </td>
-                    <td>
-                        21:00 02.01.2024
-                    </td>
-                    <td>
-                        200000000 байт
-                    </td>
-                </tr>*@
             </tbody>
         </table>
     </div>
@@ -132,15 +109,6 @@
     </div>
 
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
-
-    <script>
-        let inputField = document.getElementById('myInput');
-        let charCount = document.getElementById('charCount');
-        
-        inputField.addEventListener("input", () => {
-            charCount.textContent = `${inputField.value.length}/${inputField.maxLength}`
-        })
-    </script>
 </body>
 </html>
 

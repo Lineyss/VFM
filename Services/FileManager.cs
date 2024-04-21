@@ -78,6 +78,11 @@ namespace VFM.Services
             return fileContentResult;
         }
 
+        public FileContentResult downloadAll (List<string> paths)
+        {
+            ZipFile.
+        }
+
         public FileContentResult downloadDirectory(string path)
         {
             string pathToZip = $"{Directory.GetParent(path).FullName}/{Path.GetFileNameWithoutExtension(path)}.zip";
@@ -204,7 +209,7 @@ namespace VFM.Services
                     dateCreate = Directory.GetCreationTime(path).ToString(),
                     dateChange = Directory.GetLastWriteTime(path).ToString(),
                     size = GetFolderSize(path),
-                    isEmpty = true
+                    isFile = false
                 };
             }
             catch
@@ -244,6 +249,7 @@ namespace VFM.Services
                     fullPath = fullPath,
                     dateCreate = File.GetCreationTime(fullPath).ToString(),
                     dateChange = File.GetLastWriteTime(fullPath).ToString(),
+                    isFile = true
                 });
             }
 
@@ -263,6 +269,7 @@ namespace VFM.Services
                     fullPath = fullPath,
                     dateCreate = Directory.GetCreationTime(fullPath).ToString(),
                     dateChange = Directory.GetLastWriteTime(fullPath).ToString(),
+                    isFile = false
                 });
             }
 
@@ -281,7 +288,8 @@ namespace VFM.Services
                     fullPath = element.RootDirectory.FullName,
                     dateCreate = element.RootDirectory.CreationTime.ToString(),
                     dateChange = element.RootDirectory.LastWriteTime.ToString(),
-                    size = element.TotalSize
+                    size = element.TotalSize,
+                    isFile = false
                 });
             }
         }

@@ -3,6 +3,11 @@ const popupMain = document.querySelector(".popupMain");
 const load = document.querySelector(".load");
 const paginationContainer = document.querySelector(".pagination");
 const tbody = document.querySelector("tbody");
+const searchInput = document.getElementById('myInput');
+const deleteButton = document.getElementById("delete");
+const downloadButton = document.getElementById("download");
+
+let pathArray = [];
 
 const viewOrHiddenPopup = (bool) => {
     popupContainer.classList.toggle("hidden", bool);
@@ -32,9 +37,7 @@ const createPaginatorLink = (text, pageNumber) => {
     a.textContent = text;
     a.classList.add("paginationElement");
 
-    if (pageNumber === getPropertyes().pageNumber) {
-        a.classList.add("select");
-    }
+    if (pageNumber === getPropertyes().pageNumber)  a.classList.add("selectA");
 
     a.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), pageNumber })}`;
 
@@ -49,25 +52,44 @@ const createPagination = async (maxPagination) => {
         paginationContainer.appendChild(createPaginatorLink(i, i));
     }
 
-    if (maxPagination - currentPage > 2) {
-        paginationContainer.appendChild(createPaginatorLink("...", maxPagination));
-    }
+    if (maxPagination - currentPage > 2) paginationContainer.appendChild(createPaginatorLink("...", maxPagination));
 
-    if (currentPage > 1) {
-        paginationContainer.insertBefore(createPaginatorLink("←", currentPage - 1), paginationContainer.firstChild);
-    }
+    if (currentPage + 2 < maxPagination) paginationContainer.appendChild(createPaginatorLink(maxPagination, maxPagination));
 
-    if (currentPage < maxPagination) {
-        paginationContainer.appendChild(createPaginatorLink("→", currentPage + 1));
-    }
+    if (currentPage > 1) paginationContainer.insertBefore(createPaginatorLink("←", currentPage - 1), paginationContainer.firstChild);
+
+    if (currentPage < maxPagination) paginationContainer.appendChild(createPaginatorLink("→", currentPage + 1));
 }
 
-const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, size) => {
+const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, size, isFile) => {
     const tr = document.createElement("tr");
+
+    tr.setAttribute("isfile", isFile);
 
     const tdCheckBox = document.createElement("td");
     const checkBox = document.createElement("input");
     checkBox.type = "checkbox";
+    checkBox.addEventListener("click", function () {
+        this.parentElement.parentElement.classList.toggle("selectTr", this.checked);
+        const text = this.parentElement.parentElement.childNodes[3].textContent;
+
+        if (this.checked) {
+            pathArray.push(text);
+        } else {
+            const index = pathArray.indexOf(text);
+            if (index > -1) pathArray.splice(index, 1);
+        }
+
+        if (pathArray.length == 0) {
+            deleteButton.disabled = true;
+            downloadButton.disabled = true;
+        }
+        else {
+            deleteButton.disabled = false;
+            downloadButton.disabled = false;
+        }
+
+    });
     tdCheckBox.appendChild(checkBox);
 
     const tdImage = document.createElement("td");
@@ -78,14 +100,25 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
     tr.append(tdCheckBox, tdImage, createSimpleTd(fileName), createSimpleTd(fullPath), createSimpleTd(dateCreate), createSimpleTd(dateChange), createSimpleTd(convertBytes(size)));
 
     tbody.appendChild(tr);
+
+    tr.addEventListener("dblclick", function () {
+        const path = this.childNodes[3].textContent;
+        const isFileInt = this.getAttribute("isfile");
+        location.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), path, isFile: isFileInt })}`;
+    })
 }
 
 const convertBytes = (bytes) => {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
+    bytes = Math.abs(bytes);
+
+    if (bytes < 1) return bytes + ' B';
+
     let unitIndex = 0;
     while (bytes >= 1024 && unitIndex < units.length - 1) {
-        bytes /= 1024;
+        bytes
+            /= 1024;
         unitIndex++;
     }
 
@@ -96,6 +129,12 @@ const createSimpleTd = (text) => {
     const td = document.createElement("td");
     td.textContent = text;
     return td;
+}
+
+const countingChars = (input) => {
+    const parent = input.parentElement;
+    const span = parent.childNodes[1];
+    span.textContent = `${input.value.length}/${input.maxLength}`
 }
 
 const sendRequest = async (url) => {
@@ -109,11 +148,12 @@ const sendRequest = async (url) => {
         createPagination(data.totalNumberPages);
 
         for (const element of data.currentItems) {
-            createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size);
+            createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
         }
+
     } catch (error) {
         const h2 = document.createElement("h2");
-        h2.textContent = "Nothing found for this path";
+        h2.textContent = "Ничего не найдено.";
         const content = document.querySelector(".content");
         content.innerHTML = '';
         content.appendChild(h2);
@@ -124,8 +164,21 @@ const sendRequest = async (url) => {
 }
 
 const main = async () => {
+    viewOrHiddenPopup(false);
+    viewOrHiddenLoad(false);
+
     const url = `${location.origin}/api/FileManager${covertPropertyesToUrl()}`;
-    await sendRequest(url);
+
+    const send = sendRequest(url);
+
+    const text = getPropertyes()['path'];
+
+    searchInput.addEventListener("input", function () {
+        countingChars(this);
+    });
+
+    searchInput.value = text;
+    countingChars(searchInput);
 
     document.querySelector(".close").addEventListener("click", () => {
         viewOrHiddenPopup(true);
@@ -142,9 +195,9 @@ const main = async () => {
     document.getElementById("upload").addEventListener("click", () => {
         viewOrHiddenPopup(false);
     });
+
+    await send;
 }
 
-viewOrHiddenPopup(false);
-viewOrHiddenLoad(false);
 
 main();
