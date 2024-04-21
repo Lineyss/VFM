@@ -64,7 +64,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "createF", PropertyName ="True")]
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "createF")]
         public IActionResult Post([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -82,7 +82,7 @@ namespace VFM.Controllers
         }
 
         [HttpPut("{fileName}")]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "updateNmaeF", PropertyName = "True")]
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "updateNmaeF")]
         public IActionResult Put(string fileName, [FromHeader] string path)
         {
             try
@@ -100,7 +100,7 @@ namespace VFM.Controllers
         }
 
         [HttpDelete]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "deleteF", PropertyName = "True")]
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "deleteF")]
         public IActionResult Delete([FromHeader] string path, [FromHeader] bool isFile = true)
         {
             try
@@ -118,7 +118,7 @@ namespace VFM.Controllers
         }
 
         [HttpPost("upload")]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "uploadF", PropertyName = "True")]
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "uploadF")]
         public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
         {
             List<OSModel> osModels = new List<OSModel>();
@@ -150,8 +150,8 @@ namespace VFM.Controllers
         }
 
         [HttpPost("download")]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "downloadF", PropertyName = "True")]
-        public IActionResult Download(List<string> paths)
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "downloadF")]
+        public IActionResult Download([FromForm] List<string> paths)
         {
             try
             {
@@ -160,7 +160,7 @@ namespace VFM.Controllers
                 if (System.IO.File.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadFile(paths[0]);
                 else if (Directory.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadDirectory(paths[0]);
 
-                sFileManager.downloadAll(paths);
+                return sFileManager.downloadAll(paths);
 
                 throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }

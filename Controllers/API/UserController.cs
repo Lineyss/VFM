@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,7 @@ namespace VFM.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
+    [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
     public class UserController : ControllerBase, IAPIController<UserModel, SupportUserModel>
     {
         private readonly LiteDbContext db;

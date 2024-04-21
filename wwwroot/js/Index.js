@@ -111,11 +111,12 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
 const convertBytes = (bytes) => {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
+    let unitIndex = 0;
+
     bytes = Math.abs(bytes);
 
-    if (bytes < 1) return bytes + ' B';
+    if (bytes < 1) return bytes + ' ' + units[unitIndex];
 
-    let unitIndex = 0;
     while (bytes >= 1024 && unitIndex < units.length - 1) {
         bytes
             /= 1024;

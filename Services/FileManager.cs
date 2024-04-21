@@ -80,7 +80,22 @@ namespace VFM.Services
 
         public FileContentResult downloadAll (List<string> paths)
         {
-            ZipFile.
+            string zipPath = Environment.CurrentDirectory + "/downloadAll.zip";
+            ZipArchive archive;
+            using (archive = ZipFile.Open(zipPath, ZipArchiveMode.Create))
+            {
+                foreach(string path in paths)
+                {
+                    archive.CreateEntryFromFile(path, Path.GetFileName(path));
+                }
+            }
+
+
+            FileContentResult fileContentResult = downloadFile(zipPath);
+
+            File.Delete(zipPath);
+
+            return fileContentResult;
         }
 
         public FileContentResult downloadDirectory(string path)

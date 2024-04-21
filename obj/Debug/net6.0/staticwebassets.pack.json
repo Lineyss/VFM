@@ -29,24 +29,16 @@
       "PackagePath": "staticwebassets\\image\\folder.svg"
     },
     {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\loadIcon.svg",
+      "PackagePath": "staticwebassets\\image\\loadIcon.svg"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\Index.js",
+      "PackagePath": "staticwebassets\\js\\Index.js"
+    },
+    {
       "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\auth.js",
       "PackagePath": "staticwebassets\\js\\auth.js"
-    },
-    {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\clientManager.js",
-      "PackagePath": "staticwebassets\\js\\clientManager.js"
-    },
-    {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\exit.js",
-      "PackagePath": "staticwebassets\\js\\exit.js"
-    },
-    {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\index.js",
-      "PackagePath": "staticwebassets\\js\\index.js"
-    },
-    {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\windowsRoute.js",
-      "PackagePath": "staticwebassets\\js\\windowsRoute.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VFM.Microsoft.AspNetCore.StaticWebAssets.props",
