@@ -7,6 +7,8 @@ const searchInput = document.getElementById('myInput');
 const deleteButton = document.getElementById("delete");
 const downloadButton = document.getElementById("download");
 
+let mainUrl = `${location.origin}/api/FileManager`
+
 let pathArray = [];
 
 const viewOrHiddenPopup = (bool) => {
@@ -134,7 +136,7 @@ const createSimpleTd = (text) => {
 
 const countingChars = (input) => {
     const parent = input.parentElement;
-    const span = parent.childNodes[1];
+    const span = parent.querySelector("snap");
     span.textContent = `${input.value.length}/${input.maxLength}`
 }
 
@@ -168,7 +170,7 @@ const main = async () => {
     viewOrHiddenPopup(false);
     viewOrHiddenLoad(false);
 
-    const url = `${location.origin}/api/FileManager${covertPropertyesToUrl()}`;
+    const url = mainUrl + covertPropertyesToUrl();
 
     const send = sendRequest(url);
 
@@ -180,6 +182,60 @@ const main = async () => {
 
     searchInput.value = text;
     countingChars(searchInput);
+
+    downloadButton.addEventListener("click", () => {
+        const url = mainUrl + '/download';
+        fetch(url, {
+            method: 'POST',
+            body:{
+                paths: pathArray[0]
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Не удалось скачать файл');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.classList.add("hidden");
+            a.href = url;
+            a.download = 'filename.zip'; // Указать название файла
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            alert(error);
+        });
+    })
+
+    deleteButton.addEventListener("click", () => {
+        const result = confirm("Вы точно хотите удалить эти файла? Восстановить их будет невозможно.");
+        if (result === true) {
+            let paths = JSON.stringify(pathArray);
+            console.log(pathArray);
+            fetch(mainUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                    paths: paths
+                },
+            }).then(response => {
+                if (!response.ok) throw new Error("Не удалось удалить файлы");
+                else location.reload();
+            }).catch(error => {
+                alert(error);
+            })
+        }
+    })
 
     document.querySelector(".close").addEventListener("click", () => {
         viewOrHiddenPopup(true);

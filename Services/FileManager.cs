@@ -78,7 +78,7 @@ namespace VFM.Services
             return fileContentResult;
         }
 
-        public FileContentResult downloadAll (List<string> paths)
+        public FileContentResult downloadAll ([FromBody] List<string> paths)
         {
             string zipPath = Environment.CurrentDirectory + "/downloadAll.zip";
             ZipArchive archive;

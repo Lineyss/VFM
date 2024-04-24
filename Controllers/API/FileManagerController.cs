@@ -65,7 +65,7 @@ namespace VFM.Controllers
 
         [HttpPost]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "createF")]
-        public IActionResult Post([FromHeader] string path, [FromHeader] bool isFile = true)
+        public IActionResult Post(string path, bool isFile = true)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace VFM.Controllers
 
         [HttpPut("{fileName}")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "updateNmaeF")]
-        public IActionResult Put(string fileName, [FromHeader] string path)
+        public IActionResult Put(string fileName, string path)
         {
             try
             {
@@ -101,14 +101,22 @@ namespace VFM.Controllers
 
         [HttpDelete]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "deleteF")]
-        public IActionResult Delete([FromHeader] string path, [FromHeader] bool isFile = true)
+        public IActionResult Delete(List<string> paths)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(path)) 
-                    throw new Exception(ErrorModel.AllFieldsMostBeFields);
+                if (paths == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
-                sFileManager.Delete(path, isFile);
+                var _paths = paths.Where(element => System.IO.File.Exists(element) || Directory.Exists(element));
+
+                if (_paths.Count() == 0) throw new Exception(ErrorModel.WrongPath);
+
+                foreach(string path in paths)
+                {
+                    if (System.IO.File.Exists(path)) sFileManager.Delete(path, true);
+                    else sFileManager.Delete(path, false);
+                }
+
                 return Ok();
             }
             catch (Exception e)
@@ -119,7 +127,7 @@ namespace VFM.Controllers
 
         [HttpPost("upload")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "uploadF")]
-        public async Task<IActionResult> UploadFiles(IFormFileCollection files, [FromHeader] string path)
+        public async Task<IActionResult> UploadFiles(IFormFileCollection files, string path)
         {
             List<OSModel> osModels = new List<OSModel>();
             try
@@ -151,16 +159,21 @@ namespace VFM.Controllers
 
         [HttpPost("download")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "downloadF")]
-        public IActionResult Download([FromForm] List<string> paths)
+        public IActionResult Download(string paths)
         {
             try
             {
+                return sFileManager.downloadFile(paths);
+/*                if (paths == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
+
                 paths = paths.Where(element => System.IO.File.Exists(element) || Directory.Exists(element)).ToList();
-                
+
+                if (paths.Count == 0) throw new Exception(ErrorModel.WrongPath);
+
                 if (System.IO.File.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadFile(paths[0]);
                 else if (Directory.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadDirectory(paths[0]);
 
-                return sFileManager.downloadAll(paths);
+                return sFileManager.downloadAll(paths);*/
 
                 throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }

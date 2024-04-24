@@ -7,7 +7,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="~/js/clientManager.js"></script>
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/admin.css">
     <title>Document</title>
@@ -20,25 +19,15 @@
             </a>
         </h1>
 
-        <div class="d1">
-            <form>
-                <input id="myInput" type="text" placeholder="Искать здесь..." maxlength="266">
-                <snap id="charCount">0/266</snap>
-                <button type="submit">Поиск</button>
-            </form>
-        </div>
-
         <div class="ButtonBlock">
             <button>
-                <a>
+                <a href="/Auth/Exit">
                     Выйти
                 </a>
             </button>
 
-            <button>
-                <a>
-                    Создать пользователя
-                </a>
+            <button id="createUser">
+                Создать пользователя
             </button>
         </div>
     </div>
@@ -99,16 +88,27 @@
             <button>Сохранить</button>
         </form>
     </div>
+
+    <div class="popupConteiner">
+        <div class="loadPopup">
+            <img src="~/image/loadIcon.svg" />
+        </div>
+        <div class="formContainer">
+            <div class="contentFormContainer">
+                <div class="topContentForm">
+
+                </div>
+                <div class="formContent">
+                    <h1>Создать пользователя</h1>
+                    <form>
+                
+                        <button type="submit">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    <script type="module" src="~/js//Admin.js"></script>
 </body>
 </html>
-
-<script>
-    const inputField = document.getElementById('myInput');
-    const charCount = document.getElementById('charCount');
-
-    inputField.addEventListener('input', function () {
-        charCount.textContent = `${inputField.value.length}/${inputField.maxLength}`;
-    });
-
-</script>
