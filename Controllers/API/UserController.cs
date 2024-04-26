@@ -46,12 +46,12 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
         [HttpPost]
-        public IActionResult Post([FromForm] SupportUserModel model, bool customPar = false)
+        public IActionResult _Post([FromForm] SupportUserModel model)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace VFM.Controllers.API
 
                 if (user != null) throw new Exception(ErrorModel.LoginIsExist);
 
-                user = new UserModel(model, customPar);
+                user = new UserModel(model);
 
                 var InserResult = users.Insert(user);
                 user = users.FindById(InserResult);
@@ -73,7 +73,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -95,7 +95,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -110,7 +110,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 

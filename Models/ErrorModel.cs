@@ -2,6 +2,13 @@
 {
     public sealed class ErrorModel
     {
+        public ErrorModel(string errorText)
+        {
+            ErrorText = errorText;
+        }
+
+        public string ErrorText { get; set; }
+
         public const string FileIsExist = "Ошибка: Файл существует";
         public const string DirectoryIsExist = "Ошибка: Директория уже существует";
         public const string LoginIsExist = "Ошибка: Аккаунт с таким логином уже существует";

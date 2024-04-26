@@ -1,44 +1,52 @@
 {
   "Files": [
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\admin.css",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\admin.css",
       "PackagePath": "staticwebassets\\css\\admin.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\auth.css",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\auth.css",
       "PackagePath": "staticwebassets\\css\\auth.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\index.css",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\index.css",
       "PackagePath": "staticwebassets\\css\\index.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\css\\main.css",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\main.css",
       "PackagePath": "staticwebassets\\css\\main.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\document.svg",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\document.svg",
       "PackagePath": "staticwebassets\\image\\document.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\drive.svg",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\drive.svg",
       "PackagePath": "staticwebassets\\image\\drive.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\folder.svg",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\folder.svg",
       "PackagePath": "staticwebassets\\image\\folder.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\image\\loadIcon.svg",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\loadIcon.svg",
       "PackagePath": "staticwebassets\\image\\loadIcon.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\Index.js",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\Admin.js",
+      "PackagePath": "staticwebassets\\js\\Admin.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\Index.js",
       "PackagePath": "staticwebassets\\js\\Index.js"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\VFM\\wwwroot\\js\\auth.js",
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\auth.js",
       "PackagePath": "staticwebassets\\js\\auth.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\main.js",
+      "PackagePath": "staticwebassets\\js\\main.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VFM.Microsoft.AspNetCore.StaticWebAssets.props",

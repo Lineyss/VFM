@@ -33,81 +33,133 @@
     </div>
     <div class="content">
         <form class="userBlock">
-            <p>ID</p>
-            <input placeholder="Login" text="Lineyss" maxlength="20" required />
-            <input placeholder="Password" text="password" maxlength="25" required />
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <p>ID</p>
+            </div>
+            <div class="inputConteiner">
+                <input name="login" placeholder="Логин" required maxlength="20" />
+                <snap id="charCount"></snap>
+            </div>
+            <div class="inputConteiner">
+                <input name="password" type="password" placeholder="Пароль" required maxlength="25" />
+                <snap id="charCount"></snap>
+            </div>
+            <div>
+                <span>Админ</span>
+                <select name="isAdmin">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <span>Cоздавать папку/файл</span>
+                <select name="createF">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <span>Удалить папку/файл</span>
+                <select name="deleteF">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <span>Обновить имя папки/файла</span>
+                <select name="updateNameF">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <span>Скачивать файлы/папки</span>
+                <select name="downloadF">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
-                </select>
-            </div>
-            <div>
-                <span>isAdmin</span>
-                <select>
-                    <option value="true" selected>true</option>
-                    <option value="false">frue</option>
+                <span>Загружать файл/папку</span>
+                <select name="uploadF">
+                    <option value="true" selected>Да</option>
+                    <option value="false">Нет</option>
                 </select>
             </div>
             <button>Сохранить</button>
+            <button>Удалить</button>
         </form>
     </div>
 
-    <div class="popupConteiner">
-        <div class="loadPopup">
+    <div class="popupConteiner hidden">
+        <div class="loadPopup hidden">
             <img src="~/image/loadIcon.svg" />
         </div>
         <div class="formContainer">
             <div class="contentFormContainer">
                 <div class="topContentForm">
-
+                    <span class="close"></span>
                 </div>
                 <div class="formContent">
                     <h1>Создать пользователя</h1>
-                    <form>
-                
+                    <form method="post">
+                        <div class="inputConteiner">
+                            <input name="login" placeholder="Логин" required maxlength="20" />
+                            <snap id="charCount"></snap>
+                        </div>
+                        <div class="inputConteiner">
+                            <input name="password" type="password" placeholder="Пароль" required maxlength="25" />
+                            <snap id="charCount"></snap>
+                        </div>
+                        <div>
+                            <span>Админ</span>
+                            <select name="isAdmin">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Может создавать папку/файл</span>
+                            <select name="createF">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Может удалить папку/файл</span>
+                            <select name="deleteF">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Может обновить имя папки/файла</span>
+                            <select name="updateNameF">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Может скачивать файлы/папки</span>
+                            <select name="downloadF">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Может загружать файл/папку</span>
+                            <select name="uploadF">
+                                <option value="true" selected>Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
                         <button type="submit">Отправить</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
     <script type="module" src="~/js//Admin.js"></script>
 </body>

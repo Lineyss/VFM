@@ -8,7 +8,7 @@ namespace VFM.Models
     {
         public UserModel() { }
 
-        public UserModel(SupportUserModel model, bool customPars = false)
+        public UserModel(SupportUserModel model)
         {
             CheckValidData(model);
 
@@ -78,7 +78,7 @@ namespace VFM.Models
         public bool? uploadF { get; set; } = false;
 
 
-        private const string regexPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,30}$";
-        private const string regexLogin = "^[a-zA-Z]{3,20}$";
+        private const string regexPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._@$!%*?&\/])[A-Za-z\d._@$!%*?&\/]{3,25}$";
+        private const string regexLogin = "^[a-zA-Z0-9_]{3,20}$";
     }
 }

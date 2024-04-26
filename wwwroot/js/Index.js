@@ -1,4 +1,6 @@
-﻿const popupContainer = document.querySelector(".popupConteiner");
+﻿import { countingChars } from './main.js'
+
+const popupContainer = document.querySelector(".popupConteiner");
 const popupMain = document.querySelector(".popupMain");
 const load = document.querySelector(".load");
 const paginationContainer = document.querySelector(".pagination");
@@ -134,18 +136,10 @@ const createSimpleTd = (text) => {
     return td;
 }
 
-const countingChars = (input) => {
-    const parent = input.parentElement;
-    const span = parent.querySelector("snap");
-    span.textContent = `${input.value.length}/${input.maxLength}`
-}
-
 const sendRequest = async (url) => {
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
+        if (!response.ok) throw new Error();
 
         const data = await response.json();
         createPagination(data.totalNumberPages);
