@@ -1,4 +1,4 @@
-﻿import { countingChars } from './main.js'
+﻿import { countingChars, createInputContainer } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const popupMain = document.querySelector(".popupMain");
@@ -20,6 +20,38 @@ const viewOrHiddenPopup = (bool) => {
 const viewOrHiddenLoad = (bool) => {
     popupMain.classList.toggle("hidden", !bool);
     load.classList.toggle("hidden", bool);
+}
+
+const getFormCreateFolderOrFiles = (path, isFile) => {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let url = mainUrl + `?path=${path}&isFile=${isFile}`;
+
+        await fetch(url).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.error(error);
+            alert.window('Не удалось создать файл/')
+        })
+    });
+
+    let inputBox = createInputContainer('fileName', 'text', 'Название файла', 260, '');
+    form.appendChild(inputBox);
+
+    let button = document.createElement('button');
+    button.setAttribute('type', 'submit');
+
+    form.appendChild(button);
+
+    return form;
 }
 
 const getPropertyes = () => {
@@ -232,6 +264,7 @@ const main = async () => {
                 if (!response.ok) throw new Error("Не удалось удалить файлы");
                 else location.reload();
             }).catch(error => {
+                console.error(error);
                 alert(error);
             })
         }

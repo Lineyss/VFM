@@ -1,4 +1,4 @@
-﻿import { countingChars } from './main.js'
+﻿import { createInputContainer } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const load = document.querySelector(".loadPopup");
@@ -19,7 +19,7 @@ const validate = (form) => {
     const login = form.login;
 
     if (!loginRegex.test(login.value)) {
-        login.setCustomValidity("1. Длинна логина дожно состовлять от 3 до 20 символов. \n 2. Логин не может содержать специальные символы, кроме нижнего подчеркивания.");
+        login.setCustomValidity("1. Длинна логина дожно состовлять от 3 до  20 символов. \n 2. Логин не может содержать специальные символы, кроме нижнего подчеркивания.");
     }
     else {
         login.setCustomValidity('');
@@ -78,36 +78,6 @@ const createSelectBlock = (SpanText, selectName, optionSelected) => {
     return div;
 }
 
-const createInputContainer = (name, type, placeholder, maxLenght, value) => {
-    let div = document.createElement("div");
-    div.classList.add("inputConteiner");
-
-    let snap = document.createElement("snap");
-    snap.setAttribute("id", 'charCount');
-
-    let input = document.createElement("input");
-    if (name != 'password') {
-        input.required = true;  
-    }
-    input.maxLength = maxLenght;
-    input.placeholder = placeholder;
-    input.type = type;
-    input.name = name;
-    input.value = value;
-
-
-    div.appendChild(input);
-    div.appendChild(snap);
-
-    countingChars(input);
-
-    input.addEventListener("input", function () {
-        countingChars(this);
-    });
-
-    return div;
-}
-
 const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updateNameF, downloadF, uploadF) => {
 
     usersPassword[ID] = password;
@@ -127,7 +97,9 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
 
     form.appendChild(divID);
     form.appendChild(createInputContainer('login', 'text', 'Логин', 20, login));
-    form.appendChild(createInputContainer('password', 'password', 'Пароль', 25, ''));
+    let passwordInput = createInputContainer('password', 'password', 'Пароль', 25, '');
+    passwordInput.querySelector("input").required = false;
+    form.appendChild(passwordInput);
 
     form.appendChild(createSelectBlock('Админ', 'isAdmin', isAdmin));
     form.appendChild(createSelectBlock('Создать папку/файл', 'createF', createF));

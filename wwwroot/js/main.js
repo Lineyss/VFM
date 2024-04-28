@@ -4,6 +4,33 @@
     span.textContent = `${input.value.length}/${input.maxLength}`
 }
 
+export const createInputContainer = (name, type, placeholder, maxLenght, value) => {
+    let div = document.createElement("div");
+    div.classList.add("inputConteiner");
+
+    let snap = document.createElement("snap");
+    snap.setAttribute("id", 'charCount');
+
+    let input = document.createElement("input");
+    input.required = true;
+    input.maxLength = maxLenght;
+    input.placeholder = placeholder;
+    input.type = type;
+    input.name = name;
+    input.value = value;
+
+    div.appendChild(input);
+    div.appendChild(snap);
+
+    countingChars(input);
+
+    input.addEventListener("input", function () {
+        countingChars(this);
+    });
+
+    return div;
+}
+
 /*const createPaginatorLink = (text, currentPageNumber, pageNumbers, url) => {
     const a = document.createElement("a");
     a.textContent = text;
