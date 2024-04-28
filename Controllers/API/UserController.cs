@@ -26,7 +26,7 @@ namespace VFM.Controllers.API
         {
             try
             {
-                var users = db.GetCollection<UserModel>("user") .FindAll();
+                var users = db.GetCollection<UserModel>("user").FindAll();
                 return !users.Any() ? NoContent() : Ok(users);
             }
             catch
@@ -78,7 +78,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPut("{ID}")]
-        public IActionResult Put([FromForm] SupportUserModel model, int ID, bool customPar = false)
+        public IActionResult Put([FromForm] SupportUserModel model, int ID)
         {
             try
             {
@@ -86,9 +86,10 @@ namespace VFM.Controllers.API
                 UserModel user = users.Find(element => element.ID == ID).FirstOrDefault()
                     ?? throw new Exception(ErrorModel.AccountIsNotExist);
 
-                user.UpdateModel(model, customPar);
+                user.UpdateModel(model);
 
-                user.UpdateModel(user, customPar);
+                user.UpdateModel(user);
+
                 users.Update(user);
 
                 return Ok(user);

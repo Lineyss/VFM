@@ -17,15 +17,13 @@ form.addEventListener("submit", (e) => {
 
     var _form = new FormData(form);
 
-    let url;
-
     fetch(location.href, {
         method: 'POST',
         body: _form
     }).then(response => {
         if (response.redirected) location.href = response.url;
-
-        alter(response.statusText);
+    }).catch(error => {
+        alter(error);
     });
 
     button.disabled = false;

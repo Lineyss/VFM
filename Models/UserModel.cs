@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
-
 using VFM.Services;
 namespace VFM.Models
 {
@@ -49,20 +48,22 @@ namespace VFM.Models
 
         }
 
-        public UserModel UpdateModel(UserModel model, bool customPars=false)
+        public UserModel UpdateModel(UserModel model, bool updatePassword = true)
         {
             CheckValidData(model);
 
             login = model.login;
+
             password = HashPassword.Hash(model.password);
 
             return this;
         }
-        public UserModel UpdateModel(SupportUserModel model, bool customPars = false)
+        public UserModel UpdateModel(SupportUserModel model, bool updatePassword = true)
         {
             CheckValidData(model);
 
             login = model.login;
+            
             password = HashPassword.Hash(model.password);
 
             return this;

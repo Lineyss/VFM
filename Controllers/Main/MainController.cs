@@ -59,7 +59,10 @@ namespace VFM.Controllers.Main
 
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager")]
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         [HttpGet("VirtualFileManager/Admin")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]

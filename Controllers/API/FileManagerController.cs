@@ -101,7 +101,7 @@ namespace VFM.Controllers
 
         [HttpDelete]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "deleteF")]
-        public IActionResult Delete(List<string> paths)
+        public IActionResult Delete([FromBody] List<string> paths)
         {
             try
             {
@@ -159,21 +159,29 @@ namespace VFM.Controllers
 
         [HttpPost("download")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "downloadF")]
-        public IActionResult Download(string paths)
+        public IActionResult Download( [FromBody] List<string> paths)
         {
             try
             {
-                return sFileManager.downloadFile(paths);
-/*                if (paths == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
+
+                if (paths == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 paths = paths.Where(element => System.IO.File.Exists(element) || Directory.Exists(element)).ToList();
 
                 if (paths.Count == 0) throw new Exception(ErrorModel.WrongPath);
 
-                if (System.IO.File.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadFile(paths[0]);
-                else if (Directory.Exists(paths[0]) && paths.Count == 1) return sFileManager.downloadDirectory(paths[0]);
-
-                return sFileManager.downloadAll(paths);*/
+                if (System.IO.File.Exists(paths[0]) && paths.Count == 1)
+                {
+                    return sFileManager.downloadFile(paths[0]);
+                }
+                else if (Directory.Exists(paths[0]) && paths.Count == 1)
+                {
+                    return sFileManager.downloadDirectory(paths[0]);
+                }
+                else if (paths.Count > 1)
+                {
+                    return sFileManager.downloadAll(paths);
+                }
 
                 throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }

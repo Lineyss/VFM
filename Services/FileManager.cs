@@ -70,12 +70,15 @@ namespace VFM.Services
         {
             byte[] fileBytes = File.ReadAllBytes(path);
 
-            string contentType = "application/" + Path.GetExtension(path);
+            string exist = Path.GetExtension(path);
+            exist = exist.Substring(1, exist.Length - 1);
 
-            FileContentResult fileContentResult = new FileContentResult(fileBytes, contentType);
-            fileContentResult.FileDownloadName = Path.GetFileName(path);
+            string contentType = "application/" + exist;
 
-            return fileContentResult;
+            return new FileContentResult(fileBytes, contentType)
+            {
+                FileDownloadName = Path.GetFileNameWithoutExtension(path)
+            };
         }
 
         public FileContentResult downloadAll ([FromBody] List<string> paths)

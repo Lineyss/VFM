@@ -179,14 +179,13 @@ const main = async () => {
 
     downloadButton.addEventListener("click", () => {
         const url = mainUrl + '/download';
+        let paths = JSON.stringify(pathArray);
         fetch(url, {
             method: 'POST',
-            body:{
-                paths: pathArray[0]
-            },
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: paths
         })
         .then(response => {
             if (!response.ok) {
@@ -194,14 +193,23 @@ const main = async () => {
             }
             return response.blob();
         })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
+        .then(bob => {
+            const url = window.URL.createObjectURL(bob);
+
+            const arrayUrl = url.split('/');
+            let fileName = arrayUrl[arrayUrl.length - 1];
+            const exist = bob.type.split('/')[1];
+            
+            fileName = fileName + '.' + exist;
+
             const a = document.createElement('a');
+
             a.classList.add("hidden");
             a.href = url;
-            a.download = 'filename.zip'; // Указать название файла
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
+
             window.URL.revokeObjectURL(url);
         })
         .catch(error => {
@@ -213,15 +221,13 @@ const main = async () => {
         const result = confirm("Вы точно хотите удалить эти файла? Восстановить их будет невозможно.");
         if (result === true) {
             let paths = JSON.stringify(pathArray);
-            console.log(pathArray);
+            console.log(paths);
             fetch(mainUrl, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: {
-                    paths: paths
-                },
+                body: paths
             }).then(response => {
                 if (!response.ok) throw new Error("Не удалось удалить файлы");
                 else location.reload();

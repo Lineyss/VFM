@@ -3,17 +3,18 @@
 const popupContainer = document.querySelector(".popupConteiner");
 const load = document.querySelector(".loadPopup");
 const createUserForm = document.querySelector(".formContent > form");
+const paginationContainer = document.querySelector(".pagination");
 const createUserFormContainer = document.querySelector(".formContainer")
 const content = document.querySelector(".content");
 
 let url = location.origin + "/api/User"
 
-const validate = () => {
+const validate = (form) => {
     const loginRegex = /^[a-zA-Z0-9_]{3,20}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._@$!%*?&\/])[A-Za-z\d._@$!%*?&\/]{3,25}$/;
 
-    const password = createUserForm.password;
-    const login = createUserForm.login;
+    const password = form.password;
+    const login = form.login;
 
     if (!loginRegex.test(createUserForm.login.value)) {
         login.setCustomValidity("1. Длинна логина дожно состовлять от 3 до 20 символов. \n 2. Логин не может содержать специальные символы, кроме нижнего подчеркивания.");
@@ -40,44 +41,184 @@ const createSelectBlock = (SpanText, selectName, optionSelected) => {
     let div = document.createElement("div");
     let span = document.createElement("span");
     let selected = document.createElement("select");
+    let optionTrue = document.createElement('option');
+    let optionFalse = document.createElement('option');
+
+    let textTrueOption = document.createTextNode('Да');
+    let textFalseOption = document.createTextNode('Нет');
 
     span.appendChild(document.createTextNode(SpanText));
 
-    selected.setAttribute('name', selectName);
+    selected.name = selectName;
 
-    
+    optionTrue.value = true;
+    optionTrue.appendChild(textTrueOption);
+
+    optionFalse.value = false;
+    optionFalse.appendChild(textFalseOption);
+
+    if (optionSelected) {
+        optionTrue.selected = true;
+    }
+    else {
+        optionFalse.selected = true;
+    }
+
+    selected.appendChild(optionTrue);
+    selected.appendChild(optionFalse);
+
+
+    div.appendChild(span);
+    div.appendChild(selected);
+
+    return div;
+}
+
+const createInputContainer = (name, type, placeholder, maxLenght, value) => {
+    let div = document.createElement("div");
+    div.classList.add("inputConteiner");
+
+    let snap = document.createElement("snap");
+    snap.setAttribute("id", 'charCount');
+
+    let input = document.createElement("input");
+    input.required = true;
+    input.maxLength = maxLenght;
+    input.placeholder = placeholder;
+    input.type = type;
+    input.name = name;
+    input.value = value;
+
+
+    div.appendChild(input);
+    div.appendChild(snap);
+
+    countingChars(input);
+
+    input.addEventListener("input", function () {
+        countingChars(this);
+    });
+
+    return div;
 }
 
 const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updateNameF, downloadF, uploadF) => {
     let form = document.createElement('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+    });
     form.classList.add("userBlock");
 
+    let divID = document.createElement('div');
+    let p = document.createElement('p');
+    let idText = document.createTextNode(ID);
+    p.appendChild(idText);
+    divID.appendChild(p);
 
+    form.appendChild(divID);
+    form.appendChild(createInputContainer('login', 'text', 'Логин', 20, login));
+    form.appendChild(createInputContainer('password', 'password', 'Пароль', 25), password);
+
+    form.appendChild(createSelectBlock('Админ', 'isAdmin', isAdmin));
+    form.appendChild(createSelectBlock('Создать папку/файл', 'createF', createF));
+    form.appendChild(createSelectBlock('Удалить папку/файл', 'deleteF', deleteF));
+    form.appendChild(createSelectBlock('Оновить имя папки/файда', 'updateNameF', updateNameF));
+    form.appendChild(createSelectBlock('Скачивать файлы/папки', 'downloadF', downloadF));
+    form.appendChild(createSelectBlock('Загружить файл/папку', 'uploadF', uploadF));
+
+    let saveButton = document.createElement('button');
+    saveButton.type = "submit";
+    let saveButtonText = document.createTextNode('Сохранить');
+    saveButton.appendChild(saveButtonText);
+    saveButton.addEventListener("click", function () {
+        const form = this.parentElement;
+        validate(form);
+        if (form.checkValidity()) {
+            const responseForm = new FormData(form);
+
+            const id = form.querySelector('div > p').innerHTML;
+
+            let urlUpdate = url + '/' + id;
+
+            fetch(urlUpdate, {
+                method: 'PUT',
+                body: responseForm
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+                else throw new Error();
+            }).catch(error => {
+                alert("Error: Не удалось обновить данные о пользователе.")
+            });
+        }
+    });
+
+    let deleteButton = document.createElement('button');
+    deleteButton.type = "submit";
+    let deleteButtonText = document.createTextNode('Удалить');
+    deleteButton.appendChild(deleteButtonText);
+    deleteButton.addEventListener("click", function () {
+        validate(this.parentElement);
+        if (this.parentElement.checkValidity()) {
+            const pID = this.parentElement.querySelector("div > p");
+            console.log(pID);
+            const ID = pID.innerHTML;
+
+            let urlDelete = url + '/' + ID
+
+            fetch(urlDelete, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    const form = this.parentElement;
+                    content.removeChild(form);
+                } else {
+                    throw new Error();
+                }
+
+            }).catch(error => {
+                alert("Error: Не удалось удалить пользователя");
+            });
+        }
+
+    });
+
+    form.appendChild(saveButton);
+    form.appendChild(deleteButton);
+
+    return form;
 }
 
 const getUsers = async () => {
-
-    viewOrHiddenPopup(false);
-    viewOrHiddenLoad(false);
-
-    fetch(url, {
+    await fetch(url, {
         method: 'GET',
     }).then(response => {
         if (response.ok) return response.json();
     }).then(data => {
-        if (!data) throw new Error("Не удалось получить список пользователей");
+        if (!data) throw new Error();
+
+        for (const user of data) {
+            content.appendChild(createUserElement(user.id, user.login, user.password, user.isAdmin, user.createF, user.deleteF, user.updateNameF, user.downloadF, user.uploadF));
+        }
 
     }).catch(error => {
-
+        let h2 = document.createElement('h2');
+        let h2Text = document.createTextNode("Не удалось получить список пользователей");
+        h2.appendChild(h2Text);
+        content.appendChild(h2);
     });
 
-    viewOrHiddenPopup(true);
-    viewOrHiddenLoad(true);
 }
 
 const main = async () => {
+    viewOrHiddenPopup(false);
+    viewOrHiddenCreateUserForm(true);
+    viewOrHiddenLoad(false);
 
-    document.querySelector(".formContent > form > button").addEventListener("click", validate)
+    document.querySelector(".formContent > form > button").addEventListener("click", function () {
+        validate(this.parentElement);
+    })
 
     document.getElementById("createUser").addEventListener("click", () => {
         viewOrHiddenPopup(false);
@@ -110,15 +251,13 @@ const main = async () => {
 
     document.querySelector(".close").addEventListener("click", () => {
         viewOrHiddenPopup(true);
-    })
-
-    document.querySelectorAll(".inputConteiner > input").forEach(element => {
-        countingChars(element);
-        element.addEventListener("input", function () {
-            countingChars(this);
-        });
     });
 
+    await getUsers();
+
+    viewOrHiddenPopup(true);
+    viewOrHiddenCreateUserForm(false);
+    viewOrHiddenLoad(true);
 };
 
 main();
