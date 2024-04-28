@@ -88,8 +88,6 @@ namespace VFM.Controllers.API
 
                 user.UpdateModel(model);
 
-                user.UpdateModel(user);
-
                 users.Update(user);
 
                 return Ok(user);

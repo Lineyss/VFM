@@ -48,25 +48,25 @@ namespace VFM.Models
 
         }
 
-        public UserModel UpdateModel(UserModel model, bool updatePassword = true)
+        public void UpdateModel(SupportUserModel model)
         {
-            CheckValidData(model);
+            if(password == model.password)
+            {
+                CheackValidLogin(model.login);
+            }
+            else
+            {
+                CheckValidData(model);
+            }
 
             login = model.login;
-
             password = HashPassword.Hash(model.password);
-
-            return this;
-        }
-        public UserModel UpdateModel(SupportUserModel model, bool updatePassword = true)
-        {
-            CheckValidData(model);
-
-            login = model.login;
-            
-            password = HashPassword.Hash(model.password);
-
-            return this;
+            isAdmin = model.isAdmin;
+            downloadF = model.downloadF;
+            uploadF = model.uploadF;
+            createF = model.createF;
+            deleteF = model.deleteF;
+            updateNameF = model.updateNameF;
         }
         public int ID { get; set; }
         public string login { get; set; }

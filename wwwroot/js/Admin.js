@@ -7,27 +7,31 @@ const paginationContainer = document.querySelector(".pagination");
 const createUserFormContainer = document.querySelector(".formContainer")
 const content = document.querySelector(".content");
 
+let usersPassword = {};
+
 let url = location.origin + "/api/User"
 
 const validate = (form) => {
     const loginRegex = /^[a-zA-Z0-9_]{3,20}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._@$!%*?&\/])[A-Za-z\d._@$!%*?&\/]{3,25}$/;
-
+    const formID = form.getAttribute('id');
     const password = form.password;
     const login = form.login;
 
-    if (!loginRegex.test(createUserForm.login.value)) {
+    if (!loginRegex.test(login.value)) {
         login.setCustomValidity("1. Длинна логина дожно состовлять от 3 до 20 символов. \n 2. Логин не может содержать специальные символы, кроме нижнего подчеркивания.");
     }
     else {
         login.setCustomValidity('');
     }
 
-    if (!passwordRegex.test(createUserForm.password.value)) {
-        password.setCustomValidity("1. Должна быть хотя бы одна буква в нижнем регистре.\n2. Должна быть хотя бы одна буква в верхнем регистре.\n3. Соответствует любому символу из диапазона от a до z, от A до Z, от 0 до 9 или одному из специальных символов: . , _ , @, $, !, %, *, ?, & , / , \. \n4. Длина должна быть от 3 до 25 символов. ");
-    }
-    else {
-        password.setCustomValidity('');
+    if (formID != 'userForm' || (formID == 'userForm' && password.value.length > 0)) {
+        if (!passwordRegex.test(password.value)) {
+            password.setCustomValidity("1. Должна быть хотя бы одна буква в нижнем регистре.\n2. Должна быть хотя бы одна буква в верхнем регистре.\n3. Соответствует любому символу из диапазона от a до z, от A до Z, от 0 до 9 или одному из специальных символов: . , _ , @, $, !, %, *, ?, & , / , \. \n4. Длина должна быть от 3 до 25 символов. ");
+        }
+        else {
+            password.setCustomValidity('');
+        }
     }
 }
 
@@ -82,7 +86,9 @@ const createInputContainer = (name, type, placeholder, maxLenght, value) => {
     snap.setAttribute("id", 'charCount');
 
     let input = document.createElement("input");
-    input.required = true;
+    if (name != 'password') {
+        input.required = true;  
+    }
     input.maxLength = maxLenght;
     input.placeholder = placeholder;
     input.type = type;
@@ -103,7 +109,11 @@ const createInputContainer = (name, type, placeholder, maxLenght, value) => {
 }
 
 const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updateNameF, downloadF, uploadF) => {
+
+    usersPassword[ID] = password;
+    
     let form = document.createElement('form');
+    form.id = 'userForm';
     form.addEventListener('submit', (e) => {
         e.preventDefault();
     });
@@ -117,7 +127,7 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
 
     form.appendChild(divID);
     form.appendChild(createInputContainer('login', 'text', 'Логин', 20, login));
-    form.appendChild(createInputContainer('password', 'password', 'Пароль', 25), password);
+    form.appendChild(createInputContainer('password', 'password', 'Пароль', 25, ''));
 
     form.appendChild(createSelectBlock('Админ', 'isAdmin', isAdmin));
     form.appendChild(createSelectBlock('Создать папку/файл', 'createF', createF));
@@ -134,9 +144,13 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
         const form = this.parentElement;
         validate(form);
         if (form.checkValidity()) {
-            const responseForm = new FormData(form);
-
             const id = form.querySelector('div > p').innerHTML;
+
+            if (!form.password.value) {
+                form.password.value = usersPassword[id];
+            }
+
+            const responseForm = new FormData(form);
 
             let urlUpdate = url + '/' + id;
 
@@ -159,29 +173,25 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
     let deleteButtonText = document.createTextNode('Удалить');
     deleteButton.appendChild(deleteButtonText);
     deleteButton.addEventListener("click", function () {
-        validate(this.parentElement);
-        if (this.parentElement.checkValidity()) {
-            const pID = this.parentElement.querySelector("div > p");
-            console.log(pID);
-            const ID = pID.innerHTML;
+        const pID = this.parentElement.querySelector("div > p");
 
-            let urlDelete = url + '/' + ID
+        const ID = pID.innerHTML;
 
-            fetch(urlDelete, {
-                method: 'DELETE'
-            }).then(response => {
-                if (response.ok) {
-                    const form = this.parentElement;
-                    content.removeChild(form);
-                } else {
-                    throw new Error();
-                }
+        let urlDelete = url + '/' + ID
 
-            }).catch(error => {
-                alert("Error: Не удалось удалить пользователя");
-            });
-        }
+        fetch(urlDelete, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                const form = this.parentElement;
+                content.removeChild(form);
+            } else {
+                throw new Error();
+            }
 
+        }).catch(error => {
+            alert("Error: Не удалось удалить пользователя");
+        });
     });
 
     form.appendChild(saveButton);

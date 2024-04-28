@@ -108,7 +108,7 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
     tr.addEventListener("dblclick", function () {
         const path = this.childNodes[3].textContent;
         const isFileInt = this.getAttribute("isfile");
-        location.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), path, isFile: isFileInt })}`;
+        location.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), pageNumber:1, path, isFile: isFileInt })}`;
     })
 }
 
