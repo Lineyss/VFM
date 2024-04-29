@@ -35,14 +35,6 @@
     margin:0 2px;
 }
 
-.userBlock > div > input {
-    padding: 5px 0px;
-    padding-left: 5px;
-    margin: 0px 5px;
-    border:0;
-    outline:0;
-}
-
 .userBlock > button
 {
     margin:8px;
@@ -117,27 +109,4 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-}
-
-.formContent > form > div > input {
-    padding: 5px 0;
-    padding-left: 5px;
-    border:0;
-    outline:none;
-    width:84%;
-}
-
-.formContent > form > div > snap
-{
-    height:100%;
-    width:16%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:0px 6px
-}
-
-.inputConteiner
-{
-    border:1px solid black;
 }

@@ -8,6 +8,7 @@ const tbody = document.querySelector("tbody");
 const searchInput = document.getElementById('myInput');
 const deleteButton = document.getElementById("delete");
 const downloadButton = document.getElementById("download");
+const formPopup = document.querySelector(".formPopup");
 
 let mainUrl = `${location.origin}/api/FileManager`
 
@@ -22,15 +23,24 @@ const viewOrHiddenLoad = (bool) => {
     load.classList.toggle("hidden", bool);
 }
 
-const getFormCreateFolderOrFiles = (path, isFile) => {
+const getFormCreateFolderOrFiles = (isFile) => {
     const form = document.createElement('form');
     form.method = 'POST';
-    form.addEventListener("submit", (e) => {
+    form.setAttribute('isFile', isFile)
+    form.addEventListener("submit", function(e) {
         e.preventDefault();
+
+        const path = getPropertyes()['path'];
+        const isFile = this.getAttribute('isFile');
 
         let url = mainUrl + `?path=${path}&isFile=${isFile}`;
 
-        await fetch(url).then(response => {
+        let form = new FormData(this);
+
+        fetch(url, {
+            method: 'POST',
+            body: form,
+        }).then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
@@ -39,14 +49,16 @@ const getFormCreateFolderOrFiles = (path, isFile) => {
             console.log(data);
         }).catch(error => {
             console.error(error);
-            alert.window('Не удалось создать файл/')
-        })
+            alert('Не удалось создать файл/папку.')
+        });
+
     });
 
     let inputBox = createInputContainer('fileName', 'text', 'Название файла', 260, '');
     form.appendChild(inputBox);
 
     let button = document.createElement('button');
+    button.innerHTML = 'Сохранить'
     button.setAttribute('type', 'submit');
 
     form.appendChild(button);
@@ -276,14 +288,20 @@ const main = async () => {
 
     document.getElementById("createFi").addEventListener("click", () => {
         viewOrHiddenPopup(false);
+        formPopup.innerHTML = '';
+        formPopup.appendChild(getFormCreateFolderOrFiles(true));
     });
 
     document.getElementById("createFo").addEventListener("click", () => {
         viewOrHiddenPopup(false);
+        formPopup.innerHTML = '';
+        formPopup.appendChild(getFormCreateFolderOrFiles(false));
     });
 
     document.getElementById("upload").addEventListener("click", () => {
         viewOrHiddenPopup(false);
+        formPopup.innerHTML = '';
+        formPopup.appendChild();
     });
 
     await send;

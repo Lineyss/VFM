@@ -1,4 +1,4 @@
-﻿import { createInputContainer } from './main.js'
+﻿import { createInputContainer, countingChars } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const load = document.querySelector(".loadPopup");
@@ -233,6 +233,13 @@ const main = async () => {
 
     document.querySelector(".close").addEventListener("click", () => {
         viewOrHiddenPopup(true);
+    });
+
+    document.querySelectorAll('input').forEach(element => {
+        countingChars(element);
+        element.addEventListener('input', function () {
+            countingChars(this);
+        });
     });
 
     await getUsers();
