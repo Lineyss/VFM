@@ -72,8 +72,7 @@ namespace VFM.Controllers
                 if (string.IsNullOrWhiteSpace(path)) 
                     throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
-                string _url = $"{url + HttpContext.Request.Path}?Path={path}";
-                return Created(path, sFileManager.Create(path, isFile));
+                return Ok(sFileManager.Create(path, isFile));
             }
             catch (Exception e)
             {

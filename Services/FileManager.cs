@@ -201,7 +201,7 @@ namespace VFM.Services
                     fullPath = path,
                     dateCreate = File.GetCreationTime(path).ToString(),
                     dateChange = File.GetLastWriteTime(path).ToString(),
-                    size = file.Length
+                    size = 0
                 };
 
                 file.Close();
@@ -221,12 +221,12 @@ namespace VFM.Services
                 DirectoryInfo file = Directory.CreateDirectory(path);
                 return new OSModel
                 {
-                    icon = iconPathDocument,
-                    fileName = Path.GetDirectoryName(path),
+                    icon = iconPathFolder,
+                    fileName = file.Name,
                     fullPath = path,
-                    dateCreate = Directory.GetCreationTime(path).ToString(),
-                    dateChange = Directory.GetLastWriteTime(path).ToString(),
-                    size = GetFolderSize(path),
+                    dateCreate = file.CreationTime.ToString(),
+                    dateChange = file.CreationTime.ToString(),
+                    size = 0,
                     isFile = false
                 };
             }

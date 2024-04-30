@@ -28,7 +28,7 @@
 .closePopup
 {
     width:100%;
-    height:5%;
+    height:7%;
     display:flex;
     align-items:center;
     justify-content:flex-end
@@ -104,6 +104,38 @@ tbody > tr:hover{
 .formPopup {
     width: 100%;
     height: 95%;
+    display:flex;
+    flex-direction:column;
+}
+
+.formPopup > h1
+{
+    width:100%;
+    height:10%;
+    text-align:center;
+}
+
+.formPopup > form
+{
+    width:100%;
+    height:90%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.formPopup > form > .inputConteiner
+{
+    width:40%;
+    height:10%;
+    margin:20px;
+}
+
+.formPopup > form > button
+{
+    width: 40%;
+    font-size:15px;
 }
 
 .selectA
