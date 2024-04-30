@@ -131,7 +131,7 @@ namespace VFM.Controllers
             List<OSModel> osModels = new List<OSModel>();
             try
             {
-                if (string.IsNullOrWhiteSpace(path) || System.IO.File.Exists(path))
+                if (string.IsNullOrWhiteSpace(path) || System.IO.File.Exists(path) || files.Count == 0)
                     throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 if (!Directory.Exists(path)) 

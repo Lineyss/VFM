@@ -43,7 +43,7 @@ namespace VFM.Services
 
         public async Task<OSModel>? CreateAsync (string path, IFormFile file)
         {
-            if (File.Exists(path)) throw new Exception(ErrorModel.FileIsExist);
+            path = CheckExistFile(path);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -310,6 +310,19 @@ namespace VFM.Services
                     isFile = false
                 });
             }
+        }
+
+        private string CheckExistFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                var filePathArr = filePath.Split('.');
+                filePathArr[0] += 1;
+                filePath = string.Join('.', filePathArr);
+                filePath = CheckExistFile(filePath);
+            }
+
+            return filePath;
         }
 
         private long GetFolderSize(string path, long size = 0)

@@ -11,6 +11,8 @@ const downloadButton = document.getElementById("download");
 const formInPopup = document.querySelector(".formPopup > form");
 const formInPopupH1 = document.querySelector(".formPopup > h1");
 
+let createdInputFileElement = 1;
+
 let mainUrl = `${location.origin}/api/FileManager`
 
 let pathArray = [];
@@ -31,11 +33,13 @@ const createInputFileBlock = () => {
 
     input.type = 'file';
     input.required = true;
-
+    input.name = 'files';
 
     button.innerHTML = '-';
     button.addEventListener('click', function () {
-        console.log(this.parentElement);
+        let div = this.parentElement;
+        div.parentElement.removeChild(div);
+        createdInputFileElement -= 1;
     });
 
     div.appendChild(input);
@@ -49,21 +53,26 @@ const getFormUploadFiles = () => {
     formInPopup.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        let url = mainUrl + '/upload';
+        let path = getPropertyes()['path'];
+
+        let url = mainUrl + '/upload?path=' + path;
 
         let form = new FormData(formInPopup);
 
         fetch(url, {
-            method: 'POST'
+            method: 'POST',
+            body: form
         }).then(response => {
-            if (response.ok) {
-            }
-            else if (response.status == 206) {
-
+            if (response.ok || response.status == 206) {
+                return response.json();
             }
             throw new Error(response);
         }).then(data => {
             console.log(data);
+            for (const element of data) {
+                createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
+            }
+            alert('Файл(ы) загруженны');
         }).catch(error => {
             console.error(error);
             alert('Не удалось загрузить файлы на сервер');
@@ -74,13 +83,24 @@ const getFormUploadFiles = () => {
 
     const createdInputButton = document.createElement('button');
     createdInputButton.innerHTML = '+';
+    createdInputButton.setAttribute('style', 'margin: 5px 0;');
+    createdInputButton.type = "button";
+
     createdInputButton.addEventListener("click", () => {
-        let div = createInputFileBlock();
-        formInPopup.insertBefore(div, formInPopup.children[formInPopup.children.length - 1]);
+        if (createdInputFileElement < 5) {
+            let div = createInputFileBlock();
+            formInPopup.insertBefore(div, formInPopup.children[formInPopup.children.length - 2]);
+            createdInputFileElement += 1;
+        }
     });
+
+    const sendButton = document.createElement('button');
+    sendButton.innerHTML = 'Сохранить';
+    sendButton.type = 'submit';
 
     formInPopup.appendChild(createInputFileBlock());
     formInPopup.appendChild(createdInputButton);
+    formInPopup.appendChild(sendButton);
 }
 
 const getFormCreateFolderOrFiles = (isFile) => {
@@ -361,6 +381,7 @@ const main = async () => {
     document.getElementById("upload").addEventListener("click", () => {
         viewOrHiddenPopup(false);
         formInPopup.innerHTML = '';
+        createdInputFileElement = 1;
         getFormUploadFiles();
     });
 
