@@ -10,6 +10,9 @@ const deleteButton = document.getElementById("delete");
 const downloadButton = document.getElementById("download");
 const formInPopup = document.querySelector(".formPopup > form");
 const formInPopupH1 = document.querySelector(".formPopup > h1");
+const buttonUpload = document.getElementById("upload");
+const buttonCreateFo = document.getElementById("createFo");
+const buttonCreateFi = document.getElementById("createFi");
 
 let createdInputFileElement = 1;
 
@@ -216,7 +219,6 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
             deleteButton.disabled = false;
             downloadButton.disabled = false;
         }
-
     });
     tdCheckBox.appendChild(checkBox);
 
@@ -288,11 +290,41 @@ const main = async () => {
     viewOrHiddenPopup(false);
     viewOrHiddenLoad(false);
 
-    const url = mainUrl + covertPropertyesToUrl();
+    let propertyes = getPropertyes();
 
-    const send = sendRequest(url);
+    if (propertyes['isFile'] == 'false' || propertyes['isFile'] == false) {
+        const url = mainUrl + covertPropertyesToUrl(propertyes);
 
-    const text = getPropertyes()['path'];
+        sendRequest(url);
+
+        document.querySelector(".close").addEventListener("click", () => {
+            viewOrHiddenPopup(true);
+        });
+
+        buttonCreateFi.addEventListener("click", () => {
+            viewOrHiddenPopup(false);
+            formInPopup.innerHTML = '';
+            getFormCreateFolderOrFiles(true);
+        });
+
+        buttonCreateFo.addEventListener("click", () => {
+            viewOrHiddenPopup(false);
+            formInPopup.innerHTML = '';
+            getFormCreateFolderOrFiles(false);
+        });
+
+        buttonUpload.addEventListener("click", () => {
+            viewOrHiddenPopup(false);
+            formInPopup.innerHTML = '';
+            createdInputFileElement = 1;
+            getFormUploadFiles();
+        });
+    }
+    else if (propertyes['isFile'] == 'true' || propertyes['isFile'] == true) {
+        buttonUpload.disabled = true;
+    }
+
+    const text = propertyes['path'];
 
     searchInput.addEventListener("input", function () {
         countingChars(this);
@@ -319,7 +351,7 @@ const main = async () => {
         })
         .then(bob => {
             const url = window.URL.createObjectURL(bob);
-
+            console.log(url);
             const arrayUrl = url.split('/');
             let fileName = arrayUrl[arrayUrl.length - 1];
             const exist = bob.type.split('/')[1];
@@ -362,31 +394,6 @@ const main = async () => {
         }
     })
 
-    document.querySelector(".close").addEventListener("click", () => {
-        viewOrHiddenPopup(true);
-    });
-
-    document.getElementById("createFi").addEventListener("click", () => {
-        viewOrHiddenPopup(false);
-        formInPopup.innerHTML = '';
-        getFormCreateFolderOrFiles(true);
-    });
-
-    document.getElementById("createFo").addEventListener("click", () => {
-        viewOrHiddenPopup(false);
-        formInPopup.innerHTML = '';
-        getFormCreateFolderOrFiles(false);
-    });
-
-    document.getElementById("upload").addEventListener("click", () => {
-        viewOrHiddenPopup(false);
-        formInPopup.innerHTML = '';
-        createdInputFileElement = 1;
-        getFormUploadFiles();
-    });
-
-    await send;
 }
-
 
 main();
