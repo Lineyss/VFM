@@ -1,6 +1,6 @@
-﻿@page
-@model VFM.Views.Main.IndexModel
+﻿@model VFM.Models.UserModel
 @{
+    var isAdmin = Model?.isAdmin;
 }
 
 <html lang="en">
@@ -49,12 +49,16 @@
             <button id="delete" disabled="true">
                 Удалить
             </button>
-
-            <button id="admin">
-                <a href="/VirtualFileManager/Admin">
-                    Админ панель
-                </a>
-            </button>
+            @{  
+                if (isAdmin != null || isAdmin == true)
+                {
+                    <button id="admin">
+                        <a href="/VirtualFileManager/Admin">
+                            Админ панель
+                        </a>
+                    </button>               
+                }
+            }
 
             <button>
                 <a href="/Auth/Exit">

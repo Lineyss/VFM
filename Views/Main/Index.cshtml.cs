@@ -5,8 +5,10 @@ namespace VFM.Views.Main
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+        public bool isAdmin { get; private set; }
+        public void OnGet(bool isAdmin)
         {
+            this.isAdmin = isAdmin;
         }
     }
 }

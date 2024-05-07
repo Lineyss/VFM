@@ -37,7 +37,7 @@ namespace VFM.Controllers.Main
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -59,14 +59,39 @@ namespace VFM.Controllers.Main
 
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            UserModel userModel;
+            try
+            {
+                string? idUser = User.FindFirst("ID").Value;
+
+                int ID = Convert.ToInt32(idUser);
+                userModel = GetUser(ID);
+            }
+            catch 
+            {
+                userModel = new UserModel();
+            }
+            return View(userModel);
         }
 
         [HttpGet("VirtualFileManager/Admin")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
         public IActionResult Admin() => View();
 
+
+        private UserModel GetUser(int ID)
+        {
+            try
+            {
+                return db.GetCollection<UserModel>("user").FindById(ID);
+            }
+            catch
+            {
+                return new UserModel();
+            }
+
+        }
     }
 }

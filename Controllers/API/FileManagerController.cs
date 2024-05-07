@@ -53,13 +53,13 @@ namespace VFM.Controllers
                 return totalNumberPage < pageNumber ? NotFound(fileManagerModel):Ok(fileManagerModel);
 
             }
-            catch (System.IO.DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
             catch (Exception e) 
              {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -76,7 +76,7 @@ namespace VFM.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -94,7 +94,7 @@ namespace VFM.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -113,14 +113,14 @@ namespace VFM.Controllers
                 foreach(string path in paths)
                 {
                     if (System.IO.File.Exists(path)) sFileManager.Delete(path, true);
-                    else sFileManager.Delete(path, false);
+                    else if(Directory.Exists(path)) sFileManager.Delete(path, false);
                 }
 
                 return Ok();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -150,9 +150,9 @@ namespace VFM.Controllers
                 else if (osModels.Count < files.Count && osModels.Count != 0) return StatusCode(206, osModels);
                 else throw new Exception(ErrorModel.CanNotUploadFiles);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -162,7 +162,6 @@ namespace VFM.Controllers
         {
             try
             {
-
                 if (paths == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
                 paths = paths.Where(element => System.IO.File.Exists(element) || Directory.Exists(element)).ToList();
@@ -184,9 +183,14 @@ namespace VFM.Controllers
 
                 throw new Exception(ErrorModel.FilesOrDirectoriesIsNotExist);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                string filePath = e.Message.Split("'")[1];
+                return BadRequest(new ErrorModel($"Не удалось скачать файл по пути: {filePath}"));
+            }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 

@@ -35,10 +35,17 @@ namespace VFM.Services
 
         public OSModel Create(string path, bool isFile)
         {
+            if (File.Exists(path)) throw new Exception(ErrorModel.FileIsExist);
+            if (Directory.Exists(path)) throw new Exception(ErrorModel.DirectoryIsExist);
+
             if (isFile)
-               return CreateFile(path);
+            {
+                return CreateFile(path);
+            }
             else
+            {
                 return CreateDirectory(path);
+            }
         }
 
         public async Task<OSModel>? CreateAsync (string path, IFormFile file)
@@ -84,6 +91,7 @@ namespace VFM.Services
         public FileContentResult downloadAll ([FromBody] List<string> paths)
         {
             string zipPath = Environment.CurrentDirectory + "/downloadAll.zip";
+            if (File.Exists(zipPath)) File.Delete(zipPath);
             ZipArchive archive;
             using (archive = ZipFile.Open(zipPath, ZipArchiveMode.Create))
             {
@@ -92,7 +100,6 @@ namespace VFM.Services
                     archive.CreateEntryFromFile(path, Path.GetFileName(path));
                 }
             }
-
 
             FileContentResult fileContentResult = downloadFile(zipPath);
 
@@ -151,7 +158,6 @@ namespace VFM.Services
                 {
                     string newPath = Path.Combine(Path.GetDirectoryName(path), fileName);
                     Directory.Move(path, newPath);
-                    Console.WriteLine(newPath);
                     return new OSModel
                     {
                         icon = iconPathFolder,

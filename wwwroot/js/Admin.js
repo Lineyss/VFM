@@ -1,4 +1,4 @@
-﻿import { createInputContainer, countingChars } from './main.js'
+﻿import { createInputContainer, countingChars, sendRequest } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const load = document.querySelector(".loadPopup");
@@ -126,16 +126,17 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
 
             let urlUpdate = url + '/' + id;
 
-            fetch(urlUpdate, {
-                method: 'PUT',
-                body: responseForm
-            }).then(response => {
-                if (response.ok) {
+            sendRequest(urlUpdate, responseForm, 'PUT', false, function () {
+                if (this.status / 100 == 4) {
+                    alert(JSON.parse(this.response));
+                }
+                else {
                     location.reload();
                 }
-                else throw new Error();
-            }).catch(error => {
-                alert("Error: Не удалось обновить данные о пользователе.")
+            }, function () {
+                viewOrHiddenLoad(false);
+            }, function () {
+                viewOrHiddenLoad(true);
             });
         }
     });
@@ -151,18 +152,17 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
 
         let urlDelete = url + '/' + ID
 
-        fetch(urlDelete, {
-            method: 'DELETE'
-        }).then(response => {
-            if (response.ok) {
-                const form = this.parentElement;
-                content.removeChild(form);
-            } else {
-                throw new Error();
+        sendRequest(urlDelete, null, 'DELETE', false, function () {
+            if (this.status / 100 == 4) {
+                alert(JSON.parse(this.response).errorText);
             }
-
-        }).catch(error => {
-            alert("Error: Не удалось удалить пользователя");
+            else {
+                location.reload();
+            }
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
         });
     });
 
@@ -172,31 +172,29 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
     return form;
 }
 
-const getUsers = async () => {
-    await fetch(url, {
-        method: 'GET',
-    }).then(response => {
-        if (response.ok) return response.json();
-    }).then(data => {
-        if (!data) throw new Error();
-
-        for (const user of data) {
-            content.appendChild(createUserElement(user.id, user.login, user.password, user.isAdmin, user.createF, user.deleteF, user.updateNameF, user.downloadF, user.uploadF));
-        }
-
-    }).catch(error => {
-        let h2 = document.createElement('h2');
-        let h2Text = document.createTextNode("Не удалось получить список пользователей");
-        h2.appendChild(h2Text);
-        content.appendChild(h2);
-    });
-
-}
-
 const main = async () => {
-    viewOrHiddenPopup(false);
-    viewOrHiddenCreateUserForm(true);
-    viewOrHiddenLoad(false);
+    sendRequest(url, null, 'GET', true, function () {
+        let data = JSON.parse(this.response);
+        if (this.status / 100 == 4) {
+            let h2 = document.createElement('h2');
+            let h2Text = document.createTextNode("Не удалось получить список пользователей");
+            h2.appendChild(h2Text);
+            content.appendChild(h2);
+        }
+        else {
+            for (const user of data) {
+                content.appendChild(createUserElement(user.id, user.login, user.password, user.isAdmin, user.createF, user.deleteF, user.updateNameF, user.downloadF, user.uploadF));
+            }
+        }
+    }, function () {
+        viewOrHiddenPopup(false);
+        viewOrHiddenCreateUserForm(true);
+        viewOrHiddenLoad(false);
+    }, function () {
+        viewOrHiddenPopup(true);
+        viewOrHiddenCreateUserForm(false);
+        viewOrHiddenLoad(true);
+    });
 
     document.querySelector(".formContent > form > button").addEventListener("click", function () {
         validate(this.parentElement);
@@ -212,23 +210,18 @@ const main = async () => {
 
         let form = new FormData(createUserForm);
 
-        viewOrHiddenLoad(true);
-
-        fetch(url, {
-            method: 'POST',
-            body: form
-        }).then(response => {
-            if (!response.ok)
-                return response.json();
-            else
+        sendRequest(url, form, 'POST', false, function () {
+            if (this.status / 100 == 4) {
+                alert(JSON.parse(this.response).errorText)
+            }
+            else {
                 location.reload();
-        }).then(data => {
-            if (data) throw new Error(data.errorText.split(':')[1]);
-        }).catch(error => {
-            alert(error);
+            }
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
         });
-
-        viewOrHiddenLoad(false);
     })
 
     document.querySelector(".close").addEventListener("click", () => {
@@ -241,12 +234,6 @@ const main = async () => {
             countingChars(this);
         });
     });
-
-    await getUsers();
-
-    viewOrHiddenPopup(true);
-    viewOrHiddenCreateUserForm(false);
-    viewOrHiddenLoad(true);
 };
 
 main();

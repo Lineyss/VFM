@@ -32,6 +32,7 @@ namespace VFM
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton(new LiteDbContext("LiteDb.db"));
+            builder.Services.AddTransient<Services.AuthenticationManager>();
 
             builder.Services.AddHttpContextAccessor();
 

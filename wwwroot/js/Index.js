@@ -1,4 +1,4 @@
-﻿import { countingChars, createInputContainer } from './main.js'
+﻿import { countingChars, createInputContainer, sendRequest } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const popupMain = document.querySelector(".popupMain");
@@ -62,23 +62,19 @@ const getFormUploadFiles = () => {
 
         let form = new FormData(formInPopup);
 
-        fetch(url, {
-            method: 'POST',
-            body: form
-        }).then(response => {
-            if (response.ok || response.status == 206) {
-                return response.json();
+        sendRequest(url, form, 'POST', false, function () {
+            let data = JSON.parse(this.response);
+            if (this.status / 100 == 4) alert(data.errorText);
+            else {
+                for (const element of data) {
+                    createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
+                }
+                alert('Файл(ы) загруженны');
             }
-            throw new Error(response);
-        }).then(data => {
-            console.log(data);
-            for (const element of data) {
-                createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
-            }
-            alert('Файл(ы) загруженны');
-        }).catch(error => {
-            console.error(error);
-            alert('Не удалось загрузить файлы на сервер');
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
         });
     });
 
@@ -114,25 +110,27 @@ const getFormCreateFolderOrFiles = (isFile) => {
         let path = getPropertyes()['path'];
         const isFile = formInPopup.getAttribute('isFile');
 
-        if (path[path.length - 1] == '\\')
+        if (path[path.length - 1] == '//')
             path += formInPopup.fileName.value;
         else
-            path += `\\${formInPopup.fileName.value}`;
+            path += `//${formInPopup.fileName.value}`;
             
         let url = mainUrl + `?path=${path}&isFile=${isFile}`;
 
-        fetch(url, {
-            method: 'POST'
-        }).then(response => {
-            if (!response.ok) 
-                throw new Error(response.statusText);
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
-        }).catch(error => {
-            console.error(error);
-            alert('Не удалось создать файл/папку.')
+        sendRequest(url, null, 'POST', false, function () {
+            let data = JSON.parse(this.response);
+            if (this.status / 100 == 4) {
+                alert(data.errorText);
+            }
+            else {
+                createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
+            }
+        },
+        function () {
+            viewOrHiddenLoad(false);
+        },
+        function () {
+            viewOrHiddenLoad(true);
         });
     });
 
@@ -227,7 +225,8 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
     image.src = imgPath;
     tdImage.appendChild(image);
 
-    tr.append(tdCheckBox, tdImage, createSimpleTd(fileName), createSimpleTd(fullPath), createSimpleTd(dateCreate), createSimpleTd(dateChange), createSimpleTd(convertBytes(size)));
+    tr.append(tdCheckBox, tdImage, createSimpleTd(fileName), createSimpleTd(fullPath), createSimpleTd(dateCreate), createSimpleTd(dateChange));
+    tr.appendChild(createSimpleTd(convertBytes(size)));
 
     tbody.appendChild(tr);
 
@@ -238,7 +237,7 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
     })
 }
 
-const convertBytes = (bytes) => {
+const convertBytes = async (bytes) => {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
     let unitIndex = 0;
@@ -262,40 +261,37 @@ const createSimpleTd = (text) => {
     return td;
 }
 
-const sendRequest = async (url) => {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error();
-
-        const data = await response.json();
-        createPagination(data.totalNumberPages);
-
-        for (const element of data.currentItems) {
-            createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
-        }
-
-    } catch (error) {
-        const h2 = document.createElement("h2");
-        h2.textContent = "Ничего не найдено.";
-        const content = document.querySelector(".content");
-        content.innerHTML = '';
-        content.appendChild(h2);
-    } finally {
-        viewOrHiddenPopup(true);
-        viewOrHiddenLoad(true);
-    }
-}
-
 const main = async () => {
-    viewOrHiddenPopup(false);
-    viewOrHiddenLoad(false);
-
     let propertyes = getPropertyes();
 
     if (propertyes['isFile'] == 'false' || propertyes['isFile'] == false) {
         const url = mainUrl + covertPropertyesToUrl(propertyes);
 
-        sendRequest(url);
+        sendRequest(url, null, 'GET', true, function () {
+            if (this.status / 100 == 2) {
+                const data = JSON.parse(this.response);
+                createPagination(data.totalNumberPages);
+
+                for (const element of data.currentItems) {
+                    createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
+                }
+            }
+            else {
+                const h2 = document.createElement("h2");
+                h2.textContent = "Ничего не найдено.";
+                const content = document.querySelector(".content");
+                content.innerHTML = '';
+                content.appendChild(h2);
+            }
+        },
+        function () {
+            viewOrHiddenPopup(false);
+            viewOrHiddenLoad(false);
+        },
+        function () {
+            viewOrHiddenPopup(true);
+            viewOrHiddenLoad(true);
+        });
 
         document.querySelector(".close").addEventListener("click", () => {
             viewOrHiddenPopup(true);
@@ -322,6 +318,8 @@ const main = async () => {
     }
     else if (propertyes['isFile'] == 'true' || propertyes['isFile'] == true) {
         buttonUpload.disabled = true;
+        viewOrHiddenPopup(true);
+        viewOrHiddenLoad(true);
     }
 
     const text = propertyes['path'];
@@ -336,64 +334,59 @@ const main = async () => {
     downloadButton.addEventListener("click", () => {
         const url = mainUrl + '/download';
         let paths = JSON.stringify(pathArray);
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: paths
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Не удалось скачать файл');
+
+        sendRequest(url, paths, 'POST', true, function () {
+            if (this.status / 100 == 4) alert(JSON.parse(this.response).errorText);
+            else {
+                const blob = this.response;
+                const url = URL.createObjectURL(blob);
+
+                console.log(url);                                                       
+
+                const arrayUrl = url.split('/');
+                let fileName = arrayUrl[arrayUrl.length - 1];
+                const exist = blob.type.split('/')[1];
+
+                fileName = fileName + '.' + exist;
+
+                const a = document.createElement('a');
+                a.classList.add('hidden');
+                a.href = url;
+                a.download = fileName;
+
+                document.body.appendChild(a);
+
+                a.click();
+
+                document.body.removeChild(a);
+
+                URL.revokeObjectURL(url);
             }
-            return response.blob();
-        })
-        .then(bob => {
-            const url = window.URL.createObjectURL(bob);
-            console.log(url);
-            const arrayUrl = url.split('/');
-            let fileName = arrayUrl[arrayUrl.length - 1];
-            const exist = bob.type.split('/')[1];
-            
-            fileName = fileName + '.' + exist;
-
-            const a = document.createElement('a');
-
-            a.classList.add("hidden");
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => {
-            alert(error);
-        });
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
+        }, 'Content-Type', 'application/json', 'blob');
     })
 
     deleteButton.addEventListener("click", () => {
         const result = confirm("Вы точно хотите удалить эти файла? Восстановить их будет невозможно.");
         if (result === true) {
             let paths = JSON.stringify(pathArray);
-            console.log(paths);
-            fetch(mainUrl, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: paths
-            }).then(response => {
-                if (!response.ok) throw new Error("Не удалось удалить файлы");
-                else location.reload();
-            }).catch(error => {
-                console.error(error);
-                alert(error);
-            })
+            sendRequest(mainUrl, paths, 'DELETE', false, function () {
+                if (this.status / 100 == 4) alert(JSON.parse(this.response).errorText);
+                else if (this.status / 100 == 2) {
+                    location.reload();
+                }
+            },
+            function () {
+                viewOrHiddenLoad(false);
+            },
+            function () {
+                viewOrHiddenLoad(true);
+            }, 'Content-Type', 'application/json');
         }
     })
-
 }
 
 main();
