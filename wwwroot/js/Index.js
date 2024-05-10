@@ -11,14 +11,15 @@ const downloadButton = document.getElementById("download");
 const formInPopup = document.querySelector(".formPopup > form");
 const formInPopupH1 = document.querySelector(".formPopup > h1");
 const buttonUpload = document.getElementById("upload");
-const buttonCreateFo = document.getElementById("createFo");
-const buttonCreateFi = document.getElementById("createFi");
+const buttonCreateF = document.getElementById("createF");
+const buttonUpdateF = document.getElementById("updateF");
 
 let createdInputFileElement = 1;
 
 let mainUrl = `${location.origin}/api/FileManager`
 
 let pathArray = [];
+let selectedElements = [];
 
 const viewOrHiddenPopup = (bool) => {
     popupContainer.classList.toggle("hidden", bool);
@@ -63,14 +64,15 @@ const getFormUploadFiles = () => {
         let form = new FormData(formInPopup);
 
         sendRequest(url, form, 'POST', false, function () {
-            let data = JSON.parse(this.response);
-            if (this.status / 100 == 4) alert(data.errorText);
-            else {
+            let data = this.response? JSON.parse(this.response) : this.response;
+            if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
+            else if (this.status == 400 && data) alert(data.errorText);
+            else if (this.status == 200) {
                 for (const element of data) {
                     createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
                 }
                 alert('Файл(ы) загруженны');
-            }
+            } else alert("Не предвиденная ошибка. Попробуйте позже.")
         }, function () {
             viewOrHiddenLoad(false);
         }, function () {
@@ -102,43 +104,23 @@ const getFormUploadFiles = () => {
     formInPopup.appendChild(sendButton);
 }
 
-const getFormCreateFolderOrFiles = (isFile) => {
-    formInPopup.setAttribute('isFile', isFile)
-    formInPopup.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        let path = getPropertyes()['path'];
-        const isFile = formInPopup.getAttribute('isFile');
-
-        if (path[path.length - 1] == '//')
-            path += formInPopup.fileName.value;
-        else
-            path += `//${formInPopup.fileName.value}`;
-            
-        let url = mainUrl + `?path=${path}&isFile=${isFile}`;
-
-        sendRequest(url, null, 'POST', false, function () {
-            let data = JSON.parse(this.response);
-            if (this.status / 100 == 4) {
-                alert(data.errorText);
-            }
-            else {
-                createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
-            }
-        },
-        function () {
-            viewOrHiddenLoad(false);
-        },
-        function () {
-            viewOrHiddenLoad(true);
-        });
-    });
-
-    if (isFile) formInPopupH1.innerHTML = 'Создать файл';
-    else formInPopupH1.innerHTML = 'Создать директорию';
+const getFormCreateOrUpdateFileOrDirectory = (isFile) => {
+    formInPopupH1.innerHTML = 'Создать файл/директорию';
 
     let inputBox = createInputContainer('fileName', 'text', 'Название файла', 260, '');
     formInPopup.appendChild(inputBox);
+
+    let div = document.createElement("div");
+    let p = document.createElement('p');
+    p.innerHTML = 'Это файл?'
+    let inputCheckBox = document.createElement('input');
+    inputCheckBox.name = 'isFile';
+    inputCheckBox.type = 'checkbox';
+    inputCheckBox.checked = isFile;
+
+    div.appendChild(inputCheckBox);
+    div.appendChild(p);
+    formInPopup.appendChild(div)
 
     let button = document.createElement('button');
     button.innerHTML = 'Сохранить'
@@ -217,6 +199,10 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
             deleteButton.disabled = false;
             downloadButton.disabled = false;
         }
+        if (pathArray.length == 1)
+            buttonUpdateF.disabled = false;
+        else
+            buttonUpdateF.disabled = true;
     });
     tdCheckBox.appendChild(checkBox);
 
@@ -226,7 +212,7 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
     tdImage.appendChild(image);
 
     tr.append(tdCheckBox, tdImage, createSimpleTd(fileName), createSimpleTd(fullPath), createSimpleTd(dateCreate), createSimpleTd(dateChange));
-    tr.appendChild(createSimpleTd(convertBytes(size)));
+    tr.appendChild(createSimpleTd(size));
 
     tbody.appendChild(tr);
 
@@ -236,24 +222,6 @@ const createContentRow = (imgPath, fileName, fullPath, dateCreate, dateChange, s
         location.href = `${location.origin}${location.pathname}${covertPropertyesToUrl({ ...getPropertyes(), pageNumber:1, path, isFile: isFileInt })}`;
     })
 }
-
-const convertBytes = async (bytes) => {
-    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-
-    let unitIndex = 0;
-
-    bytes = Math.abs(bytes);
-
-    if (bytes < 1) return bytes + ' ' + units[unitIndex];
-
-    while (bytes >= 1024 && unitIndex < units.length - 1) {
-        bytes
-            /= 1024;
-        unitIndex++;
-    }
-
-    return bytes.toFixed(2) + ' ' + units[unitIndex];
-};
 
 const createSimpleTd = (text) => {
     const td = document.createElement("td");
@@ -268,7 +236,7 @@ const main = async () => {
         const url = mainUrl + covertPropertyesToUrl(propertyes);
 
         sendRequest(url, null, 'GET', true, function () {
-            if (this.status / 100 == 2) {
+            if (this.status == 200) {
                 const data = JSON.parse(this.response);
                 createPagination(data.totalNumberPages);
 
@@ -285,28 +253,82 @@ const main = async () => {
             }
         },
         function () {
+            console.log(performance.now());
             viewOrHiddenPopup(false);
             viewOrHiddenLoad(false);
         },
         function () {
             viewOrHiddenPopup(true);
             viewOrHiddenLoad(true);
+            console.log(performance.now())
         });
 
         document.querySelector(".close").addEventListener("click", () => {
             viewOrHiddenPopup(true);
         });
 
-        buttonCreateFi.addEventListener("click", () => {
+        buttonCreateF.addEventListener("click", () => {
             viewOrHiddenPopup(false);
             formInPopup.innerHTML = '';
-            getFormCreateFolderOrFiles(true);
+            getFormCreateOrUpdateFileOrDirectory(true);
+            formInPopup.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                let path = getPropertyes()['path'];
+                const isFile = formInPopup.querySelector('input[type=checkbox]').checked;
+
+                if (path[path.length - 1] == '//') path += formInPopup.fileName.value;
+                else path += `//${formInPopup.fileName.value}`;
+            
+                let url = mainUrl + `?path=${path}&isFile=${isFile}`;
+
+                sendRequest(url, null, 'POST', false, function () {
+                    let data = this.response ? JSON.parse(this.response) : this.response;
+                    if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
+                    else if (this.status == 400 && data) alert(data.errorText);
+                    else if (this.status == 200) createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
+                    else alert("Не предвиденная ошибка. Попробуйте позже.")
+                },
+                function () {
+                    viewOrHiddenLoad(false);
+                },
+                function () {
+                    viewOrHiddenLoad(true);
+                });
+            });
         });
 
-        buttonCreateFo.addEventListener("click", () => {
+        buttonUpdateF.addEventListener("click", () => {
+            let selectTrs = document.querySelectorAll(".selectTr");
+            if (selectTrs.length != 1) return;
+
+            let isFile = (selectTrs[0].getAttribute("isfile") === 'true');
+
             viewOrHiddenPopup(false);
             formInPopup.innerHTML = '';
-            getFormCreateFolderOrFiles(false);
+            getFormCreateOrUpdateFileOrDirectory(isFile);
+            formInPopup.querySelector('input[type=checkbox]').disabled = true;
+            formInPopup.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let fullPath = document.querySelector('.selectTr').children[3].innerHTML;
+                console.log(document.querySelector('.selectTr'));
+
+                let url = mainUrl + `?path=${fullPath}&fileName=${formInPopup.fileName.value}`;
+
+                console.log(url);
+
+                sendRequest(url, null, 'PUT', false, function () {
+                    let data = this.response ? JSON.parse(this.response) : this.response;
+                    if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
+                    else if (this.status == 400 && data) alert(data.errorText ?? "Не предвиденная ошибка. Попробуйте позже.");
+                    else if (this.status == 200) location.reload();
+                    else alert("Не предвиденная ошибка. Попробуйте позже.")
+                }, function () {
+                    viewOrHiddenLoad(false);
+                }, function () {
+                    viewOrHiddenLoad(true);
+                })
+            });
         });
 
         buttonUpload.addEventListener("click", () => {
@@ -336,12 +358,12 @@ const main = async () => {
         let paths = JSON.stringify(pathArray);
 
         sendRequest(url, paths, 'POST', true, function () {
-            if (this.status / 100 == 4) alert(JSON.parse(this.response).errorText);
-            else {
+            if (this.status == 400 && this.response) alert(JSON.parse(this.response).errorText);
+            else if (this.status == 200) {
                 const blob = this.response;
                 const url = URL.createObjectURL(blob);
 
-                console.log(url);                                                       
+                console.log(url);
 
                 const arrayUrl = url.split('/');
                 let fileName = arrayUrl[arrayUrl.length - 1];
@@ -362,6 +384,8 @@ const main = async () => {
 
                 URL.revokeObjectURL(url);
             }
+            else if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
+            else alert("Не предвиденная ошибка. Попробуйте позже.");
         }, function () {
             viewOrHiddenLoad(false);
         }, function () {
@@ -374,10 +398,10 @@ const main = async () => {
         if (result === true) {
             let paths = JSON.stringify(pathArray);
             sendRequest(mainUrl, paths, 'DELETE', false, function () {
-                if (this.status / 100 == 4) alert(JSON.parse(this.response).errorText);
-                else if (this.status / 100 == 2) {
-                    location.reload();
-                }
+                if (this.status == 400 && this.response) alert(JSON.parse(this.response).errorText);
+                else if (this.status == 200) location.reload();
+                else if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
+                else alert("Не предвиденная ошибка. Попробуйте позже.");
             },
             function () {
                 viewOrHiddenLoad(false);

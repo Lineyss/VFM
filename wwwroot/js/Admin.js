@@ -146,24 +146,27 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
     let deleteButtonText = document.createTextNode('Удалить');
     deleteButton.appendChild(deleteButtonText);
     deleteButton.addEventListener("click", function () {
-        const pID = this.parentElement.querySelector("div > p");
+        const result = confirm("Вы точко хотите удалить этого пользователя? Все пользователи авторизованные под ним будут разлогинены.")
+        if (result == true) {
+            const pID = this.parentElement.querySelector("div > p");
 
-        const ID = pID.innerHTML;
+            const ID = pID.innerHTML;
 
-        let urlDelete = url + '/' + ID
+            let urlDelete = url + '/' + ID
 
-        sendRequest(urlDelete, null, 'DELETE', false, function () {
-            if (this.status / 100 == 4) {
-                alert(JSON.parse(this.response).errorText);
-            }
-            else {
-                location.reload();
-            }
-        }, function () {
-            viewOrHiddenLoad(false);
-        }, function () {
-            viewOrHiddenLoad(true);
-        });
+            sendRequest(urlDelete, null, 'DELETE', false, function () {
+                if (this.status / 100 == 4) {
+                    alert(JSON.parse(this.response).errorText);
+                }
+                else {
+                    location.reload();
+                }
+            }, function () {
+                viewOrHiddenLoad(false);
+            }, function () {
+                viewOrHiddenLoad(true);
+            });
+        }
     });
 
     form.appendChild(saveButton);

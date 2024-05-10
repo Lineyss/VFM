@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "83fwUZLTlfg2Hp857m22txMQQBPz0rxAQMEv+y0G5rI=",
+  "Hash": "q4PwDQdX6wwOKT4yZHeURissSx9fwAdivXYnZS+HYas=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -153,12 +153,12 @@
       "OriginalItemSpec": "wwwroot\\image\\loadIcon.svg"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\Admin.js",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\admin.js",
       "SourceId": "VFM",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
-      "RelativePath": "js/Admin.js",
+      "RelativePath": "js/admin.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -167,7 +167,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\Admin.js"
+      "OriginalItemSpec": "wwwroot\\js\\admin.js"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\auth.js",
@@ -187,12 +187,12 @@
       "OriginalItemSpec": "wwwroot\\js\\auth.js"
     },
     {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\Index.js",
+      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\index.js",
       "SourceId": "VFM",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
       "BasePath": "_content/VFM",
-      "RelativePath": "js/Index.js",
+      "RelativePath": "js/index.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -201,7 +201,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\Index.js"
+      "OriginalItemSpec": "wwwroot\\js\\index.js"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\main.js",

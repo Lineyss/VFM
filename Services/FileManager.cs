@@ -50,7 +50,7 @@ namespace VFM.Services
 
         public async Task<OSModel>? CreateAsync (string path, IFormFile file)
         {
-            path = CheckExistFile(path);
+            path = ChangeFileNameIfExist(path);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -66,7 +66,6 @@ namespace VFM.Services
                     fullPath = path,
                     dateCreate = File.GetCreationTime(path).ToString(),
                     dateChange = File.GetLastWriteTime(path).ToString(),
-                    size = file.Length
                 };
             }
 
@@ -138,40 +137,33 @@ namespace VFM.Services
 
         public OSModel ChangeFileName(string fileName, string path)
         {
-            try
+            if(File.Exists(path))
             {
-                if(File.Exists(path))
+                string newPath = path.Replace(Path.GetFileNameWithoutExtension(path), fileName);
+                if (isExist(newPath)) throw new Exception(ErrorModel.FileIsExist);
+                File.Move(path, newPath);
+                return new OSModel
                 {
-                    string newPath = path.Replace(Path.GetFileNameWithoutExtension(path), fileName);
-                    File.Move(path, newPath);
-                    return new OSModel
-                    {
-                        icon = iconPathDocument,
-                        fileName = Path.GetFileName(newPath),
-                        fullPath = newPath,
-                        dateCreate = File.GetCreationTime(newPath).ToString(),
-                        dateChange = File.GetLastWriteTime(newPath).ToString(),
-                        size = new FileInfo(newPath).Length
-                    };
-                }
-                else if(Directory.Exists(path))
-                {
-                    string newPath = Path.Combine(Path.GetDirectoryName(path), fileName);
-                    Directory.Move(path, newPath);
-                    return new OSModel
-                    {
-                        icon = iconPathFolder,
-                        fileName = Path.GetFileName(newPath),
-                        fullPath = newPath,
-                        dateCreate = File.GetCreationTime(newPath).ToString(),
-                        dateChange = File.GetLastWriteTime(newPath).ToString(),
-                        size = GetFolderSize(newPath)
-                    };
-                }
+                    icon = iconPathDocument,
+                    fileName = Path.GetFileName(newPath),
+                    fullPath = newPath,
+                    dateCreate = File.GetCreationTime(newPath).ToString(),
+                    dateChange = File.GetLastWriteTime(newPath).ToString(),
+                };
             }
-            catch
+            else if(Directory.Exists(path))
             {
-                throw new Exception(ErrorModel.CanNotChangeFileName);
+                string newPath = Path.Combine(Path.GetDirectoryName(path), fileName);
+                if (isExist(newPath)) throw new Exception(ErrorModel.DirectoryIsExist);
+                Directory.Move(path, newPath);
+                return new OSModel
+                {
+                    icon = iconPathFolder,
+                    fileName = Path.GetFileName(newPath),
+                    fullPath = newPath,
+                    dateCreate = File.GetCreationTime(newPath).ToString(),
+                    dateChange = File.GetLastWriteTime(newPath).ToString(),
+                };
             }
 
             throw new Exception(ErrorModel.WrongPath);
@@ -181,17 +173,10 @@ namespace VFM.Services
         {
             foreach (var element in osModels)
             {
-                try
-                {
-                    if (element.icon == iconPathDocument)
-                        element.size = new FileInfo(element.fullPath).Length;
-                    else
-                        element.size = GetFolderSize(element.fullPath);
-                }
-                catch { }
+                element.size = GetSize(element);
             }
 
-            return osModels;
+            return osModels;    
         }
 
         private OSModel CreateFile(string path)
@@ -207,7 +192,6 @@ namespace VFM.Services
                     fullPath = path,
                     dateCreate = File.GetCreationTime(path).ToString(),
                     dateChange = File.GetLastWriteTime(path).ToString(),
-                    size = 0
                 };
 
                 file.Close();
@@ -232,7 +216,6 @@ namespace VFM.Services
                     fullPath = path,
                     dateCreate = file.CreationTime.ToString(),
                     dateChange = file.CreationTime.ToString(),
-                    size = 0,
                     isFile = false
                 };
             }
@@ -312,43 +295,65 @@ namespace VFM.Services
                     fullPath = element.RootDirectory.FullName,
                     dateCreate = element.RootDirectory.CreationTime.ToString(),
                     dateChange = element.RootDirectory.LastWriteTime.ToString(),
-                    size = element.TotalSize,
                     isFile = false
                 });
             }
         }
 
-        private string CheckExistFile(string filePath)
+        private string ChangeFileNameIfExist(string path)
         {
-            if (File.Exists(filePath))
+            if (File.Exists(path) || Directory.Exists(path))
             {
-                var filePathArr = filePath.Split('.');
+                var filePathArr = path.Split('.');
                 filePathArr[0] += 1;
-                filePath = string.Join('.', filePathArr);
-                filePath = CheckExistFile(filePath);
+                path = string.Join('.', filePathArr);
+                path = ChangeFileNameIfExist(path);
             }
 
-            return filePath;
+            return path;
         }
 
-        private long GetFolderSize(string path, long size = 0)
+        private bool isExist(string path)
         {
-            try
-            {
-                List<string> filesAndFolder = Directory.GetFiles(path).ToList();
-                filesAndFolder = filesAndFolder.Concat(Directory.GetDirectories(path)).ToList();
+            if (File.Exists(path) || Directory.Exists(path)) return true;
+            return false;
+        }
 
-                foreach(var element in filesAndFolder)
-                {
-                    if(Directory.Exists(element)) 
-                        size += GetFolderSize(element, size);
-                    else
-                        size += new FileInfo(element).Length;
-                }
-            }
-            catch (Exception e) 
+        private string GetSize(OSModel element)
+        {
+            double size;
+            DriveInfo? drive = DriveInfo.GetDrives().FirstOrDefault(drive => drive.Name == element.fullPath);
+            if (drive == null)
+                size = element.isFile ? new FileInfo(element.fullPath).Length : GetFolderSize(element.fullPath);
+            else
+                size = drive.TotalSize;
+
+            string[] suffixes = { "Байт", "Кбайт", "Мбайт", "Гбайт" };
+            int suffixIndex = 0;
+
+            while (size >= 1024 && suffixIndex < suffixes.Length - 1)
             {
-                Console.WriteLine(e.Message);
+                size /= 1024;
+                suffixIndex++;
+            }
+
+            return $"{size:F2} {suffixes[suffixIndex]}";
+        }
+
+        private double GetFolderSize(string path)
+        {
+            double size = 0;
+
+            var files = Directory.GetFiles(path);
+            foreach(var element in files)
+            {
+                size += element.Length;
+            }
+
+            var directoryes = Directory.GetDirectories(path);
+            foreach(var element in directoryes)
+            {
+                size += GetFolderSize(element);
             }
 
             return size;

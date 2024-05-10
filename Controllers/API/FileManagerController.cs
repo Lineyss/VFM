@@ -31,16 +31,11 @@ namespace VFM.Controllers
         {
             try
             {
-                if(isFile)
-                {
-                    return Ok();
-                }
-
                 var files = sFileManager.GetDriversFilesAndDirectories(path);
                 int totalNumberPage = files.GetNumberPages(maxNumberItems);
                  
                 files = files.Slice(maxNumberItems, pageNumber).ToList();
-                if (path != null) files = sFileManager.GetOSModelsSize(files).ToList();
+                sFileManager.GetOSModelsSize(files);
 
                 var fileManagerModel = new VFileManagerModel
                 {   
@@ -80,9 +75,9 @@ namespace VFM.Controllers
             }
         }
 
-        [HttpPut("{fileName}")]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "updateNmaeF")]
-        public IActionResult Put(string fileName, string path)
+        [HttpPut]
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyValue = "True", PropertyName = "updateNameF")]
+        public IActionResult Put(string path,string fileName)
         {
             try
             {
