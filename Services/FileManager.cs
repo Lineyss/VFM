@@ -170,10 +170,14 @@ namespace VFM.Services
         }
 
         public IEnumerable<OSModel> GetOSModelsSize(IEnumerable<OSModel> osModels)
-        {
+        {   
             foreach (var element in osModels)
             {
-                element.size = GetSize(element);
+                try
+                {
+                    element.size = GetSize(element);
+                }
+                catch { }
             }
 
             return osModels;    

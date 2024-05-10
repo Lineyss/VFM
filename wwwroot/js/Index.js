@@ -13,13 +13,13 @@ const formInPopupH1 = document.querySelector(".formPopup > h1");
 const buttonUpload = document.getElementById("upload");
 const buttonCreateF = document.getElementById("createF");
 const buttonUpdateF = document.getElementById("updateF");
+const content = document.querySelector(".content");
 
 let createdInputFileElement = 1;
 
 let mainUrl = `${location.origin}/api/FileManager`
 
 let pathArray = [];
-let selectedElements = [];
 
 const viewOrHiddenPopup = (bool) => {
     popupContainer.classList.toggle("hidden", bool);
@@ -229,6 +229,23 @@ const createSimpleTd = (text) => {
     return td;
 }
 
+const displayPdfDoc = (data) => {
+    const pdfDoc = document.createElement('object');
+    pdfDoc.style.cssText = 'width:100%; height:100%;'
+    pdfDoc.data = data;
+    pdfDoc.type = 'application/pdf';
+
+    content.innerHTML = '';
+    content.appendChild(pdfDoc);
+}
+
+const viewNotFoundMessageOnPage = (message) => {
+    const h2 = document.createElement("h2");
+    h2.textContent = message;
+    content.innerHTML = '';
+    content.appendChild(h2);
+}
+
 const main = async () => {
     let propertyes = getPropertyes();
 
@@ -244,20 +261,12 @@ const main = async () => {
                     createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
                 }
             }
-            else {
-                const h2 = document.createElement("h2");
-                h2.textContent = "Ничего не найдено.";
-                const content = document.querySelector(".content");
-                content.innerHTML = '';
-                content.appendChild(h2);
-            }
-        },
-        function () {
+            else viewNotFoundMessageOnPage("Ничего не найдено.");
+        },function () {
             console.log(performance.now());
             viewOrHiddenPopup(false);
             viewOrHiddenLoad(false);
-        },
-        function () {
+        },function () {
             viewOrHiddenPopup(true);
             viewOrHiddenLoad(true);
             console.log(performance.now())
@@ -288,11 +297,9 @@ const main = async () => {
                     else if (this.status == 400 && data) alert(data.errorText);
                     else if (this.status == 200) createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
                     else alert("Не предвиденная ошибка. Попробуйте позже.")
-                },
-                function () {
+                },function () {
                     viewOrHiddenLoad(false);
-                },
-                function () {
+                },function () {
                     viewOrHiddenLoad(true);
                 });
             });
@@ -339,9 +346,45 @@ const main = async () => {
         });
     }
     else if (propertyes['isFile'] == 'true' || propertyes['isFile'] == true) {
+        pathArray.push(propertyes['path']);
+
+        content.style.cssText = "height:100% !important";
+
+        const pagination = document.querySelector('.pagination');
+        content.parentElement.removeChild(pagination);
+
         buttonUpload.disabled = true;
-        viewOrHiddenPopup(true);
-        viewOrHiddenLoad(true);
+        buttonCreateF.disabled = true;
+        downloadButton.disabled = false;
+        deleteButton.disabled = false;
+
+        const url = mainUrl + '/download';
+
+        let paths = JSON.stringify(pathArray);
+        sendRequest(url, paths, 'POST', true, function () {
+            if (this.status == 400 && this.response) viewNotFoundMessageOnPage("Не удалось открыть файл.");
+            else if (this.status == 200) {
+                const blob = this.response;
+                const type = blob.type.split('/')[1];
+
+                switch (type) {
+                    case 'pdf':
+                        const reader = new FileReader();
+                        reader.onload = () => displayPdfDoc(reader.result);
+                        reader.readAsDataURL(blob);
+                        break;
+                    default:
+                        viewNotFoundMessageOnPage("Не удалось открыть файл.");
+                        break;
+                }
+            }
+        }, function () {
+            viewOrHiddenPopup(false);
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenPopup(true);
+            viewOrHiddenLoad(true);
+        }, 'Content-Type', 'application/json', 'blob')
     }
 
     const text = propertyes['path'];
@@ -362,8 +405,6 @@ const main = async () => {
             else if (this.status == 200) {
                 const blob = this.response;
                 const url = URL.createObjectURL(blob);
-
-                console.log(url);
 
                 const arrayUrl = url.split('/');
                 let fileName = arrayUrl[arrayUrl.length - 1];
@@ -402,11 +443,9 @@ const main = async () => {
                 else if (this.status == 200) location.reload();
                 else if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
                 else alert("Не предвиденная ошибка. Попробуйте позже.");
-            },
-            function () {
+            },function () {
                 viewOrHiddenLoad(false);
-            },
-            function () {
+            },function () {
                 viewOrHiddenLoad(true);
             }, 'Content-Type', 'application/json');
         }
