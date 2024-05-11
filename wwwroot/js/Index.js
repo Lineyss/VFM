@@ -1,4 +1,6 @@
 ﻿import { countingChars, createInputContainer, sendRequest } from './main.js'
+import JSZip from 'jszip';
+import './lib/docx-preview.min.js';
 
 const popupContainer = document.querySelector(".popupConteiner");
 const popupMain = document.querySelector(".popupMain");
@@ -14,6 +16,13 @@ const buttonUpload = document.getElementById("upload");
 const buttonCreateF = document.getElementById("createF");
 const buttonUpdateF = document.getElementById("updateF");
 const content = document.querySelector(".content");
+const reader = new FileReader();
+reader.onloadstart = () => {
+    viewOrHiddenLoad(false);
+};
+reader.onloadend = () => {
+    viewOrHiddenLoad(true);
+}
 
 let createdInputFileElement = 1;
 
@@ -235,7 +244,6 @@ const displayPdfDoc = (data) => {
     pdfDoc.data = data;
     pdfDoc.type = 'application/pdf';
 
-    content.innerHTML = '';
     content.appendChild(pdfDoc);
 }
 
@@ -347,8 +355,9 @@ const main = async () => {
     }
     else if (propertyes['isFile'] == 'true' || propertyes['isFile'] == true) {
         pathArray.push(propertyes['path']);
+        content.innerHTML = '';
 
-        content.style.cssText = "height:100% !important";
+        content.style.cssText = "height:100% !important; align-items: center !important;";
 
         const pagination = document.querySelector('.pagination');
         content.parentElement.removeChild(pagination);
@@ -365,14 +374,63 @@ const main = async () => {
             if (this.status == 400 && this.response) viewNotFoundMessageOnPage("Не удалось открыть файл.");
             else if (this.status == 200) {
                 const blob = this.response;
-                const type = blob.type.split('/')[1];
+                let type = blob.type.split('/')[1];
+                type = type.toLowerCase();
+
+                console.log(type);
 
                 switch (type) {
                     case 'pdf':
-                        const reader = new FileReader();
                         reader.onload = () => displayPdfDoc(reader.result);
                         reader.readAsDataURL(blob);
                         break;
+                    case 'jpg':
+                    case 'png':
+                    case 'gif':
+                    case 'bmp':
+                    case 'bmp ico':
+                    case 'icon':
+                    case 'webmn':
+                    case 'webp':
+                    case 'tif':
+                    case 'tiff':
+                        const img = document.createElement('img');
+                        img.style.cssText = "max-height:100%; max-width: 100%;"
+                        img.src = URL.createObjectURL(blob);
+                        content.appendChild(img);
+                        break;
+                    case 'svg':
+                        reader.onload = () => {
+                            const arrayBuffer = reader.result;
+                            const svgString = new TextDecoder().decode(arrayBuffer);
+
+                            const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+                            const svgUrl = URL.createObjectURL(svgBlob);
+
+                            const image = document.createElement('img');
+                            image.src = svgUrl;
+                            content.appendChild(image);
+                        };
+                        reader.readAsArrayBuffer(blob);
+                        break
+                    case 'doc':
+                    case 'docx':
+                        docx.renderAsync(blob, content).then(x => console.log("docx: finished"));
+                        break
+                    case 'xls':
+                    case 'xlsx':
+                    case 'ppt':
+                    case 'pptx':
+                        const url = `${URL.createObjectURL(blob)}.${type}`;
+                        console.log(url);
+                        const frame = document.createElement('iframe');
+                        frame.src = url;
+                        frame.width = '100%';
+                        frame.height = '100%';
+                        frame.frameBorder = '0';
+
+                        content.appendChild(frame);
+                        break
                     default:
                         viewNotFoundMessageOnPage("Не удалось открыть файл.");
                         break;

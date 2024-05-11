@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "c7v6UrxeYLHYoMPTvwdqd9AI1V2b3XQUiDr6684W7Dc=",
+  "Hash": "jaEiQNguVJKkGWq103G4IU7+BOXUaQapDMOT9WzxySU=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -202,6 +202,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\Index.js"
+    },
+    {
+      "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\lib\\docx-preview.min.js",
+      "SourceId": "VFM",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\",
+      "BasePath": "_content/VFM",
+      "RelativePath": "js/lib/docx-preview.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\lib\\docx-preview.min.js"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\main.js",

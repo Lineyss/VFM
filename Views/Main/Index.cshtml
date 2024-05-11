@@ -1,16 +1,18 @@
 ﻿@model VFM.Models.UserModel
 @{
     var isAdmin = Model?.isAdmin;
+    string login = Model?.login;
 }
 
 <html lang="en">
 <head>
-    <title>Главная страница</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/index.css">
-    <title>Document</title>
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <script src="~/js/lib/docx-preview.min.js"> </script>
+    <title>Привет @login</title>
 </head>
 <body>
     <div class="header">

@@ -45,6 +45,10 @@
       "PackagePath": "staticwebassets\\js\\auth.js"
     },
     {
+      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\lib\\docx-preview.min.js",
+      "PackagePath": "staticwebassets\\js\\lib\\docx-preview.min.js"
+    },
+    {
       "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\main.js",
       "PackagePath": "staticwebassets\\js\\main.js"
     },

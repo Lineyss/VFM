@@ -67,7 +67,7 @@ table {
 
 td
 {
-    width:100px;
+    max-width:100px;
     height:30px;
     text-align:center;
     overflow-x:auto;
