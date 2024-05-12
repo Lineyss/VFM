@@ -31,22 +31,31 @@ namespace VFM.Controllers
         {
             try
             {
-                var files = sFileManager.GetDriversFilesAndDirectories(path);
-                int totalNumberPage = files.GetNumberPages(maxNumberItems);
+                if (System.IO.File.Exists(path) && !isFile)
+                {
+                    string redirectUrl = $"{url}/VirtualFileManager?path={path}&pageNumber={pageNumber}&isFile={true}";
+                    return StatusCode(418, redirectUrl);
+                }
+                else if(!isFile)
+                {
+                    var files = sFileManager.GetDriversFilesAndDirectories(path);
+                    int totalNumberPage = files.GetNumberPages(maxNumberItems);
                  
-                files = files.Slice(maxNumberItems, pageNumber).ToList();
-                sFileManager.GetOSModelsSize(files);
+                    files = files.Slice(maxNumberItems, pageNumber).ToList();
+                    sFileManager.GetOSModelsSize(files);
 
-                var fileManagerModel = new VFileManagerModel
-                {   
-                    currentPage = pageNumber,
-                    totalNumberItems = files.Count,
-                    totalNumberPages = totalNumberPage,
-                    currentItems = files,
-                };
+                    var fileManagerModel = new VFileManagerModel
+                    {   
+                        currentPage = pageNumber,
+                        totalNumberItems = files.Count,
+                        totalNumberPages = totalNumberPage,
+                        currentItems = files,
+                    };
                 
-                return totalNumberPage < pageNumber ? NotFound(fileManagerModel):Ok(fileManagerModel);
+                    return totalNumberPage < pageNumber ? NotFound(fileManagerModel):Ok(fileManagerModel);
+                }
 
+                return Ok();
             }
             catch (DirectoryNotFoundException ex)
             {

@@ -2,6 +2,10 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Extensions.Configuration.Json;
+using VFM.Models;
+
+using Newtonsoft.Json;
 
 namespace VFM.Services
 {
@@ -10,10 +14,13 @@ namespace VFM.Services
         public static IPAddress[] getAddress()
         {
             string host = Dns.GetHostName();
-            var list = Dns.GetHostByName(host).AddressList;
+            var hostEntry = Dns.GetHostEntry(host);
 
-            IPAddress[] ips = list.Where(element => element.AddressFamily == AddressFamily.InterNetwork).ToArray();
-            return ips;
+            IPAddress[] addresses = hostEntry.AddressList
+                                        .Where(addr => addr.AddressFamily == AddressFamily.InterNetwork)
+                                        .ToArray();
+
+            return addresses;
         }
     }
 }

@@ -51,3 +51,10 @@ export const sendRequest = async (url, body, method, isAsync, fOnLoad, fLoadStar
     if (header) httpRequest.setRequestHeader(header, value);
     httpRequest.send(body);
 }
+
+export const viewNotFoundMessageOnPage = (message,content) => {
+    const h2 = document.createElement("h2");
+    h2.textContent = message;
+    content.innerHTML = '';
+    content.appendChild(h2);
+}

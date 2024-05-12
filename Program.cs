@@ -20,11 +20,11 @@ namespace VFM
                     {
                         options.Listen(address, 443, listenOptions =>
                         {
-                            // Указание пути к SSL сертификату и, при необходимости, пароля к нему
                             listenOptions.UseHttps("myCert.pfx", "Password123312");
                         });
                     }
                 });
+
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddEndpointsApiExplorer();

@@ -201,3 +201,22 @@ tbody > tr:hover{
     justify-content: center;
     padding: 0px 10px;
 }
+
+.xlsx-table-container {
+    overflow: auto !important;
+}
+
+.xlsx-table-container > table {
+    height: 90% !important;
+    width: 90% !important;
+}
+
+.xlsx-table-container > table, .xlsx-table-container > table > tbody > tr, .xlsx-table-container > table > tbody > tr > td {
+    border: 1px solid black;
+}
+
+.xlsx-table-container > table > tbody > tr > td {
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: auto !important;
+}

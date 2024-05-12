@@ -1,6 +1,4 @@
-﻿import { countingChars, createInputContainer, sendRequest } from './main.js'
-import JSZip from 'jszip';
-import './lib/docx-preview.min.js';
+﻿import { countingChars, createInputContainer, sendRequest, viewNotFoundMessageOnPage } from './main.js'
 
 const popupContainer = document.querySelector(".popupConteiner");
 const popupMain = document.querySelector(".popupMain");
@@ -16,13 +14,6 @@ const buttonUpload = document.getElementById("upload");
 const buttonCreateF = document.getElementById("createF");
 const buttonUpdateF = document.getElementById("updateF");
 const content = document.querySelector(".content");
-const reader = new FileReader();
-reader.onloadstart = () => {
-    viewOrHiddenLoad(false);
-};
-reader.onloadend = () => {
-    viewOrHiddenLoad(true);
-}
 
 let createdInputFileElement = 1;
 
@@ -141,7 +132,7 @@ const getFormCreateOrUpdateFileOrDirectory = (isFile) => {
 const getPropertyes = () => {
     const searchParams = new URLSearchParams(location.search);
     const pageNumber = searchParams.get("pageNumber") || 1;
-    const isFile = searchParams.get("isFile") === "true";
+    const isFile = searchParams.get("isFile")?.toLowerCase() === "true";
     const path = searchParams.get("path") || '';
 
     return { pageNumber: +pageNumber, isFile, path };
@@ -238,22 +229,6 @@ const createSimpleTd = (text) => {
     return td;
 }
 
-const displayPdfDoc = (data) => {
-    const pdfDoc = document.createElement('object');
-    pdfDoc.style.cssText = 'width:100%; height:100%;'
-    pdfDoc.data = data;
-    pdfDoc.type = 'application/pdf';
-
-    content.appendChild(pdfDoc);
-}
-
-const viewNotFoundMessageOnPage = (message) => {
-    const h2 = document.createElement("h2");
-    h2.textContent = message;
-    content.innerHTML = '';
-    content.appendChild(h2);
-}
-
 const main = async () => {
     let propertyes = getPropertyes();
 
@@ -269,7 +244,12 @@ const main = async () => {
                     createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
                 }
             }
-            else viewNotFoundMessageOnPage("Ничего не найдено.");
+            else if (this.status == 418)
+            {
+                const data = this.response;
+                location.href = data;
+            }
+            else viewNotFoundMessageOnPage("Ничего не найдено.", content);
         },function () {
             console.log(performance.now());
             viewOrHiddenPopup(false);
@@ -357,7 +337,7 @@ const main = async () => {
         pathArray.push(propertyes['path']);
         content.innerHTML = '';
 
-        content.style.cssText = "height:100% !important; align-items: center !important;";
+        content.style.cssText = "width:100%; height:90% !important; align-items: center !important; overflow:hidden";
 
         const pagination = document.querySelector('.pagination');
         content.parentElement.removeChild(pagination);
@@ -367,82 +347,12 @@ const main = async () => {
         downloadButton.disabled = false;
         deleteButton.disabled = false;
 
-        const url = mainUrl + '/download';
+        const url = `${location.origin}${location.pathname}/OpenFile?path=${propertyes['path']}`;
 
-        let paths = JSON.stringify(pathArray);
-        sendRequest(url, paths, 'POST', true, function () {
-            if (this.status == 400 && this.response) viewNotFoundMessageOnPage("Не удалось открыть файл.");
-            else if (this.status == 200) {
-                const blob = this.response;
-                let type = blob.type.split('/')[1];
-                type = type.toLowerCase();
-
-                console.log(type);
-
-                switch (type) {
-                    case 'pdf':
-                        reader.onload = () => displayPdfDoc(reader.result);
-                        reader.readAsDataURL(blob);
-                        break;
-                    case 'jpg':
-                    case 'png':
-                    case 'gif':
-                    case 'bmp':
-                    case 'bmp ico':
-                    case 'icon':
-                    case 'webmn':
-                    case 'webp':
-                    case 'tif':
-                    case 'tiff':
-                        const img = document.createElement('img');
-                        img.style.cssText = "max-height:100%; max-width: 100%;"
-                        img.src = URL.createObjectURL(blob);
-                        content.appendChild(img);
-                        break;
-                    case 'svg':
-                        reader.onload = () => {
-                            const arrayBuffer = reader.result;
-                            const svgString = new TextDecoder().decode(arrayBuffer);
-
-                            const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
-                            const svgUrl = URL.createObjectURL(svgBlob);
-
-                            const image = document.createElement('img');
-                            image.src = svgUrl;
-                            content.appendChild(image);
-                        };
-                        reader.readAsArrayBuffer(blob);
-                        break
-                    case 'doc':
-                    case 'docx':
-                        docx.renderAsync(blob, content).then(x => console.log("docx: finished"));
-                        break
-                    case 'xls':
-                    case 'xlsx':
-                    case 'ppt':
-                    case 'pptx':
-                        const url = `${URL.createObjectURL(blob)}.${type}`;
-                        console.log(url);
-                        const frame = document.createElement('iframe');
-                        frame.src = url;
-                        frame.width = '100%';
-                        frame.height = '100%';
-                        frame.frameBorder = '0';
-
-                        content.appendChild(frame);
-                        break
-                    default:
-                        viewNotFoundMessageOnPage("Не удалось открыть файл.");
-                        break;
-                }
-            }
-        }, function () {
-            viewOrHiddenPopup(false);
-            viewOrHiddenLoad(false);
-        }, function () {
-            viewOrHiddenPopup(true);
-            viewOrHiddenLoad(true);
-        }, 'Content-Type', 'application/json', 'blob')
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.style.cssText = "width:100%; height:100%";
+        content.appendChild(iframe);
     }
 
     const text = propertyes['path'];

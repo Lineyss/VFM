@@ -11,8 +11,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://192.168.0.111:7288;http://192.168.0.111:5247",
-      "sslPort": 5001,
+      "sslPort": 403,
       "sslKey": {
         "password": "Password123312"
       },

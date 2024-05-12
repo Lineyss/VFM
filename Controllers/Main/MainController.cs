@@ -75,11 +75,16 @@ namespace VFM.Controllers.Main
             }
             return View(userModel);
         }
+        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [HttpGet("VirtualFileManager/OpenFile")]
+        public async Task<IActionResult> ViewFile(string path)
+        {
+            return View();
+        }
 
         [HttpGet("VirtualFileManager/Admin")]
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
         public IActionResult Admin() => View();
-
 
         private UserModel GetUser(int ID)
         {
