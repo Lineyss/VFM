@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="~/css/main.css">
     <link type="text/css" rel="stylesheet" href="~/css/index.css">
-    <script src="~/js/lib/pptxgen.bundle.js"></script>
     <title>Привет @login</title>
 </head>
 <body>
@@ -23,8 +22,8 @@
 
         <div class="d1">
             <form>
-                <input id="myInput" name="path" type="text" placeholder="Искать здесь..." maxlength="266">
-                <snap id="charCount">0/266</snap>
+                <input id="myInput" name="path" type="text" placeholder="Искать здесь..." maxlength="32767">
+                <snap id="charCount">0/32767</snap>
                 <button type="submit">Поиск</button>
             </form>
         </div>

@@ -13,18 +13,10 @@ namespace VFM
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.WebHost
-                .UseKestrel(options =>
-                {
-                    foreach (var address in IPManager.getAddress())
-                    {
-                        options.Listen(address, 443, listenOptions =>
-                        {
-                            listenOptions.UseHttps("myCert.pfx", "Password123312");
-                        });
-                    }
-                });
-
+            foreach (var address in IPManager.getAddress())
+            {
+                builder.WebHost.UseUrls($"http://{address}:80", $"https://{address}:449");
+            }
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddEndpointsApiExplorer();
@@ -52,10 +44,6 @@ namespace VFM
                 options.SlidingExpiration = true; // Продления сроков жизни cookie при каждом запросе
 
                 options.Cookie.HttpOnly = true; // Устанавливаем флажок в браузере чтобы не было доступа у js
-                 
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Для использования HTTPS
-
-                options.Cookie.SameSite = SameSiteMode.None; // Для предотвращения csrf атак
 
                 options.Cookie.MaxAge = TimeSpan.FromDays(1); // Время жизни cookie
             })
@@ -102,8 +90,6 @@ namespace VFM
 
             app.UseStaticFiles();
             app.UseRouting();
-
-            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();

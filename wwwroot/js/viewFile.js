@@ -24,12 +24,12 @@ class File {
     }
 
     displayPdfDoc = () => {
-        const pdfDoc = document.createElement('object');
-        pdfDoc.style.cssText = 'width:100%; height:100%;'
-        pdfDoc.data = this.blob;
-        pdfDoc.type = 'application/pdf';
-
-        content.appendChild(pdfDoc);
+        var blobUrl = URL.createObjectURL(this.blob);
+        const embed = document.createElement('embed');
+        embed.src = blobUrl;
+        embed.width = '100%';
+        embed.height = '100%';
+        content.appendChild(embed);
     }
 
     displayTables = () => {
@@ -47,6 +47,16 @@ class File {
 
     displayWord = () => {
         docx.renderAsync(this.blob, content).then(x => console.log("docx: finished"));
+    }
+
+    displayTxtHtml = () => {
+        const url = URL.createObjectURL(this.blob);
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.sandbox = "allow-same-origin allow-scripts allow-popups allow-forms";
+        iframe.height = '90%';
+        iframe.style.cssText = 'box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);'
+        content.appendChild(iframe);
     }
 
     displayImage = () => {
@@ -73,7 +83,7 @@ class File {
     }
 
     displayPresentation = () => {
-        reader.onload = (e) => {
+/*        reader.onload = (e) => {
             var pptx = new PptxGenJS();
             pptx.read(e.target.result);
 
@@ -89,7 +99,7 @@ class File {
             content.innerHTML = textContent;
         };
 
-        reader.readAsArrayBuffer(this.blob);
+        reader.readAsArrayBuffer(this.blob);*/
     }
 }
 
@@ -107,42 +117,54 @@ const main = () => {
         if (this.status == 400 && this.response) viewNotFoundMessageOnPage("Не удалось открыть файл.", content);
         else if (this.status == 200) {
             const file = new File(this.response);
-            switch (file.extention) {
-                case 'pdf':
-                    file.displayPdfDoc();
-                    break;
-                case 'jpg':
-                case 'png':
-                case 'gif':
-                case 'bmp':
-                case 'bmp ico':
-                case 'icon':
-                case 'webmn':
-                case 'webp':
-                case 'tif':
-                case 'tiff':
-                case 'svg':
-                    file.displayImage();
-                    break;
-                case 'doc':
-                case 'docx':
-                    file.displayWord();
-                    break;
-                case 'xls':
-                case 'xlsx':
-                case 'csv':
-                    file.displayTables();
-                    break;
-                case 'ppt':
-                case 'pptx':
-                    file.displayPresentation();
-                    break
-                default:
-                    viewNotFoundMessageOnPage("Не удалось открыть файл.", content);
-                    break;
+            try {
+                switch (file.extention) {
+                    case 'pdf':
+                        file.displayPdfDoc();
+                        break;
+                    case 'jpg':
+                    case 'png':
+                    case 'gif':
+                    case 'bmp':
+                    case 'bmp ico':
+                    case 'icon':
+                    case 'webmn':
+                    case 'webp':
+                    case 'tif':
+                    case 'tiff':
+                    case 'svg':
+                        file.displayImage();
+                        break;
+                    case 'doc':
+                    case 'docx':
+                        file.displayWord();
+                        break;
+                    case 'xls':
+                    case 'xlsx':
+                    case 'csv':
+                        file.displayTables();
+                        break;
+                    case 'ppt':
+                    case 'pptx':
+                        file.displayPresentation();
+                        break;
+                    default:
+                        file.displayTxt();
+                        break;
+                }
+            }
+            catch {
+                viewNotFoundMessageOnPage("Не удалось открыть файл.", content);
             }
         }
-    }, null, null, 'Content-Type', 'application/json', 'blob')
+    }, function () {
+        this.onprogress = function (e) {
+            if (e.loaded > 10 * 1024 * 1024) { 
+                this.abort();
+                viewNotFoundMessageOnPage("Не удалось открыть файл. Размер файла превышает 10 МБ.", content);
+            }
+        };
+    }, null, 'Content-Type', 'application/json', 'blob')
 }
 
 main();

@@ -77,7 +77,7 @@ namespace VFM.Controllers.Main
         }
         [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager/OpenFile")]
-        public async Task<IActionResult> ViewFile(string path)
+        public async Task<IActionResult> ViewFile()
         {
             return View();
         }

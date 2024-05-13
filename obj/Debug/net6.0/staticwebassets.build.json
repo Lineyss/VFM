@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IWSdvcLoxrjpB1UpW38OHMyXuV/aedVWatQZ3W+2MFo=",
+  "Hash": "c3CF2a7wj3TwGVNwH1kzxHwokDS0pL1kIZJVCV6VdAM=",
   "Source": "VFM",
   "BasePath": "_content/VFM",
   "Mode": "Default",
@@ -253,40 +253,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\lib\\jszip.min.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\lib\\pptxgen.bundle.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/lib/pptxgen.bundle.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\lib\\pptxgen.bundle.js"
-    },
-    {
-      "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\lib\\pptxgen.min.js",
-      "SourceId": "VFM",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\",
-      "BasePath": "_content/VFM",
-      "RelativePath": "js/lib/pptxgen.min.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\lib\\pptxgen.min.js"
     },
     {
       "Identity": "D:\\Рабочий стол\\Курсач\\Программа\\wwwroot\\js\\lib\\xlsx.full.min.js",
