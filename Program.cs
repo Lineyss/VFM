@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Net;
-using VFM.Models;
-using VFM.Services;
+using VFM.Models.Auth;
+using VFM.Models.Help;
+using VFM.Service;
 
 namespace VFM
 {
@@ -13,23 +13,18 @@ namespace VFM
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            foreach (var address in IPManager.getAddress())
-            {
-                builder.WebHost.UseUrls($"http://{address}:80", $"https://{address}:449");
-            }
+            builder.WebHost.UseUrls(IpManager.urls);
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddTransient<AuthManager>();
+            builder.Services.AddTransient<FileManagerService>();
             builder.Services.AddSingleton(new LiteDbContext("LiteDb.db"));
-            builder.Services.AddTransient<Services.AuthenticationManager>();
-
-            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthorization();
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -38,14 +33,11 @@ namespace VFM
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.LoginPath = "/Auth/Login.html"; // —траница авторизации
-                options.LogoutPath = "/Auth/Exit"; // —траница выхода
-
-                options.SlidingExpiration = true; // ѕродлени€ сроков жизни cookie при каждом запросе
-
-                options.Cookie.HttpOnly = true; // ”станавливаем флажок в браузере чтобы не было доступа у js
-
-                options.Cookie.MaxAge = TimeSpan.FromDays(1); // ¬рем€ жизни cookie
+                options.LoginPath = "/Auth/Login.html";
+                options.LogoutPath = "/Auth/Exit";
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.MaxAge = TimeSpan.FromDays(1);
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -53,42 +45,27 @@ namespace VFM
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // указывает, будет ли валидироватьс€ издатель при валидации токена
                     ValidateIssuer = true,
-                    // строка, представл€юща€ издател€
                     ValidIssuer = Jwt.ValidIssuer,
-                    // будет ли валидироватьс€ потребитель токена
                     ValidateAudience = true,
-                    // установка потребител€ токена
                     ValidAudience = Jwt.ValidAudience,
-                    // будет ли валидироватьс€ врем€ существовани€
                     ValidateLifetime = true,
-                    // установка ключа безопасности
                     IssuerSigningKey = Jwt.GetSymmetricSecurityKey(),
-                    // валидаци€ ключа безопасности
                     ValidateIssuerSigningKey = true,
                 };
             });
+
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            }
-            else
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHsts();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();

@@ -1,10 +1,11 @@
-﻿using LiteDB;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VFM.Models;
-using VFM.Services;
+using System.Linq;
+using VFM.Models.Auth;
+using VFM.Models.Help;
+using VFM.Models.Users;
 
 namespace VFM.Controllers.API
 {
@@ -13,26 +14,33 @@ namespace VFM.Controllers.API
     public class AuthController : ControllerBase
     {
         private readonly LiteDbContext db;
-        private readonly AuthenticationManager authenticationManager = new AuthenticationManager();
+        private readonly AuthManager authenticationManager;
 
-        public AuthController(LiteDbContext db)
+        public AuthController(LiteDbContext db, AuthManager authenticationManager)
         {
             this.db = db;
+            this.authenticationManager = authenticationManager;
         }
 
         [HttpPost("Login")]
-        [NoAuthUser]
-        public IActionResult Login([FromForm] AuthUserModel model)
+        [NoAuth]
+        public async Task<IActionResult> Login([FromForm] UserAuth model, bool isCookie = true)
         {
             try
             {
                 if (model == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
-                var user = db.GetCollection<UserModel>("user").Find(element => element.login == model.login).FirstOrDefault();
+                var user = db.GetCollection<User>("user").Find(element => element.login == model.login).FirstOrDefault();
 
-                if (user == null) throw new Exception(ErrorModel.WrongLoginAndPassword);
+                if (user == null) throw new Exception(ErrorModel.WrongLoginOrPassword);
 
-                if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginAndPassword);
+                if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginOrPassword);
+
+                if(isCookie)
+                {
+                    await authenticationManager.CookieLogIn(HttpContext, user);
+                    return Ok();
+                }
 
                 return Ok(new
                 {
@@ -46,12 +54,17 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost("Logout")]
-        [UserAuthorization(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Logout()
         {
             try
             {
-                await authenticationManager.JwtLogOut(HttpContext);
+                char[] authSchemes = HttpContext.User.Identities.SelectMany(i => i.AuthenticationType).ToArray();
+                string _authScheme = string.Join("", authSchemes);
+
+                if (CookieAuthenticationDefaults.AuthenticationScheme == _authScheme)  await authenticationManager.CookieLogOut(HttpContext);
+                else await authenticationManager.JwtLogOut(HttpContext);
+
                 return Ok();
             }
             catch (Exception e)

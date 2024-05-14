@@ -50,13 +50,11 @@ class File {
     }
 
     displayTxtHtml = () => {
-        const url = URL.createObjectURL(this.blob);
-        const iframe = document.createElement('iframe');
-        iframe.src = url;
-        iframe.sandbox = "allow-same-origin allow-scripts allow-popups allow-forms";
-        iframe.height = '90%';
-        iframe.style.cssText = 'box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);'
-        content.appendChild(iframe);
+        reader.onload = (e) => {
+            const fileContent = e.target.result;
+            content.innerHTML = fileContent;
+        };
+        reader.readAsText(this.blob);
     }
 
     displayImage = () => {
@@ -149,7 +147,7 @@ const main = () => {
                         file.displayPresentation();
                         break;
                     default:
-                        file.displayTxt();
+                        file.displayTxtHtml();
                         break;
                 }
             }

@@ -17,13 +17,15 @@ form.addEventListener("submit", async (e) => {
 
     var _form = new FormData(form);
 
-    await sendRequest(location.href, _form, 'POST', false, function () {
+    let url = `${location.origin}/api/Auth/Login?isCookie=true`
+
+    sendRequest(url, _form, 'POST', false, function () {
         if (this.status / 100 == 4) {
             let response = JSON.parse(this.response);
             alert(response.errorText);
         }
         else {
-            if (this.responseURL) location.href = this.responseURL;
+            if (this.responseURL) location.reload();
         }
     });
 

@@ -1,56 +1,72 @@
 {
   "Files": [
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\admin.css",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\css\\admin.css",
       "PackagePath": "staticwebassets\\css\\admin.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\auth.css",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\css\\auth.css",
       "PackagePath": "staticwebassets\\css\\auth.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\index.css",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\css\\index.css",
       "PackagePath": "staticwebassets\\css\\index.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\css\\main.css",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\css\\main.css",
       "PackagePath": "staticwebassets\\css\\main.css"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\document.svg",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\css\\viewFile.css",
+      "PackagePath": "staticwebassets\\css\\viewFile.css"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\image\\document.svg",
       "PackagePath": "staticwebassets\\image\\document.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\drive.svg",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\image\\drive.svg",
       "PackagePath": "staticwebassets\\image\\drive.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\folder.svg",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\image\\folder.svg",
       "PackagePath": "staticwebassets\\image\\folder.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\image\\loadIcon.svg",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\image\\loadIcon.svg",
       "PackagePath": "staticwebassets\\image\\loadIcon.svg"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\Admin.js",
-      "PackagePath": "staticwebassets\\js\\Admin.js"
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\admin.js",
+      "PackagePath": "staticwebassets\\js\\admin.js"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\Index.js",
-      "PackagePath": "staticwebassets\\js\\Index.js"
-    },
-    {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\auth.js",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\auth.js",
       "PackagePath": "staticwebassets\\js\\auth.js"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\lib\\docx-preview.min.js",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\index.js",
+      "PackagePath": "staticwebassets\\js\\index.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\lib\\docx-preview.min.js",
       "PackagePath": "staticwebassets\\js\\lib\\docx-preview.min.js"
     },
     {
-      "Id": "D:\\Рабочий стол\\Курсач\\Проект\\wwwroot\\js\\main.js",
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\lib\\jszip.min.js",
+      "PackagePath": "staticwebassets\\js\\lib\\jszip.min.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\lib\\xlsx.full.min.js",
+      "PackagePath": "staticwebassets\\js\\lib\\xlsx.full.min.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\main.js",
       "PackagePath": "staticwebassets\\js\\main.js"
+    },
+    {
+      "Id": "D:\\Рабочий стол\\VFM\\VFM\\wwwroot\\js\\viewFile.js",
+      "PackagePath": "staticwebassets\\js\\viewFile.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VFM.Microsoft.AspNetCore.StaticWebAssets.props",

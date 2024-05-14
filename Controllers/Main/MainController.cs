@@ -1,67 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using VFM.Models;
-using VFM.Services;
+using VFM.Models.Help;
+using VFM.Models.Auth;
+using VFM.Models.Users;
+using System.Net;
 
 namespace VFM.Controllers.Main
 {
     public class MainController : Controller
     {
         private readonly LiteDbContext db;
-        private readonly AuthenticationManager authenticationManager = new AuthenticationManager();
         public MainController(LiteDbContext db)
         {
             this.db = db;
         }
 
         [HttpGet("Auth/Login.html")]
-        [NoAuthUser(RedirectPath= "/VirtualFileManager")]
-        public IActionResult Auth() => View();
+        [NoAuth(RedirectPath = "/VirtualFileManager")]
+        public IActionResult Auth() => View();      
 
-        [HttpPost("Auth/Login.html")]
-        public async Task<IActionResult> Auth([FromForm] AuthUserModel model)
-        {
-            try
-            {
-                if(model == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
-
-                var user = db.GetCollection<UserModel>("user").Find(element => element.login == model.login).FirstOrDefault();
-                if (user == null) throw new Exception(ErrorModel.WrongLoginAndPassword);
-
-                if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginAndPassword);
-
-                await authenticationManager.CookieLogIn(HttpContext, user);
-
-                return Redirect("/VirtualFileManager");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new ErrorModel(e.Message));
-            }
-        }
-
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        [HttpGet("Auth/Exit")]
-        public async Task<IActionResult> Exit()
-        {
-            try
-            {
-                await authenticationManager.CookieLogOut(HttpContext);
-
-                return Redirect("/Auth/Login.html");
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager")]
         public async Task<IActionResult> Index()
         {
-            UserModel userModel;
+            User userModel;
             try
             {
                 string? idUser = User.FindFirst("ID").Value;
@@ -69,34 +32,31 @@ namespace VFM.Controllers.Main
                 int ID = Convert.ToInt32(idUser);
                 userModel = GetUser(ID);
             }
-            catch 
+            catch
             {
-                userModel = new UserModel();
+                userModel = new User();
             }
             return View(userModel);
         }
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager/OpenFile")]
-        public async Task<IActionResult> ViewFile()
-        {
-            return View();
-        }
+        public async Task<IActionResult> ViewFile() => View();
 
         [HttpGet("VirtualFileManager/Admin")]
-        [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
         public IActionResult Admin() => View();
 
-        private UserModel GetUser(int ID)
+        private User GetUser(int ID)
         {
             try
             {
-                return db.GetCollection<UserModel>("user").FindById(ID);
+                return db.GetCollection<User>("user").FindById(ID);
             }
             catch
             {
-                return new UserModel();
+                return new User();
             }
-
         }
     }
 }

@@ -1,19 +1,17 @@
-﻿using LiteDB;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using VFM.Controllers.Base;
-using VFM.Models;
+using VFM.Models.Auth;
+using VFM.Models.Help;
+using VFM.Models.Users;
 
 namespace VFM.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    [UserAuthorization(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
-    public class UserController : ControllerBase, IAPIController<UserModel, SupportUserModel>
+    [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
+    public class UserController : ControllerBase
     {
         private readonly LiteDbContext db;
         public UserController(LiteDbContext db)
@@ -26,7 +24,7 @@ namespace VFM.Controllers.API
         {
             try
             {
-                var users = db.GetCollection<UserModel>("user").FindAll();
+                var users = db.GetCollection<User>("user").FindAll();
                 return !users.Any() ? NoContent() : Ok(users);
             }
             catch
@@ -40,7 +38,7 @@ namespace VFM.Controllers.API
         {
             try
             {
-                UserModel? userModel = db.GetCollection<UserModel>("user").FindById(ID);
+                User? userModel = db.GetCollection<User>("user").FindById(ID);
 
                 return userModel == null ? NoContent() : Ok(userModel);
             }
@@ -51,16 +49,16 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost]
-        public IActionResult _Post([FromForm] SupportUserModel model)
+        public IActionResult Post([FromForm] UserForm model)
         {
             try
             {
-                var users = db.GetCollection<UserModel>("user");
-                UserModel? user = users.Find(element => element.login == model.login).FirstOrDefault();
+                var users = db.GetCollection<User>("user");
+                User? user = users.Find(element => element.login == model.login).FirstOrDefault();
 
                 if (user != null) throw new Exception(ErrorModel.LoginIsExist);
 
-                user = new UserModel(model);
+                user = new User(model);
 
                 var InserResult = users.Insert(user);
                 user = users.FindById(InserResult);
@@ -78,12 +76,12 @@ namespace VFM.Controllers.API
         }
 
         [HttpPut("{ID}")]
-        public IActionResult Put([FromForm] SupportUserModel model, int ID)
+        public IActionResult Put([FromForm] UserForm model, int ID)
         {
             try
             {
-                var users = db.GetCollection<UserModel>("user");
-                UserModel user = users.Find(element => element.ID == ID).FirstOrDefault()
+                var users = db.GetCollection<User>("user");
+                User user = users.Find(element => element.ID == ID).FirstOrDefault()
                     ?? throw new Exception(ErrorModel.AccountIsNotExist);
 
                 user.UpdateModel(model);
@@ -103,28 +101,14 @@ namespace VFM.Controllers.API
         {
             try
             {
-                bool isDelete = db.GetCollection<UserModel>("user").Delete(ID) == false ?
-                    throw new Exception(ErrorModel.AccountWithThisIDIsNotExist) : true;
-                return Ok(ID);
+                if (db.GetCollection<User>("user").Delete(ID)) return Ok(ID);
+
+                throw new Exception(ErrorModel.AccountWithThisIDIsNotExist);
             }
             catch (Exception e)
             {
                 return BadRequest(new ErrorModel(e.Message));
             }
-        }
-
-        // Не реалезованные методы
-
-        [NonAction]
-        public IActionResult Post([FromForm] SupportUserModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        [NonAction]
-        public IActionResult Put([FromForm] UserModel model)
-        {
-            throw new NotImplementedException();
         }
     }
 }
