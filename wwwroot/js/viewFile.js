@@ -144,10 +144,10 @@ const main = () => {
                     case 'csv':
                         file.displayTables();
                         break;
-                    case 'ppt':
+                    /*case 'ppt':
                     case 'pptx':
                         file.displayPresentation();
-                        break;
+                        break;*/
                     default:
                         file.displayTxtHtml();
                         break;

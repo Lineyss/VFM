@@ -30,6 +30,7 @@ namespace VFM.Controllers.API
             {
                 if (model == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
 
+                var users = db.user.ToList();
                 var user = db.user.FirstOrDefault(user => user.login == model.login);
 
                 if (user == null) throw new Exception(ErrorModel.WrongLoginOrPassword);
