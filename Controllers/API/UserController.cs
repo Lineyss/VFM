@@ -24,7 +24,7 @@ namespace VFM.Controllers.API
         {
             try
             {
-                var users = db.GetCollection<User>("user").FindAll();
+                var users = db.user.ToList();
                 return !users.Any() ? NoContent() : Ok(users);
             }
             catch
@@ -38,7 +38,7 @@ namespace VFM.Controllers.API
         {
             try
             {
-                User? userModel = db.GetCollection<User>("user").FindById(ID);
+                User? userModel = db.user.Find(ID);
 
                 return userModel == null ? NoContent() : Ok(userModel);
             }
@@ -53,17 +53,14 @@ namespace VFM.Controllers.API
         {
             try
             {
-                var users = db.GetCollection<User>("user");
-                User? user = users.Find(element => element.login == model.login).FirstOrDefault();
+                User? user = db.user.FirstOrDefault(user => user.login == model.login);
 
                 if (user != null) throw new Exception(ErrorModel.LoginIsExist);
 
                 user = new User(model);
 
-                var InserResult = users.Insert(user);
-                user = users.FindById(InserResult);
-                user.ID = InserResult;
-                users.Update(user);
+                db.user.Add(user);
+                db.SaveChanges();
 
                 string Url = $"{Request.GetDisplayUrl()}/{user.ID}";
 
@@ -80,13 +77,13 @@ namespace VFM.Controllers.API
         {
             try
             {
-                var users = db.GetCollection<User>("user");
-                User user = users.Find(element => element.ID == ID).FirstOrDefault()
+                User user = db.user.Find(ID)
                     ?? throw new Exception(ErrorModel.AccountIsNotExist);
 
                 user.UpdateModel(model);
 
-                users.Update(user);
+                db.user.Update(user);
+                db.SaveChanges();
 
                 return Ok(user);
             }
@@ -101,9 +98,13 @@ namespace VFM.Controllers.API
         {
             try
             {
-                if (db.GetCollection<User>("user").Delete(ID)) return Ok(ID);
+                User user = db.user.Find(ID)
+                    ?? throw new Exception(ErrorModel.AccountWithThisIDIsNotExist);
 
-                throw new Exception(ErrorModel.AccountWithThisIDIsNotExist);
+                db.user.Remove(user);
+                db.SaveChanges();
+
+                return Ok(user);
             }
             catch (Exception e)
             {

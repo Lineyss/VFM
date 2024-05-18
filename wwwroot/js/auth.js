@@ -20,12 +20,17 @@ form.addEventListener("submit", async (e) => {
     let url = `${location.origin}/api/Auth/Login?isCookie=true`
 
     sendRequest(url, _form, 'POST', false, function () {
-        if (this.status / 100 == 4) {
-            let response = JSON.parse(this.response);
-            alert(response.errorText);
+        try {
+            if (this.status / 100 == 4) {
+                let response = JSON.parse(this.response);
+                alert(response.errorText);
+            }
+            else {
+                if (this.responseURL) location.reload();
+            }
         }
-        else {
-            if (this.responseURL) location.reload();
+        catch {
+            alert("Не предвиденная ошибка. Попробуйте позже.");
         }
     });
 

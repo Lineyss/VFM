@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Рабочий стол\\VFM\\VFM\\VFM.csproj": {}
+    "D:\\Рабочий стол\\Курсач\\Программа\\VFM.csproj": {}
   },
   "projects": {
-    "D:\\Рабочий стол\\VFM\\VFM\\VFM.csproj": {
+    "D:\\Рабочий стол\\Курсач\\Программа\\VFM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Рабочий стол\\VFM\\VFM\\VFM.csproj",
+        "projectUniqueName": "D:\\Рабочий стол\\Курсач\\Программа\\VFM.csproj",
         "projectName": "VFM",
-        "projectPath": "D:\\Рабочий стол\\VFM\\VFM\\VFM.csproj",
-        "packagesPath": "C:\\Users\\sasch\\.nuget\\packages\\",
-        "outputPath": "D:\\Рабочий стол\\VFM\\VFM\\obj\\",
+        "projectPath": "D:\\Рабочий стол\\Курсач\\Программа\\VFM.csproj",
+        "packagesPath": "C:\\Users\\Павел\\.nuget\\packages\\",
+        "outputPath": "D:\\Рабочий стол\\Курсач\\Программа\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "D:\\System\\VisualStudioSDK\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\sasch\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Павел\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,13 +40,23 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "LiteDB": {
-              "target": "Package",
-              "version": "[5.0.19, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.29, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.30, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[6.0.30, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.30, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -63,8 +69,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -76,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

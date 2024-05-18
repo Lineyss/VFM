@@ -52,7 +52,9 @@ class File {
     displayTxtHtml = () => {
         reader.onload = (e) => {
             const fileContent = e.target.result;
-            content.innerHTML = fileContent;
+            const pre = document.createElement('pre');
+            pre.innerHTML = fileContent;
+            content.appendChild(pre);
         };
         reader.readAsText(this.blob);
     }
@@ -161,7 +163,7 @@ const main = () => {
                 this.abort();
                 viewNotFoundMessageOnPage("Не удалось открыть файл. Размер файла превышает 10 МБ.", content);
             }
-        };
+        };  
     }, null, 'Content-Type', 'application/json', 'blob')
 }
 

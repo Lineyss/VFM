@@ -22,12 +22,12 @@ namespace VFM.Controllers.Main
 
         [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             User userModel;
             try
             {
-                string? idUser = User.FindFirst("ID").Value;
+                string? idUser = User.FindFirst("ID")?.Value ?? throw new Exception();
 
                 int ID = Convert.ToInt32(idUser);
                 userModel = GetUser(ID);
@@ -41,7 +41,7 @@ namespace VFM.Controllers.Main
 
         [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager/OpenFile")]
-        public async Task<IActionResult> ViewFile() => View();
+        public IActionResult ViewFile() => View();
 
         [HttpGet("VirtualFileManager/Admin")]
         [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, PropertyName = "isAdmin", PropertyValue = "True")]
@@ -49,14 +49,7 @@ namespace VFM.Controllers.Main
 
         private User GetUser(int ID)
         {
-            try
-            {
-                return db.GetCollection<User>("user").FindById(ID);
-            }
-            catch
-            {
-                return new User();
-            }
+            return db.user.Find(ID) ?? new User();
         }
     }
 }

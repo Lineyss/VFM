@@ -1,26 +1,14 @@
-﻿using LiteDB;
+﻿using Microsoft.EntityFrameworkCore;
 using VFM.Models.Users;
 
 namespace VFM.Models.Help
 {
-    public class LiteDbContext : LiteDatabase
+    public class LiteDbContext : DbContext
     {
-        public LiteDbContext(string connectionString, BsonMapper mapper = null) : base(connectionString, mapper)
+        public LiteDbContext(DbContextOptions<LiteDbContext> options) : base(options)
         {
-            var user = GetCollection<User>("user");
-            if (user.Count() == 0)
-                user.Insert(new User
-                {
-                    ID = 1,
-                    login = "admin",
-                    password = HashPassword.Hash("admin"),
-                    isAdmin = true,
-                    createF = true,
-                    deleteF = true,
-                    updateNameF = true,
-                    downloadF = true,
-                    uploadF = true
-                });
         }
+
+        public DbSet<User> user { get; set; }
     }
 }

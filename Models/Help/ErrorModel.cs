@@ -7,7 +7,7 @@
             ErrorText = errorText;
         }
 
-        public string ErrorText { get; set; }
+        public string ErrorText { get; protected set; }
 
         public const string FileIsExist = "Ошибка: Файл существует";
         public const string DirectoryIsExist = "Ошибка: Директория уже существует";
@@ -30,5 +30,13 @@
         public const string CanNotChangeFileName = "Ошибка: Не удалось изменить название файла";
         public const string CanNotCreateFile = "Ошибка: Не удалось создать файл";
         public const string CanNotCreateDirectory = "Ошибка: Не удалось создать папку";
+
+        public const string NotValidFormatID = "Ошибка: Не верный формат ID";
+        public const string CanNotFoundServiceAuth = "Ошибка: Не удалось найти сервис авторизации";
+        public const string CanNotFoundServiceDataBase = "Ошибка: Не удалось найти сервис базы данных";
+        public const string UserIsNotAuthenticated = "Ошибка: Пользователь не авторизован";
+        public const string UserModelHasNotThisProperty = "Ошибка: Модель пользователя не содержит такой параметр";
+        public const string UserModelPropertyIsNull = "Ошибка: Параметр модели пользователя имеет значение null";
+        public const string UserModelHasNotPropertyWithThisValue = "Ошибка: Модель пользователья не содержит параметр с таким значением";
     }
 }

@@ -244,17 +244,16 @@ const main = async () => {
                     createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
                 }
             }
-            else if (this.status == 418)
-            {
+            else if (this.status == 418) {
                 const data = this.response;
                 location.href = data;
             }
             else viewNotFoundMessageOnPage("Ничего не найдено.", content);
-        },function () {
+        }, function () {
             console.log(performance.now());
             viewOrHiddenPopup(false);
             viewOrHiddenLoad(false);
-        },function () {
+        }, function () {
             viewOrHiddenPopup(true);
             viewOrHiddenLoad(true);
             console.log(performance.now())
@@ -276,7 +275,7 @@ const main = async () => {
 
                 if (path[path.length - 1] == '//') path += formInPopup.fileName.value;
                 else path += `//${formInPopup.fileName.value}`;
-            
+
                 let url = mainUrl + `?path=${path}&isFile=${isFile}`;
 
                 sendRequest(url, null, 'POST', false, function () {
@@ -285,9 +284,9 @@ const main = async () => {
                     else if (this.status == 400 && data) alert(data.errorText);
                     else if (this.status == 200) createContentRow(data.icon, data.fileName, data.fullPath, data.dateCreate, data.dateChange, data.size, data.isFile);
                     else alert("Не предвиденная ошибка. Попробуйте позже.")
-                },function () {
+                }, function () {
                     viewOrHiddenLoad(false);
-                },function () {
+                }, function () {
                     viewOrHiddenLoad(true);
                 });
             });
@@ -411,13 +410,29 @@ const main = async () => {
                 else if (this.status == 200) location.reload();
                 else if (this.status == 403) alert("Ошибка: У вас нету прав для совершения этого действия");
                 else alert("Не предвиденная ошибка. Попробуйте позже.");
-            },function () {
+            }, function () {
                 viewOrHiddenLoad(false);
-            },function () {
+            }, function () {
                 viewOrHiddenLoad(true);
             }, 'Content-Type', 'application/json');
         }
-    })
-}
+    });
+
+    document.getElementById('exit').addEventListener('click', () => {
+        const url = `${location.origin}/api/Auth/Logout`;
+        sendRequest(url, null, 'POST', false, function () {
+            if (this.status == 200) {
+                location.reload();
+            }
+            else {
+                alert("Не предвиденная ошибка. Попробуйте позже.");
+            }
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
+        });
+    });
+};
 
 main();

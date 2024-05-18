@@ -1,9 +1,11 @@
-﻿using VFM.Models.Help;
+﻿using System.ComponentModel.DataAnnotations;
+using VFM.Models.Help;
 
 namespace VFM.Models.Users
 {
     public class User : UserForm
     {
+        [Key]
         public int ID { get; set; }
 
         public User() : base() { }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using VFM.Models.Auth;
 using VFM.Models.Help;
@@ -13,7 +15,15 @@ namespace VFM
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
             builder.WebHost.UseUrls(IpManager.urls);
+
+            builder.Services.AddDbContext<LiteDbContext>(options =>
+                options.UseSqlite("Data Source=UserDb.db")
+            );
+
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddEndpointsApiExplorer();
@@ -22,7 +32,6 @@ namespace VFM
 
             builder.Services.AddTransient<AuthManager>();
             builder.Services.AddTransient<FileManagerService>();
-            builder.Services.AddSingleton(new LiteDbContext("LiteDb.db"));
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(options =>
@@ -60,6 +69,12 @@ namespace VFM
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<LiteDbContext>();
+                dbContext.Database.Migrate();
+            }
 
             app.UseSwagger();
             app.UseSwaggerUI();
