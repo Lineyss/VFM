@@ -22,9 +22,9 @@ namespace VFM.Controllers.API
             this.authenticationManager = authenticationManager;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("Login/Cookie")]
         [NoAuth]
-        public async Task<IActionResult> Login([FromForm] UserAuth model, bool isCookie = true)
+        public async Task<IActionResult> LoginCookie([FromForm] UserAuth model)
         {
             try
             {
@@ -37,13 +37,33 @@ namespace VFM.Controllers.API
 
                 if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginOrPassword);
 
-                if(isCookie)
-                {
-                    await authenticationManager.CookieLogIn(HttpContext, user);
-                    return Ok();
-                }
+                await authenticationManager.CookieLogIn(HttpContext, user);
+                return Ok();
 
-                return Ok(new
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("Login/Jwt")]
+        [NoAuth]
+        public async Task<IActionResult> LoginJWT([FromBody] UserAuth model)
+        {
+            try
+            {
+                if (model == null) throw new Exception(ErrorModel.AllFieldsMostBeFields);
+
+                var users = db.user.ToList();
+                var user = db.user.FirstOrDefault(user => user.login == model.login);
+
+                if (user == null) throw new Exception(ErrorModel.WrongLoginOrPassword);
+
+                if (!HashPassword.ComparePasswords(user.password, model.password)) throw new Exception(ErrorModel.WrongLoginOrPassword);
+
+                return Ok(new JwtModel
                 {
                     token = authenticationManager.JwtLogIn(user)
                 });

@@ -1,0 +1,50 @@
+.Authorization
+{
+    width: 400px;
+    height: 350px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Authorization > h1
+{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.Authorization > form
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+form > div
+{
+    border:1px solid black;
+    width:70%;
+    margin-bottom:10px;
+}
+
+form > button {
+    margin-top: 20px;
+    width: 70% !important;
+    font-size:17px;
+}
+
+
+input {
+    border: 0;
+    outline: 0;
+    width: 80%;
+    padding: 10px 0px;
+    padding-left: 10px;
+    margin: 5px 0px;
+    font-size:17px;
+}

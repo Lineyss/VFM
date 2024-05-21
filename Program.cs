@@ -70,14 +70,12 @@ namespace VFM
 
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
+            if (builder.Environment.IsDevelopment())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<LiteDbContext>();
-                dbContext.Database.Migrate();
-            }
+                app.UseSwagger();
+                app.UseSwaggerUI();
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            }
 
             app.UseStaticFiles();
 

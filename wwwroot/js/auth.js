@@ -17,10 +17,11 @@ form.addEventListener("submit", async (e) => {
 
     var _form = new FormData(form);
 
-    let url = `${location.origin}/api/Auth/Login?isCookie=true`
+    let url = `${location.origin}/api/Auth/Login/Cookie`
 
     sendRequest(url, _form, 'POST', false, function () {
         try {
+            console.log(this.status);
             if (this.status / 100 == 4) {
                 let response = JSON.parse(this.response);
                 alert(response.errorText);

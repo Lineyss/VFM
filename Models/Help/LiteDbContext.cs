@@ -7,6 +7,26 @@ namespace VFM.Models.Help
     {
         public LiteDbContext(DbContextOptions<LiteDbContext> options) : base(options)
         {
+            try
+            {
+                createSuperUser();
+            }
+            catch
+            {
+                try
+                {
+                    Database.EnsureCreated();
+                    createSuperUser();
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        public void createSuperUser()
+        {
             var _user = user?.FirstOrDefault(user => user.login == "admin");
 
             if (_user == null)
