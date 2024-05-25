@@ -49,7 +49,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] [FromForm] UserForm model)
+        public IActionResult Post([FromForm] UserForm model)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace VFM.Controllers.API
         }
 
         [HttpPut("{ID}")]
-        public IActionResult Put( [FromBody] [FromForm] UserForm model, int ID)
+        public IActionResult Put( [FromForm] UserForm model, int ID)
         {
             try
             {

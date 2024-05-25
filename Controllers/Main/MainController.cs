@@ -5,6 +5,7 @@ using VFM.Models.Help;
 using VFM.Models.Auth;
 using VFM.Models.Users;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace VFM.Controllers.Main
 {
@@ -39,7 +40,7 @@ namespace VFM.Controllers.Main
             return View(userModel);
         }
 
-        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager/OpenFile")]
         public IActionResult ViewFile() => View();
 
