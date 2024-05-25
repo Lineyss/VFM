@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using VFM.Models.Users;
 
 namespace VFM.Models.Help
@@ -7,31 +9,17 @@ namespace VFM.Models.Help
     {
         public LiteDbContext(DbContextOptions<LiteDbContext> options) : base(options)
         {
-            try
-            {
-                createSuperUser();
-            }
-            catch
-            {
-                try
-                {
-                    Database.EnsureCreated();
-                    createSuperUser();
-                }
-                catch
-                {
-
-                }
-            }
+            Database.EnsureCreated();
+            createSuperUser();
         }
 
         public void createSuperUser()
         {
-            var _user = user?.FirstOrDefault(user => user.login == "admin");
+            var _user = user.FirstOrDefault(user => user.login == "admin");
 
             if (_user == null)
             {
-                user?.Add(new User
+                user.Add(new User
                 {
                     login = "admin",
                     password = HashPassword.Hash("admin"),
@@ -42,9 +30,9 @@ namespace VFM.Models.Help
                     downloadF = true,
                     uploadF = true
                 });
-            }
 
-            SaveChanges();
+                SaveChanges();
+            }
         }
 
         public DbSet<User> user { get; set; }
