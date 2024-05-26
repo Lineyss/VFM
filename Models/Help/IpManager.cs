@@ -18,7 +18,6 @@ namespace VFM.Models.Help
                 if (element.AddressFamily == AddressFamily.InterNetwork)
                 {
                     _urls.Add($"http://{element}:80");
-                    _urls.Add($"https://{element}:443");
                 }
             }
 
