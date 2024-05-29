@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>blackhole_98588.png</PackageIcon>
+    <UserSecretsId>f1a2b2b3-0c93-47f1-8d5d-eff677545519</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

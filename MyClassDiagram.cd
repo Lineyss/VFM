@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="VFM.Program">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Auth.Auth" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEEAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Models\Auth\Auth.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="VFM.Models.Auth.AuthManager">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAIAAAAAAAAAAAIAAAAAAAAABAAAAAAAABAAAA=</HashCode>
+      <FileName>Models\Auth\AuthManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Auth.Jwt">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YAAEAAAAAIAAAAAAABACAAAAACAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Auth\Jwt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Auth.JwtModel">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Auth\JwtModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Auth.NoAuth">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Models\Auth\NoAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Help.ErrorModel">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAGAAAgAIABAAAAAAKICAgIAACEgIAAAACAASAACg=</HashCode>
+      <FileName>Models\Help\ErrorModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Help.HashPassword">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAABAAEAAAAIAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Models\Help\HashPassword.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Help.IpManager">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Help\IpManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Help.LiteDbContext">
+    <Position X="2.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAQA=</HashCode>
+      <FileName>Models\Help\LiteDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Help.Pagination">
+    <Position X="7.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Models\Help\Pagination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.OperationSystem.FileManager">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAhUAAAAgAAAA=</HashCode>
+      <FileName>Models\OperationSystem\FileManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.OperationSystem.FileManagers">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAACAAAAAAAEAAAAAAAAAAAAAAAgAACAA=</HashCode>
+      <FileName>Models\OperationSystem\FileManagers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Users.User">
+    <Position X="14.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Models\Users\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Users.UserAuth">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAgAAAAAgAQMAA=</HashCode>
+      <FileName>Models\Users\UserAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Models.Users.UserForm">
+    <Position X="14.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAABAAABAAAAAAgEAAAAAAABAAA=</HashCode>
+      <FileName>Models\Users\UserForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Service.FileManagerService">
+    <Position X="9.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAIAEAAAAARACIgAQAAAAhIBUAAEABIAkAgIgABYA=</HashCode>
+      <FileName>Service\FileManagerService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Controllers.API.AuthController">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAACAAAQAAIAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\API\AuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Controllers.API.FileManagerController">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAFAAAAAAAIACAEAAAAAAAkAQAAAAAg=</HashCode>
+      <FileName>Controllers\API\FileManagerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Controllers.API.UserController">
+    <Position X="5.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAABAAAAAAAAACAEAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Controllers\API\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VFM.Controllers.Main.MainController">
+    <Position X="11" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAQAAAAAAIAAAEAEAABAAAAA=</HashCode>
+      <FileName>Controllers\Main\MainController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YourNamespace.MainActivity">
+    <Position X="0.5" Y="8.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="YourNamespace.MainActivity.InputFilterAnonymousInnerClassHelper" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainActivity.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAgAAAAAACAAAAAAAAEgIgAAEAA=</HashCode>
+      <FileName>MainActivity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Com.Example.Kursach4.AdminFileManagerMainActivity">
+    <Position X="2.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAEAAAAAAAoCAAgAAAAAAAIAAAAAA=</HashCode>
+      <FileName>AdminFileManagerMainActivity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Com.Example.Kursach4.UsersResClass.Fragments.UsersViewFragment">
+    <Position X="4" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAgAAAAAAAAAAAAIAAAAAIAAACAAEAAAAAA=</HashCode>
+      <FileName>UserDetailViewFragment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segue UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\Рабочий стол\Курсач\Проект\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2024-05-29T22:27:11.1875891Z||;True|2024-05-30T01:24:14.4777309+03:00||;True|2024-05-30T01:20:25.0019009+03:00||;True|2024-05-30T01:16:30.2444585+03:00||;False|2024-05-30T01:06:54.1743923+03:00||;False|2024-05-30T01:02:58.9760331+03:00||;False|2024-05-30T00:59:14.1896557+03:00||;False|2024-05-30T00:58:52.7446866+03:00||;False|2024-05-30T00:58:08.0162593+03:00||;False|2024-05-30T00:57:58.2392376+03:00||;True|2024-05-30T00:56:14.0851335+03:00||;True|2024-05-30T00:50:37.7534630+03:00||;True|2024-05-30T00:42:57.6230828+03:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="WebApiDatabase">
+      <Value>Data Source=UserDb.db</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VFM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3c7eb4c01a76df531974da5471e94a12fd2b185")]
 [assembly: System.Reflection.AssemblyProductAttribute("VFM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VFM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

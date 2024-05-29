@@ -17,7 +17,11 @@ namespace VFM.Models.Help
             {
                 if (element.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    _urls.Add($"http://{element}:80");
+                    string url = $"http://{element}:80";
+                    _urls.Add(url);
+                    Console.WriteLine($"{url}/Auth/Login.html");
+                    Console.WriteLine($"{url}/VirtualFileManager");
+                    Console.WriteLine("----------------------");
                 }
             }
 
