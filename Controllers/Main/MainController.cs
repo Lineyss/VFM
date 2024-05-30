@@ -40,7 +40,7 @@ namespace VFM.Controllers.Main
             return View(userModel);
         }
 
-        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
+        [Auth(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [HttpGet("VirtualFileManager/OpenFile")]
         public IActionResult ViewFile() => View();
 

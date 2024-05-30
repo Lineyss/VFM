@@ -72,6 +72,7 @@ const getFormUploadFiles = () => {
                     createContentRow(element.icon, element.fileName, element.fullPath, element.dateCreate, element.dateChange, element.size, element.isFile);
                 }
                 alert('Файл(ы) загруженны');
+                location.reload();
             } else alert("Не предвиденная ошибка. Попробуйте позже.")
         }, function () {
             viewOrHiddenLoad(false);
@@ -273,7 +274,7 @@ const main = async () => {
                 let path = getPropertyes()['path'];
                 const isFile = formInPopup.querySelector('input[type=checkbox]').checked;
 
-                if (path[path.length - 1] == '//') path += formInPopup.fileName.value;
+                if (path[path.length - 1] == '//' || path[path.length - 1] == "\\") path += formInPopup.fileName.value;
                 else path += `//${formInPopup.fileName.value}`;
 
                 let url = mainUrl + `?path=${path}&isFile=${isFile}`;

@@ -14,15 +14,29 @@ namespace VFM.Models.Users
         {
             login = model.login;
             password = HashPassword.Hash(model.password);
+
+            isAdmin = model.isAdmin;
+            createF = model.createF;
+            deleteF = model.deleteF;
+            updateNameF = model.updateNameF;
+            downloadF = model.downloadF;
+            uploadF = model.uploadF;
         }
 
         public void UpdateModel(UserForm model)
         {
-            if (password == model.password) CheackValidLogin(model.login);
-            else model.CheckValidData();
+            if (password == model.password)
+            {
+               if (!CheackValidLogin(model.login)) throw new Exception(ErrorModel.NotValidLogin);
+            }
+
+            else
+            {
+                model.CheckValidData();
+                password = HashPassword.Hash(model.password);
+            }
 
             login = model.login;
-            password = HashPassword.Hash(model.password);
 
             isAdmin = model.isAdmin ?? isAdmin;
             createF = model.createF ?? createF;

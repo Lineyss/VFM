@@ -44,7 +44,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -70,7 +70,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
 
@@ -90,7 +90,7 @@ namespace VFM.Controllers.API
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorModel(e.Message));
             }
         }
     }

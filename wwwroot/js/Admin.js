@@ -118,7 +118,7 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
         if (form.checkValidity()) {
             const id = form.querySelector('div > p').innerHTML;
 
-            if (!form.password.value) {
+            if (form.password.value == "") {
                 form.password.value = usersPassword[id];
             }
 
@@ -139,7 +139,10 @@ const createUserElement = (ID, login, password, isAdmin, createF, deleteF, updat
                 viewOrHiddenLoad(true);
             });
         }
+
+        form.password.value = "";
     });
+
 
     let deleteButton = document.createElement('button');
     deleteButton.type = "submit";
@@ -235,6 +238,22 @@ const main = async () => {
         countingChars(element);
         element.addEventListener('input', function () {
             countingChars(this);
+        });
+    });
+
+    document.getElementById('exit').addEventListener('click', () => {
+        const url = `${location.origin}/api/Auth/Logout`;
+        sendRequest(url, null, 'POST', false, function () {
+            if (this.status == 200) {
+                location.reload();
+            }
+            else {
+                alert("Не предвиденная ошибка. Попробуйте позже.");
+            }
+        }, function () {
+            viewOrHiddenLoad(false);
+        }, function () {
+            viewOrHiddenLoad(true);
         });
     });
 };
